@@ -1,0 +1,1 @@
+[{"FTRcvName":"Refund","FCXsdNet":"7328.0000"},{"FTRcvName":"\u0e40\u0e07\u0e34\u0e19\u0e2a\u0e14","FCXsdNet":"2442039.0000"},{"FTRcvName":"\u0e40\u0e07\u0e34\u0e19\u0e42\u0e2d\u0e19","FCXsdNet":"205043.0000"},{"FTRcvName":"\u0e1a\u0e31\u0e15\u0e23\u0e40\u0e04\u0e23\u0e14\u0e34\u0e15","FCXsdNet":"253619.5000"}]

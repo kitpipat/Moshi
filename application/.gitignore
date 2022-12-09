@@ -1,0 +1,5 @@
+config/config.php
+config/database.php
+config/rabbitmq.php
+
+/config_deploy.php

@@ -1,0 +1,1 @@
+[{"FTRcvName":"QR Promtpay","FCXsdNet":"17699.0000"},{"FTRcvName":"Refund","FCXsdNet":"9152.0000"},{"FTRcvName":"\u0e40\u0e07\u0e34\u0e19\u0e2a\u0e14","FCXsdNet":"3968796.0000"},{"FTRcvName":"\u0e40\u0e07\u0e34\u0e19\u0e42\u0e2d\u0e19","FCXsdNet":"48722.0000"},{"FTRcvName":"\u0e1a\u0e31\u0e15\u0e23\u0e40\u0e04\u0e23\u0e14\u0e34\u0e15","FCXsdNet":"670551.5000"}]

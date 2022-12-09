@@ -1,0 +1,1 @@
+[{"FTPgpChainName":"N\/A","FCXsdNet":"151537.0000"}]

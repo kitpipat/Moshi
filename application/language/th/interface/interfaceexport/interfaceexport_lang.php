@@ -1,0 +1,25 @@
+<?php
+//TH
+//Nav Menu
+$lang['tITFXTitle']                 = "interface - ส่งออก";
+$lang['tITFXTConfirm']              = "ยืนยัน";
+
+$lang['tITFXID']                    = "ลำดับ";
+$lang['tITFXSelect']                = "เลือก";
+$lang['tITFXList']                  = "รายการส่งออก";
+$lang['tITFXCondition']             = "เงื่อนไข";
+$lang['tITFXTStatus']               = "สถานะ";
+
+$lang['tITFXDataSal']               = "การขาย";
+$lang['tITFXSalDocNo']              = "เลขที่เอกสาร";
+$lang['tITFXSalDate']               = "วันที่เอกสาร";
+// $lang['tITFXDataRec']               = "ข้อมูลการเงิน";
+
+$lang['tITFXSelectAll']             = "เลือกทั้งหมด";
+$lang['tITFXExportSuccess']         = "ส่งออกสำเร็จ";
+$lang['tITFXExportProcess']         = "กำลังส่งออก...";
+$lang['tITFXExportFail']            = "ส่งออกล้มเหลว";
+
+$lang['tITFXFilterDate']            = "วันที่";
+$lang['tITFXFilterDocSal']          = "เลขที่บิล";
+$lang['tITFXFilterTo']              = "ถึง";

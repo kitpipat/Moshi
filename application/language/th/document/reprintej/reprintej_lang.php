@@ -1,0 +1,37 @@
+<?php 
+// Lang Thai
+$lang['tEJTitleMenu']           = "พิมพ์ซ้ำใบกำกับภาษีอย่างย่อ";
+$lang['tEJPanelCondition']      = "เงื่อนไขการค้นหา";
+$lang['tEJPanelAbbrViewer']     = "แสดงใบกำกับภาษี";
+
+// Filter EJ
+$lang['tEJFilterBranch']        = "เลือกสาขา / ร้านค้า";
+$lang['tEJPacFilterBranch']     = "กรุณาระบุสาขา";
+$lang['tEJPacFilterShop']       = "กรุณาระบุร้านค้า";
+$lang['tEJFilterDate']          = "เลือกช่วงวันที่";
+$lang['tEJFilterDateFrom']      = "จากวันที่";
+$lang['tEJFilterDateTo']        = "ถึงวันที่";
+$lang['tEJFilterDocument']      = "เลือกช่วงเอกสาร";
+$lang['tEJFilterShipCodeUse']   = "เฉพาะรหัส";
+$lang['tEJFilterSlipBetween']   = "ตามช่วงที่ระบุ [ว่าง = เลือกทั้งหมด]";
+$lang['tEJFilterSlipCodeFrom']  = "จากรหัส";
+$lang['tEJFilterSlipCodeTo']    = "ถึงรหัส";
+$lang['tEJFilterDocumentType']  = "ประเภทเอกสาร";
+$lang['tEJDocumentTypeXAll']    = "เอกสารทั้งหมด";
+$lang['tEJDocumentTypeXSale']   = "เอกสารการขาย";
+$lang['tEJDocumentTypeXPay']    = "เอกสารสรุปการรับเงิน";
+$lang['tEJDocumentTypeXRoundOff']   = "เอกสารสรุปปิดรอบ";
+$lang['tEJDocumentTypeXRecive'] = "เอกสารคืนรายการ";
+
+// Lang Browse Slipe
+$lang['tEJSlipBrowseTitle']         = "เอกสารใบกำกับภาษีอย่างย่อ";
+$lang['tEJSlipBrowseBranch']        = "สาขา";
+$lang['tEJSlipBrowseShop']          = "ร้านค้า";
+$lang['tEJSlipBrowseDocumentNo']    = "เลขที่เอกสาร";
+$lang['tEJSlipBrowseShfCode']       = "รหัสรอบการขาย";
+$lang['tRPEJRefreshView']           = "แสดงใหม่";
+$lang['tRPEJFilterSerch']           = "ค้นหา";
+// Viewer EJ
+$lang['tEJNotFoundData']            = "ไม่พบข้อมูลใบกำกับภาษี";
+
+

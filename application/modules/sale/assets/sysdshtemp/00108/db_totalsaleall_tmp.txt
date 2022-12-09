@@ -1,0 +1,1 @@
+{"FCXshTotalAll":"1147440.0000","FCXshTotalSaleAll":"1150742.0000","FCXshTotalRefundAll":"3302.0000"}
