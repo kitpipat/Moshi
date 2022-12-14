@@ -82,11 +82,17 @@ $RECYCLE.BIN/
 /application/modules/supplier/assets/systemimg/
 
 #Excel File
-/application/modules/report/assets/exportexcel/
+# /application/modules/report/assets/exportexcel/
 
-/application/modules/monitordashboard/assets/systemtmp/dbtmp/
+# /application/modules/monitordashboard/assets/systemtmp/dbtmp/
 /formreport/24-09-2019/
 /formreport/view/
 /formreport/Frm_SQL_SMBillPc/
+# /config_deploy_backup.php
+# /config_deploy.php
+
+/application/modules/report/assets/exportexcel/
+
+/application/modules/monitordashboard/assets/systemtmp/dbtmp/
 /config_deploy_backup.php
 /config_deploy.php
