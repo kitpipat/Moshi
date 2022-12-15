@@ -35,13 +35,24 @@ class cLogin extends MX_Controller {
 					  
 					//case : เข้ามาแบบ HQ จะใช้ tSesUsrBchCom 
 					//     : เข้ามาแบบ BCH , SHP จะใช้ tSesUsrBchCode 
+					// $aDataUsrGroup = $this->mLogin->FSaMLOGGetDataUserLoginGroup($aDataUsr[0]['FTUsrCode']);
+					// $aDataUsrRole  = $this->mLogin->FSaMLOGGetUserRole($aDataUsr[0]['FTUsrCode']);
+					
+
 					if($aDataUsr[0]['FTBchCode'] == '' || $aDataUsr[0]['FTBchCode'] == null){
 						$aGetDataBch = $this->mLogin->FSaMLOGGetBch();
+
+						// $tUsrAgnCodeDefult  = $aDataUsrGroup[0]['FTAgnCode'];
+						// $tUsrAgnNameDefult  = $aDataUsrGroup[0]['FTAgnName'];
+
 						$aGetBch 		= $aGetDataBch[0]['FTBchCode'];
 						$aGetBchName 	= $aGetDataBch[0]['FTBchName'];
 						$tWahCode		= $aGetDataBch[0]['FTWahCode'];
 						$tWahName		= $aGetDataBch[0]['FTWahName'];
 					}else{
+						// $tUsrAgnCodeDefult  = $aDataUsrGroup[0]['FTAgnCode'];
+						// $tUsrAgnNameDefult  = $aDataUsrGroup[0]['FTAgnName'];
+
 						$aGetBch 		= $aDataUsr[0]['FTBchCode'];
 						$aGetBchName 	= $aDataUsr[0]['FTBchName'];
 						$tWahCode		= $aDataUsr[0]['FTWahCode'];
@@ -97,6 +108,10 @@ class cLogin extends MX_Controller {
 					if(!empty($aDataUsr[0]['FTBchCode']) && !empty($aDataUsr[0]['FTShpCode'])){ // SHP level
 						$this->session->set_userdata("tSesUsrLevel", "SHP");
 					}
+
+					// Agency
+					// $this->session->set_userdata("tSesUsrAgnCode", $tUsrAgnCodeDefult);
+					// $this->session->set_userdata("tSesUsrAgnName", $tUsrAgnNameDefult);
 
 
 					$aDataUsrRoleCode	= $this->mLogin->FSaMLOGListUsrRoleCode($this->session->userdata("tSesUserCode"));

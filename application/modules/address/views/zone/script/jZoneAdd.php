@@ -1,10 +1,39 @@
 <script>
+    var tUsrLevel = "<?= $this->session->userdata('tSesUsrLevel') ?>";
+    var tBchCode = "<?= $this->session->userdata('tSesUsrBchCode') ?>";
+    var tAgnName = "<?= $this->session->userdata('tSesUsrAgnName') ?>";
+ 
     $(document).ready(function(){
+        var tAgnCode = "<?= $this->session->userdata('tSesUsrAgnCode') ?>";
+        // console.log(tUsrLevel);
+        // console.log(tBchCode);
+        // console.log(tAgnCode);
+        // console.log(tAgnName);
 
+        if(tAgnCode && !$('#oetZneCode').val()){
+            $('#oetZneAgnCodeFirst').val(tAgnCode);
+            $('#oetZneAgnNameFirst').val(tAgnName);
+            $("#obtBrowseAgencyFirst").attr("disabled", true); 
+        }
 
-        if($('#ocbSelectRoot').is(':checked')){
-            $('.xWPanalZneChain').hide();
-            $("#oetZneName").attr("disabled", true); 
+        if( tUsrLevel != 'HQ' && $('#oetZneCode').val() && tAgnCode != ''){
+            $("#obtBrowseAgencyFirst").attr("disabled", true); 
+            $('#oetZneAgnCodeSecond').val(tAgnCode);
+            $('#oetZneAgnNameSecond').val(tAgnName);
+            $("#obtBrowseAgencySecond").attr("disabled", true); 
+        }else if(tUsrLevel != 'HQ' && $('#oetZneCode').val() && tAgnCode == '') {
+            $("#obtBrowseAgencySecond").attr("disabled", true); 
+        }
+        // else {
+        //     // $('#oetZneAgnCodeSecond').hide();
+        //     // $('#oetZneAgnNameSecond').hide();
+        //     // $('#obtBrowseAgencySecond').hide();
+        //     $('#odvZneAgn').hide();
+        // }
+        
+
+        if($('#oetZneCode').val()){
+            $("#ocbSelectRoot").attr("disabled", true); 
         }
 
         if($('#oetZneParent').val() != ''){
@@ -48,6 +77,29 @@
         JSxAgencyVisibleComponent('#odvZneAutoGenCode', true);
     }
     
+    
+
+    $('.xWIMGZoneReferEdit').off('click');
+    $('.xWIMGZoneReferEdit').on('click',function(){
+        var tZneCode = $(this).parent().parent().data('znecode');
+        JSxZoneSetCallPageEdit(tPdtCode);
+    });
+
+    $('#obtZneSetAdd').off('click');
+    $('#obtZneSetAdd').on('click', function() {
+        JSxZoneSetCallPageAdd();
+    });
+
+    $('#obtZneSetBack').off('click');
+    $('#obtZneSetBack').on('click', function() {
+        JSvZoneObjDataTable();
+    });
+
+    $('#olbZneSetInfo').off('click');
+    $('#olbZneSetInfo').on('click', function() {
+        JSvZoneObjDataTable();
+    });
+
     if(JSbZoneIsUpdatePage()){
         // Zone Code
         $("#oetZneCode").attr("readonly", true);
@@ -162,50 +214,237 @@
 
     function JSxHideObjZoneType(){
               tZneRefer = $('#ocmTypeRefer').val();
+        
         switch(tZneRefer){
             case 'TCNMBranch':
- 
                 $('#odvZneBranch').show();
                 $('#odvZneUSer').hide();
                 $('#odvZneSaleMan').hide();
                 $('#odvZneShop').hide();
                 $('#odvZnePos').hide();
+                $('#odvZneCountry').hide();
+                $('#odvZneAgency').hide();
+                $('#odvZneMerchant').hide();
+
+                // $('#oetZneBchCode').val('');
+                // $('#oetZneBchName').val('');
+                $('#oetZneUSerCode').val('');
+                $('#oetZneUSerName').val('');
+                $('#oetZneSpnCode').val('');
+                $('#oetZneSpnName').val('');
+                $('#oetZneShopCode').val('');
+                $('#oetZneShopName').val('');
+                $('#oetZnePosCode').val('');
+                $('#oetZnePosName').val('');
+                $('#oetZneCtyCode').val('');
+                $('#oetZneCtyName').val('');
+                $('#oetZneAgnCode').val('');
+                $('#oetZneAgnName').val('');
+                $('#oetZneMchCode').val('');
+                $('#oetZneMchName').val('');
             break;
 
             case 'TCNMUser':
-
                 $('#odvZneBranch').hide();
                 $('#odvZneUSer').show();
                 $('#odvZneSaleMan').hide();
                 $('#odvZneShop').hide();
                 $('#odvZnePos').hide();
+                $('#odvZneCountry').hide();
+                $('#odvZneAgency').hide();
+                $('#odvZneMerchant').hide();
+
+                $('#oetZneBchCode').val('');
+                $('#oetZneBchName').val('');
+                // $('#oetZneUSerCode').val('');
+                // $('#oetZneUSerName').val('');
+                $('#oetZneSpnCode').val('');
+                $('#oetZneSpnName').val('');
+                $('#oetZneShopCode').val('');
+                $('#oetZneShopName').val('');
+                $('#oetZnePosCode').val('');
+                $('#oetZnePosName').val('');
+                $('#oetZneCtyCode').val('');
+                $('#oetZneCtyName').val('');
+                $('#oetZneAgnCode').val('');
+                $('#oetZneAgnName').val('');
+                $('#oetZneMchCode').val('');
+                $('#oetZneMchName').val('');
             break;
 
             case 'TCNMSpn':
-
                 $('#odvZneBranch').hide();
                 $('#odvZneUSer').hide();
                 $('#odvZneSaleMan').show();
                 $('#odvZneShop').hide();
                 $('#odvZnePos').hide();
+                $('#odvZneCountry').hide();
+                $('#odvZneAgency').hide();
+                $('#odvZneMerchant').hide();
+
+                $('#oetZneBchCode').val('');
+                $('#oetZneBchName').val('');
+                $('#oetZneUSerCode').val('');
+                $('#oetZneUSerName').val('');
+                // $('#oetZneSpnCode').val('');
+                // $('#oetZneSpnName').val('');
+                $('#oetZneShopCode').val('');
+                $('#oetZneShopName').val('');
+                $('#oetZnePosCode').val('');
+                $('#oetZnePosName').val('');
+                $('#oetZneCtyCode').val('');
+                $('#oetZneCtyName').val('');
+                $('#oetZneAgnCode').val('');
+                $('#oetZneAgnName').val('');
+                $('#oetZneMchCode').val('');
+                $('#oetZneMchName').val('');
             break;
        
             case 'TCNMShop':
-
                 $('#odvZneBranch').hide();
                 $('#odvZneUSer').hide();
                 $('#odvZneSaleMan').hide();
                 $('#odvZneShop').show();
                 $('#odvZnePos').hide();
+                $('#odvZneCountry').hide();
+                $('#odvZneAgency').hide();
+                $('#odvZneMerchant').hide();
+
+                $('#oetZneBchCode').val('');
+                $('#oetZneBchName').val('');
+                $('#oetZneUSerCode').val('');
+                $('#oetZneUSerName').val('');
+                $('#oetZneSpnCode').val('');
+                $('#oetZneSpnName').val('');
+                // $('#oetZneShopCode').val('');
+                // $('#oetZneShopName').val('');
+                $('#oetZnePosCode').val('');
+                $('#oetZnePosName').val('');
+                $('#oetZneCtyCode').val('');
+                $('#oetZneCtyName').val('');
+                $('#oetZneAgnCode').val('');
+                $('#oetZneAgnName').val('');
+                $('#oetZneMchCode').val('');
+                $('#oetZneMchName').val('');
             break;
 
             case 'TCNMPos':
-      
                 $('#odvZneBranch').hide();
                 $('#odvZneUSer').hide();
                 $('#odvZneSaleMan').hide();
                 $('#odvZneShop').hide();
                 $('#odvZnePos').show();
+                $('#odvZneCountry').hide();
+                $('#odvZneAgency').hide();
+                $('#odvZneMerchant').hide();
+
+                $('#oetZneBchCode').val('');
+                $('#oetZneBchName').val('');
+                $('#oetZneUSerCode').val('');
+                $('#oetZneUSerName').val('');
+                $('#oetZneSpnCode').val('');
+                $('#oetZneSpnName').val('');
+                $('#oetZneShopCode').val('');
+                $('#oetZneShopName').val('');
+                // $('#oetZnePosCode').val('');
+                // $('#oetZnePosName').val('');
+                $('#oetZneCtyCode').val('');
+                $('#oetZneCtyName').val('');
+                $('#oetZneAgnCode').val('');
+                $('#oetZneAgnName').val('');
+                $('#oetZneMchCode').val('');
+                $('#oetZneMchName').val('');
+            break;
+            case 'TCNMCountry':          
+                $('#odvZneBranch').hide();
+                $('#odvZneUSer').hide();
+                $('#odvZneSaleMan').hide();
+                $('#odvZneShop').hide();
+                $('#odvZnePos').hide();
+                $('#odvZneCountry').show();
+                $('#odvZneAgency').hide();
+                $('#odvZneMerchant').hide();
+
+                $('#oetZneBchCode').val('');
+                $('#oetZneBchName').val('');
+                $('#oetZneUSerCode').val('');
+                $('#oetZneUSerName').val('');
+                $('#oetZneSpnCode').val('');
+                $('#oetZneSpnName').val('');
+                $('#oetZneShopCode').val('');
+                $('#oetZneShopName').val('');
+                $('#oetZnePosCode').val('');
+                $('#oetZnePosName').val('');
+                // $('#oetZneCtyCode').val('');
+                // $('#oetZneCtyName').val('');
+                $('#oetZneAgnCode').val('');
+                $('#oetZneAgnName').val('');
+                $('#oetZneMchCode').val('');
+                $('#oetZneMchName').val('');
+            break;
+            case 'TCNMAgency':          
+                $('#odvZneBranch').hide();
+                $('#odvZneUSer').hide();
+                $('#odvZneSaleMan').hide();
+                $('#odvZneShop').hide();
+                $('#odvZnePos').hide();
+                $('#odvZneCountry').hide();
+                $('#odvZneAgency').show();
+                $('#odvZneMerchant').hide();
+
+                $('#oetZneBchCode').val('');
+                $('#oetZneBchName').val('');
+                $('#oetZneUSerCode').val('');
+                $('#oetZneUSerName').val('');
+                $('#oetZneSpnCode').val('');
+                $('#oetZneSpnName').val('');
+                $('#oetZneShopCode').val('');
+                $('#oetZneShopName').val('');
+                $('#oetZnePosCode').val('');
+                $('#oetZnePosName').val('');
+                $('#oetZneCtyCode').val('');
+                $('#oetZneCtyName').val('');
+                // $('#oetZneAgnCode').val('');
+                // $('#oetZneAgnName').val('');
+                $('#oetZneMchCode').val('');
+                $('#oetZneMchName').val('');
+
+                var tAgnCode = "<?= $this->session->userdata('tSesUsrAgnCode') ?>";
+
+                if(tAgnCode){
+                    var tAgnName = "<?= $this->session->userdata('tSesUsrAgnName') ?>";
+                    $('#oetZneAgnCode').val(tAgnCode);
+                    $('#oetZneAgnName').val(tAgnName);
+                    $("#obtBrowseAgency").attr("disabled", true); 
+                }
+                
+            break;
+            case 'TCNMMerchant':          
+                $('#odvZneBranch').hide();
+                $('#odvZneUSer').hide();
+                $('#odvZneSaleMan').hide();
+                $('#odvZneShop').hide();
+                $('#odvZnePos').hide();
+                $('#odvZneCountry').hide();
+                $('#odvZneAgency').hide();
+                $('#odvZneMerchant').show();
+
+                $('#oetZneBchCode').val('');
+                $('#oetZneBchName').val('');
+                $('#oetZneUSerCode').val('');
+                $('#oetZneUSerName').val('');
+                $('#oetZneSpnCode').val('');
+                $('#oetZneSpnName').val('');
+                $('#oetZneShopCode').val('');
+                $('#oetZneShopName').val('');
+                $('#oetZnePosCode').val('');
+                $('#oetZnePosName').val('');
+                $('#oetZneCtyCode').val('');
+                $('#oetZneCtyName').val('');
+                $('#oetZneAgnCode').val('');
+                $('#oetZneAgnName').val('');
+                // $('#oetZneMchCode').val('');
+                // $('#oetZneMchName').val('');
             break;
             default:
                 $('#odvZneBranch').hide();
@@ -213,6 +452,10 @@
                 $('#odvZneSaleMan').hide();
                 $('#odvZneShop').hide();
                 $('#odvZnePos').hide();
+                $('#odvZneCountry').hide();
+                $('#odvZneAgency').hide();
+                $('#odvZneMerchant').hide();
+
         }
     }
 
@@ -275,11 +518,16 @@
             FuncName:'JSxNextFuncZneArea',
             ArgReturn:['FTAreCode']
         },
-        RouteAddNew : 'area',
-        BrowseLev : nStaZneBrowseType
+        // RouteAddNew : 'area',
+        // BrowseLev : nStaZneBrowseType
     } 
 
-
+    
+    if ((tBchCode == '' || tBchCode == null) || tUsrLevel == "HQ") {
+        tWhereBch = '';
+    } else {
+        tWhereBch = " AND TCNMBranch.FTBchCode IN(" + tBchCode + ")";
+    }
     // OPtion ฺBranch (สาขา)
     var oBrowseBch = {
         
@@ -288,6 +536,9 @@
         Join :{
             Table:	['TCNMBranch_L'],
             On:['TCNMBranch_L.FTBchCode = TCNMBranch.FTBchCode AND TCNMBranch_L.FNLngID ='+nLangEdits,]
+        },
+        Where :{
+            Condition : [tWhereBch]
         },
         GrideView:{
             ColumnPathLang	: 'company/branch/branch',
@@ -307,18 +558,29 @@
             Text		: ["oetZneBchName","TCNMBranch_L.FTBchName"],
         },
 
-        RouteAddNew : 'branch',
-        BrowseLev : nStaZneBrowseType
+        // RouteAddNew : 'branch',
+        // BrowseLev : nStaZneBrowseType
         
     }
 
+  
     // Browse USer (ผู้ใช้ ) 
+    var tUsrCode = "<?= $this->session->userdata('tSesUserCode') ?>";
+    if ((tUsrCode == '' || tUsrCode == null) || tUsrLevel == "HQ") {
+        tWhereUser = '';
+    } else {
+        tWhereUser = " AND TCNMUser.FTUsrCode IN(" + tUsrCode + ")";
+    }
+
     var oBrowseUSer = {
         Title : ['authen/user/user','tUSRTitle'],
         Table:{Master:'TCNMUser',PK:'FTUsrCode',PKName:'FTUsrName'},
         Join : {
             Table:	['TCNMUser_L'],
             On:['TCNMUser_L.FTUsrCode = TCNMUser.FTUsrCode AND TCNMUser_L.FNLngID ='+nLangEdits,]
+        },
+        Where :{
+            Condition : [tWhereUser]
         },
         GrideView:{
             ColumnPathLang	: 'authen/user/user',
@@ -338,19 +600,28 @@
             Text		: ["oetZneUSerName","TCNMUser_L.FTUsrName"],
         },
 
-        RouteAddNew : 'user',
-        BrowseLev : nStaZneBrowseType
+        // RouteAddNew : 'user',
+        // BrowseLev : nStaZneBrowseType
     }
 
     // Browse SaleMan (พนักงานขาย) 
+    if ((tBchCode == '' || tBchCode == null) || tUsrLevel == "HQ") {
+        tWhereSale = '';
+    } else {
+        tWhereSale = " AND TCNTSpnGroup.FTBchCode IN(''," + tBchCode + ")";
+    }
     var  oBrowseSaleMan = {
         Title : ['company/warehouse/warehouse','tSalePerson'],
         Table:{Master:'TCNMSpn',PK:'FTSpnCode'},
         Join :{
-            Table:	['TCNMSpn_L'],
-            On:['TCNMSpn_L.FTSpnCode = TCNMSpn.FTSpnCode AND TCNMSpn_L.FNLngID = '+nLangEdits,]
+            Table:	['TCNMSpn_L','TCNTSpnGroup'],
+            On:['TCNMSpn_L.FTSpnCode = TCNMSpn.FTSpnCode AND TCNMSpn_L.FNLngID = '+nLangEdits,
+                'TCNTSpnGroup.FTSpnCode = TCNMSpn.FTSpnCode'
+                ]
         },
-        
+        Where :{
+            Condition : [tWhereSale]
+        },
         GrideView:{
             ColumnPathLang	: 'company/warehouse/warehouse',
             ColumnKeyLang	: ['tBrowseSHPCode','tBrowseSHPName'],
@@ -368,18 +639,26 @@
             Value		: ["oetZneSpnCode","TCNMSpn.FTSpnCode"],
             Text		: ["oetZneSpnName","TCNMSpn_L.FTSpnName"],
         },
-        RouteAddNew : 'saleperson',
-        BrowseLev : nStaZneBrowseType
+        // RouteAddNew : 'saleperson',
+        // BrowseLev : nStaZneBrowseType
     }
 
 
     //ฺBrowse Shop (ร้านค้า)
+    if ((tBchCode == '' || tBchCode == null) || tUsrLevel == "HQ") {
+        tWhereShop = '';
+    } else {
+        tWhereShop = " AND TCNMShop.FTBchCode IN(" + tBchCode + ")";
+    }
     var oBrowseShop = {
         Title : ['authen/user/user','tBrowseSHPTitle'],
         Table:{Master:'TCNMShop',PK:'FTShpCode'},
         Join :{
             Table:	['TCNMShop_L'],
             On:['TCNMShop_L.FTShpCode = TCNMShop.FTShpCode AND TCNMShop_L.FNLngID = '+nLangEdits,]
+        },
+        Where :{
+            Condition : [tWhereShop]
         },
         Filter:{
             Selector:'oetBranchCode',
@@ -403,28 +682,36 @@
             Value		: ["oetZneShopCode","TCNMShop.FTShpCode"],
             Text		: ["oetZneShopName","TCNMShop_L.FTShpName"],
         },
-        RouteAddNew : 'shop',
-        BrowseLev : nStaZneBrowseType
+        // RouteAddNew : 'shop',
+        // BrowseLev : nStaZneBrowseType
     }
 
+    if ((tBchCode == '' || tBchCode == null) || tUsrLevel == "HQ") {
+        tWherePOS = '';
+    } else {
+        tWherePOS = " AND TCNMPos.FTBchCode IN(" + tBchCode + ")";
+    }
     // Browse Pos (เครื่องจุดขาย) 
     var oBrowsePOS = {
         Title : ['company/warehouse/warehouse','tSalemachinePOS'],
         Table:{Master:'TCNMPos',PK:'FTPosCode'},
         Join :{
-            Table:	['TCNMPosLastNo'],
-            On:['TCNMPosLastNo.FTPosCode = TCNMPos.FTPosCode']
+            Table:	['TCNMPos_L','TCNMBranch_L'],
+            On:[
+                'TCNMPos_L.FTPosCode = TCNMPos.FTPosCode AND  TCNMPos_L.FTBchCode = TCNMPos.FTBchCode',
+                'TCNMBranch_L.FTBchCode = TCNMPos.FTBchCode'
+               ]
         },
         Where :{
-            Condition : ["AND TCNMPos.FTPosType = '1' "]
+            Condition : ["AND TCNMPos.FTPosType = '1' " + tWherePOS]
         },
         GrideView:{
             ColumnPathLang	: 'pos/salemachine/salemachine',
-            ColumnKeyLang	: ['tPOSCode','tPOSName'],
-            ColumnsSize     : ['15%','75%'],
+            ColumnKeyLang	: ['tPOSCode','tPOSBranchRef','tPOSName'],
+            ColumnsSize     : ['15%','20%','55'],
             WidthModal      : 50,
-            DataColumns		: ['TCNMPos.FTPosCode','TCNMPosLastNo.FTPosComName'],
-            DataColumnsFormat : ['',''],
+            DataColumns		: ['TCNMPos.FTPosCode','TCNMBranch_L.FTBchName','TCNMPos_L.FTPosName'],
+            DataColumnsFormat : ['','',''],
             Perpage			: 5,
             OrderBy			: ['TCNMPos.FTPosCode'],
             SourceOrder		: "ASC"
@@ -432,11 +719,185 @@
         CallBack:{
             ReturnType	: 'S',
             Value		: ["oetZnePosCode","TCNMPos.FTPosCode"],
-            Text		: ["oetZnePosName","TCNMPosLastNo.FTPosComName"],
+            Text		: ["oetZnePosName","TCNMPos_L.FTPosName"],
         },
-        RouteAddNew : 'salemachine',
-        BrowseLev : nStaZneBrowseType
+        // RouteAddNew : 'salemachine',
+        // BrowseLev : nStaZneBrowseType,
+        // DebugSQL: true,
     }	
+
+    var tCtyCode = "<?= $this->session->userdata('tSesDefCountry') ?>";
+    
+    if ((tCtyCode == '' || tCtyCode == null) || tUsrLevel == "HQ") {
+        tWhereCty = '';
+    } else {
+        tWhereCty = " AND TCNMCountry.FTCtyCode = '" + tCtyCode + "'";
+    }
+    // Browse Country (ประเทศ) 
+    var oBrowseCountry = {
+        Title : ['company/country/country','tCountryTitle'],
+        Table:{Master:'TCNMCountry',PK:'FTCtyCode'},
+        Join :{
+            Table:	['TCNMCountry_L'],
+            On:['TCNMCountry_L.FTCtyCode = TCNMCountry.FTCtyCode']
+        },
+        Where :{
+            Condition : ["AND TCNMCountry.FTCtyStaUse = '1' "+ tWhereCty]
+        },
+        GrideView:{
+            ColumnPathLang	: 'company/country/country',
+            ColumnKeyLang	: ['tCountryRef','tCountryName'],
+            ColumnsSize     : ['15%','75%'],
+            WidthModal      : 50,
+            DataColumns		: ['TCNMCountry.FTCtyCode','TCNMCountry_L.FTCtyName'],
+            DataColumnsFormat : ['',''],
+            Perpage			: 5,
+            OrderBy			: ['TCNMCountry.FTCtyCode'],
+            SourceOrder		: "ASC"
+        },
+        CallBack:{
+            ReturnType	: 'S',
+            Value		: ["oetZneCtyCode","TCNMCountry.FTCtyCode"],
+            Text		: ["oetZneCtyName","TCNMCountry_L.FTCtyName"],
+        },
+        // RouteAddNew : 'country',
+        // BrowseLev : nStaZneBrowseType
+    }	
+
+    var tAgnCode = "<?= $this->session->userdata('tSesUsrAgnCode') ?>";
+
+    if (tAgnCode == '' || tAgnCode == null) {
+        tWhereAgn = '';
+    } else {
+        tWhereAgn = " AND TCNMAgency.FTAgnCode = '" + tAgnCode + "'";
+    }
+    var oBrowseAgency = {
+        Title: ['payment/rate/rate','tRTEAgency'],
+        Table: {
+            Master: 'TCNMAgency',
+            PK: 'FTAgnCode'
+        },
+        Join: {
+            Table: ['TCNMAgency_L'],
+            On: ['TCNMAgency_L.FTAgnCode = TCNMAgency.FTAgnCode']
+        },
+        Where: {
+            Condition: [tWhereAgn]
+        },
+        GrideView: {
+            ColumnPathLang: 'payment/rate/rate',
+            ColumnKeyLang: ['tBrowseAgnCode', 'tBrowseAgnName'],
+            ColumnsSize: ['15%', '75%'],
+            DataColumns: ['TCNMAgency.FTAgnCode', 'TCNMAgency_L.FTAgnName'],
+            DataColumnsFormat: ['', ''],
+            WidthModal: 50,
+            Perpage: 10,
+            OrderBy: ['TCNMAgency.FTAgnCode ASC'],
+        },
+        CallBack: {
+            ReturnType: 'S',
+            Value: ["oetZneAgnCode", "TCNMAgency.FTAgnCode"],
+            Text: ["oetZneAgnName", "TCNMAgency_L.FTAgnName"]
+        }
+    }
+
+    var oBrowseAgencyF = {
+        Title: ['payment/rate/rate','tRTEAgency'],
+        Table: {
+            Master: 'TCNMAgency',
+            PK: 'FTAgnCode'
+        },
+        Join: {
+            Table: ['TCNMAgency_L'],
+            On: ['TCNMAgency_L.FTAgnCode = TCNMAgency.FTAgnCode']
+        },
+        Where: {
+            Condition: [tWhereAgn]
+        },
+        GrideView: {
+            ColumnPathLang: 'payment/rate/rate',
+            ColumnKeyLang: ['tBrowseAgnCode', 'tBrowseAgnName'],
+            ColumnsSize: ['15%', '75%'],
+            DataColumns: ['TCNMAgency.FTAgnCode', 'TCNMAgency_L.FTAgnName'],
+            DataColumnsFormat: ['', ''],
+            WidthModal: 50,
+            Perpage: 10,
+            OrderBy: ['TCNMAgency.FTAgnCode ASC'],
+        },
+        CallBack: {
+            ReturnType: 'S',
+            Value: ["oetZneAgnCodeFirst", "TCNMAgency.FTAgnCode"],
+            Text: ["oetZneAgnNameFirst", "TCNMAgency_L.FTAgnName"]
+        }
+    }
+
+    var oBrowseAgencyS = {
+        Title: ['payment/rate/rate','tRTEAgency'],
+        Table: {
+            Master: 'TCNMAgency',
+            PK: 'FTAgnCode'
+        },
+        Join: {
+            Table: ['TCNMAgency_L'],
+            On: ['TCNMAgency_L.FTAgnCode = TCNMAgency.FTAgnCode']
+        },
+        Where: {
+            Condition: [tWhereAgn]
+        },
+        GrideView: {
+            ColumnPathLang: 'payment/rate/rate',
+            ColumnKeyLang: ['tBrowseAgnCode', 'tBrowseAgnName'],
+            ColumnsSize: ['15%', '75%'],
+            DataColumns: ['TCNMAgency.FTAgnCode', 'TCNMAgency_L.FTAgnName'],
+            DataColumnsFormat: ['', ''],
+            WidthModal: 50,
+            Perpage: 10,
+            OrderBy: ['TCNMAgency.FTAgnCode ASC'],
+        },
+        CallBack: {
+            ReturnType: 'S',
+            Value: ["oetZneAgnCodeSecond", "TCNMAgency.FTAgnCode"],
+            Text: ["oetZneAgnNameSecond", "TCNMAgency_L.FTAgnName"]
+        }
+    }
+
+    // Browse Merchant (กลุ่มธุรกิจ) 
+    var tMerCode = ",'<?= $this->session->userdata('tSesUsrPplCode') ?>'";
+
+    if (tUsrLevel == "HQ") {
+        tWhereMer = '';
+    } else {
+        tWhereMer = " AND TCNMMerchant.FTPplCode IN(''" + tMerCode + ")";
+    }
+    var oBrowseMerchant = {
+        Title: ['address/zone/zone','tZneSltMerchant'],
+        Table: {
+            Master: 'TCNMMerchant',
+            PK: 'FTMerCode'
+        },
+        Join: {
+            Table: ['TCNMMerchant_L'],
+            On: ['TCNMMerchant_L.FTMerCode = TCNMMerchant.FTMerCode']
+        },
+        Where: {
+            Condition: [tWhereMer]
+        },
+        GrideView: {
+            ColumnPathLang: 'merchant/merchant/merchant',
+            ColumnKeyLang: ['tMCNTBCode', 'tMCNTBName'],
+            ColumnsSize: ['15%', '75%'],
+            DataColumns: ['TCNMMerchant.FTMerCode', 'TCNMMerchant_L.FTMerName'],
+            DataColumnsFormat: ['', ''],
+            WidthModal: 50,
+            Perpage: 10,
+            OrderBy: ['TCNMMerchant.FTMerCode ASC'],
+        },
+        CallBack: {
+            ReturnType: 'S',
+            Value: ["oetZneMchCode", "TCNMMerchant.FTMerCode"],
+            Text: ["oetZneMchName", "TCNMMerchant_L.FTMerName"]
+        }
+    }
 
     //Set Event Browse 
     $('#oimBrowseZneParent').click(function(){
@@ -482,6 +943,36 @@
         JCNxBrowseData('oBrowseBch');
     });
 
+    $('#obtBrowseCountry').click(function(){
+        // Update CheckPinMenu Create By Witsarut 04/10/2019
+        JSxCheckPinMenuClose();
+        JCNxBrowseData('oBrowseCountry');
+    });
+
+    $('#obtBrowseAgency').click(function(){
+        // Update CheckPinMenu Create By Witsarut 04/10/2019
+        JSxCheckPinMenuClose();
+        JCNxBrowseData('oBrowseAgency');
+    });
+
+    $('#obtBrowseAgencyFirst').click(function(){
+        // Update CheckPinMenu Create By Witsarut 04/10/2019
+        JSxCheckPinMenuClose();
+        JCNxBrowseData('oBrowseAgencyF');
+    });
+
+    $('#obtBrowseAgencySecond').click(function(){
+        // Update CheckPinMenu Create By Witsarut 04/10/2019
+        JSxCheckPinMenuClose();
+        JCNxBrowseData('oBrowseAgencyS');
+    });
+
+    $('#obtBrowseMerchant').click(function(){
+        // Update CheckPinMenu Create By Witsarut 04/10/2019
+        JSxCheckPinMenuClose();
+        JCNxBrowseData('oBrowseMerchant');
+    });
+    
 
     function JSxNextFuncZneParent(paDataReturn){
         $('#oetZneParentName').closest('.form-group').addClass( "has-success" ).removeClass( "has-error");
@@ -510,61 +1001,9 @@
     });
 
     //Edit inline
-    function JSvCallPageZoneReferClickEdit(ZenElement, ZenEvent , pnZone) {
-        JCNxOpenLoading();
-            var tRecordId = $(ZenElement).parents('.xWZoneObjDataSource').attr('id');
-            var oRecord = {
-                tShp        : $(ZenElement).parents('.xWZoneObjDataSource').find('.xCNFieldZneKey input[type=hidden]').val(),
-                tShpSN      : $(ZenElement).parents('.xWZoneObjDataSource').find('.xCNFieldPosSN input[type=text]').val(),
-                tShpStatus  : $(ZenElement).parents('.xWZoneObjDataSource').find('.xCNFieldPosStatus select').val()
-            };
-            // Backup Seft Record
-                localStorage.setItem(tRecordId, JSON.stringify(oRecord));
-            
-            // Visibled icons
-            JSxZonreferDataSourceVisibledOperationIcon(ZenElement, 'edit', false);      // Itself hidden(edit)
-            JSxZonreferDataSourceVisibledOperationIcon(ZenElement, 'cancel', true);     // hidden cancel icon
-            JSxZonreferDataSourceVisibledOperationIcon(ZenElement, 'save', true);       // hidden save icon
-
-            $(ZenElement) // Active xCNFieldZneKey - success
-                    .parents('.xWZoneObjDataSource')
-                    .find('.xCNFieldZneKey input[type=text]')
-                    .removeAttr('disabled')
-                    .removeClass( "xCNHide" )
-                    .addClass('text')
-                    .attr('maxlength', 18);
-                    $('.xWInpuTextLineotrZen'+tRecordId).addClass('xCNHide');  
-
-            $(ZenElement) // Active TypeReferEdit - success
-                    .parents('.xWZoneObjDataSource')
-                    .find('#ocmTypeReferEdit'+tRecordId)
-                    .removeClass( "xCNHide" );
-                    $('.xWInpuTextLineotrZen'+tRecordId).addClass('xCNHide');                        
-
-            $(ZenElement) // Active TypeReferEdit - success
-                    .parents('.xWZoneObjDataSource')
-                    .find('.xWInpuTextLineZenReferCode input[type=text]')
-                    .removeAttr('disabled')
-                    .removeClass( "xCNHide" )
-                    .addClass('text')
-                    .attr('maxlength', 18);
-                    // $('.xWInpuTextLineotrZen'+tRecordId).addClass('xCNHide');    
-            
-            $(ZenElement) // Active TypeReferEdit - success
-                    .parents('.xWZoneObjDataSource')
-                    .find('.xCNFieldZneRefName input[type=text]')
-                    .removeAttr('disabled')
-                    .removeClass( "xCNHide" )
-                    .addClass('text')
-                    .attr('maxlength', 18);
-                    // $('.xWInpuTextLineotrZen'+tRecordId).addClass('xCNHide');
-
-
-            var tElement = ZenElement;
-            $(ZenElement).parents('.xWZoneObjDataSource').find('#ocmTypeReferEditRefer'+tRecordId).change(function(){
-                JSxHideObjZoneTypeRefer(this,tElement);
-            });
-            JCNxCloseLoading();
+    function JSvCallPageZoneReferClickEdit(ZenElement, ZenEvent , pnZoneCode) {
+        // console.log(pnZone);
+        JSxZoneSetCallPageEdit(pnZoneCode);
     }
 
     //
@@ -615,9 +1054,8 @@
                             WidthModal      : 50,
                             DataColumns		: ['TCNMBranch.FTBchCode','TCNMBranch_L.FTBchName'],
                             DataColumnsFormat : ['',''],
-                            Perpage			: 5,
-                            OrderBy			: ['TCNMBranch_L.FTBchName'],
-                            SourceOrder		: "ASC"
+                            Perpage			: 10,
+                            OrderBy		    : ['TCNMBranch.FDCreateOn DESC'],
                         },
                         CallBack:{
                             StaSingItem : '1',

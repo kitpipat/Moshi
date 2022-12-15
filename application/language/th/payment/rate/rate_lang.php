@@ -42,3 +42,9 @@ $lang['tRteUnit']         =  "หน่วยย่อย ปัดเศษ";
 $lang['tRTEValidCode']      = "กรุณากรอกรหัสสกุลเงิน";
 $lang['tRTEValidName']      = "กรุณากรอกชื่อสกุลเงิน";
 $lang['tRTEValidCheckCode']  = "รหัสสกุลเงินนี้มีในระบบแล้วกรุณาครวจสอบอีกครั้ง";
+
+$lang['tRTEAgency']     = "ตัวแทนขาย";
+
+// tBrowse
+$lang['tBrowseAgnCode']     = "รหัส";
+$lang['tBrowseAgnName']     = "ชื่อตัวแทน";

@@ -42,3 +42,10 @@ $lang['tRteUnit']         =  "Rate Unit";
 $lang['tRTEValidCode']      = "Please Enter Code.";
 $lang['tRTEValidName']      = "Please Enter Name.";
 $lang['tRTEValidCheckCode']  = "Rate Code Duplication";
+
+
+$lang['tRTEAgency']     = "Agency";
+
+// tBrowse
+$lang['tBrowseAgnCode']     = "Code";
+$lang['tBrowseAgnName']     = "Representative Name";

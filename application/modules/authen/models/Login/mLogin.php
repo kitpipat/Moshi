@@ -79,4 +79,79 @@ class mLogin extends CI_Model
         $oList          = $oQuery->result_array();
         return $oList;
     }
+
+    // Last Update : Napat(Jame) 17/08/2020 ดึงสาขามาจาก Agn ทั้งหมด
+    public function FSaMLOGGetDataUserLoginGroup($ptUsrCode){
+        $tLang = $this->session->userdata("tLangID");
+        $tSQL  = "  SELECT DISTINCT
+                        USG.FTUsrCode       AS FTUsrCode,
+                        USG.FTAgnCode       AS FTAgnCode,
+                        AGNL.FTAgnName      AS FTAgnName,
+                        BCH.FTBchCode       AS FTBchCode,
+                        BCHL.FTBchName      AS FTBchName,
+                        USG.FTShpCode       AS FTShpCode,
+                        SHPL.FTShpName      AS FTShpName,
+                        USG.FTMerCode       AS FTMerCode,
+                        MERL.FTMerName      AS FTMerName,
+                        WAHL.FTWahCode      AS FTWahCode,
+                        WAHL.FTWahName      AS FTWahName,
+                        CASE 
+                            WHEN ISNULL(USG.FTAgnCode,'') != '' AND ISNULL(USG.FTBchCode,'')  = '' AND ISNULL(USG.FTMerCode,'')  = '' AND ISNULL(USG.FTShpCode,'')  = '' THEN 'AGN'
+                            WHEN ISNULL(USG.FTBchCode,'') != '' AND ISNULL(USG.FTMerCode,'')  = '' AND ISNULL(USG.FTShpCode,'')  = '' THEN 'BCH' 
+                            WHEN ISNULL(USG.FTBchCode,'') != '' AND ISNULL(USG.FTMerCode,'') != '' AND ISNULL(USG.FTShpCode,'')  = '' THEN 'MER'
+                            WHEN ISNULL(USG.FTBchCode,'') != '' AND ISNULL(USG.FTMerCode,'') != '' AND ISNULL(USG.FTShpCode,'') != '' THEN 'SHP'
+                            ELSE 'HQ'
+                        END AS FTLoginLevel
+                    FROM TCNTUsrGroup USG WITH(NOLOCK)
+                    /* 
+                        ถ้าเป็น User AD ให้ Where ด้วย FTAgnCode (จะดึงสาขาทั้งหมดภายใต้ AD)
+                        ถ้าเป็น User AD Bch ให้ Where ด้วย FTBchCode (จะดึงเฉพาะสาขาที่กำหนดในหน้าจอผู้ใช้)
+                        ถ้าเป็น User Bch ให้ Where ด้วย FTBchCode (จะดึงเฉพาะสาขาที่กำหนดในหน้าจอผู้ใช้)
+                    */
+                    LEFT JOIN TCNMBranch		BCH  WITH(NOLOCK) ON 
+                        CASE 
+                            WHEN ISNULL(USG.FTAgnCode,'') != '' AND ISNULL(USG.FTBchCode,'') != '' THEN USG.FTBchCode 
+                            WHEN ISNULL(USG.FTAgnCode,'') != '' AND ISNULL(USG.FTBchCode,'')  = '' THEN USG.FTAgnCode 
+                            ELSE USG.FTBchCode
+                        END 
+                            = 
+                        CASE 
+                            WHEN ISNULL(USG.FTAgnCode,'') != '' AND ISNULL(USG.FTBchCode,'') != '' THEN BCH.FTBchCode 
+                            WHEN ISNULL(USG.FTAgnCode,'') != '' AND ISNULL(USG.FTBchCode,'')  = '' THEN BCH.FTAgnCode 
+                            ELSE BCH.FTBchCode
+                        END
+                    LEFT JOIN TCNMBranch_L      BCHL WITH(NOLOCK) ON BCH.FTBchCode = BCHL.FTBchCode AND BCHL.FNLngID = $tLang
+                    LEFT JOIN TCNMAgency_L      AGNL WITH(NOLOCK) ON USG.FTAgnCode = AGNL.FTAgnCode AND AGNL.FNLngID = $tLang
+                    LEFT JOIN TCNMShop_L        SHPL WITH(NOLOCK) ON USG.FTShpCode = SHPL.FTShpCode AND SHPL.FNLngID = $tLang
+                    LEFT JOIN TCNMMerchant_L    MERL WITH(NOLOCK) ON USG.FTMerCode = MERL.FTMerCode AND MERL.FNLngID = $tLang
+                    LEFT JOIN TCNMWaHouse_L     WAHL WITH(NOLOCK) ON BCH.FTWahCode = WAHL.FTWahCode AND BCH.FTBchCode = WAHL.FTBchCode AND WAHL.FNLngID = $tLang
+                    WHERE USG.FTUsrCode = '$ptUsrCode'
+                    ORDER BY FTMerCode ASC, FTBchCode ASC, FTShpCode ASC
+                    ";
+        // $tSQL  = "   SELECT
+        //                 USG.FTUsrCode       AS FTUsrCode,
+        //                 USG.FTAgnCode       AS FTAgnCode,
+        //                 AGNL.FTAgnName      AS FTAgnName,
+        //                 USG.FTBchCode       AS FTBchCode,
+        //                 BCHL.FTBchName      AS FTBchName,
+        //                 USG.FTShpCode       AS FTShpCode,
+        //                 SHPL.FTShpName      AS FTShpName,
+        //                 USG.FTMerCode       AS FTMerCode,
+        //                 MERL.FTMerName      AS FTMerName,
+        //                 WAHL.FTWahCode      AS FTWahCode,
+        //                 WAHL.FTWahName      AS FTWahName
+        //             FROM TCNTUsrGroup USG WITH(NOLOCK)
+        //             LEFT JOIN TCNMBranch        BCH  ON USG.FTBchCode = BCH.FTBchCode
+        //             LEFT JOIN TCNMBranch_L      BCHL ON USG.FTBchCode = BCHL.FTBchCode AND BCHL.FNLngID = $tLang
+        //             LEFT JOIN TCNMShop_L        SHPL ON USG.FTShpCode = SHPL.FTShpCode AND SHPL.FNLngID = $tLang
+        //             LEFT JOIN TCNMMerchant_L    MERL ON USG.FTMerCode = MERL.FTMerCode AND MERL.FNLngID = $tLang
+        //             LEFT JOIN TCNMAgency_L      AGNL ON USG.FTAgnCode = AGNL.FTAgnCode AND AGNL.FNLngID = $tLang
+        //             LEFT JOIN TCNMWaHouse_L     WAHL ON BCH.FTWahCode = WAHL.FTWahCode AND USG.FTBchCode = WAHL.FTBchCode AND WAHL.FNLngID = $tLang
+        //             WHERE USG.FTUsrCode = '$ptUsrCode'
+        //             ORDER BY FTMerCode ASC, FTBchCode ASC, FTShpCode ASC
+        //          ";
+        $oQuery = $this->db->query($tSQL);
+        return $oQuery->result_array();
+    }
 }
+

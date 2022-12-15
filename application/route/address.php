@@ -10,24 +10,40 @@ $route ['areaEventAdd']                 = 'address/area/cArea/FSoCAREAddEvent';
 $route ['areaEventEdit']                = 'address/area/cArea/FSoCAREEditEvent';
 $route ['areaEventDelete']              = 'address/area/cArea/FSoCAREDeleteEvent';
 
-// Zone (โซน)
-$route ['zone/(:any)/(:any)']           = 'address/zone/cZone/index/$1/$2';
-$route ['zoneCheckUserLevel']           = 'address/zone/cZone/FSvCZNECheckUserLevel';
-$route ['zoneList']                     = 'address/zone/cZone/FSvCZNEListPage';
-$route ['zoneDataTable']                = 'address/zone/cZone/FSvCZNEDataList';
-$route ['zonePageAdd']                  = 'address/zone/cZone/FSvCZNEAddPage';
-$route ['zoneEventAdd']                 = 'address/zone/cZone/FSaCZNEAddEvent';
-$route ['zonePageEdit']                 = 'address/zone/cZone/FSvCZNEEditPage';
-$route ['zoneEventEdit']                = 'address/zone/cZone/FSaCZNEEditEvent';
-$route ['zoneEventDelete']              = 'address/zone/cZone/FSaCZNEDeleteEvent';
+// // Zone (โซน)
+// $route ['zone/(:any)/(:any)']           = 'address/zone/cZone/index/$1/$2';
+// $route ['zoneCheckUserLevel']           = 'address/zone/cZone/FSvCZNECheckUserLevel';
+// $route ['zoneList']                     = 'address/zone/cZone/FSvCZNEListPage';
+// $route ['zoneDataTable']                = 'address/zone/cZone/FSvCZNEDataList';
+// $route ['zonePageAdd']                  = 'address/zone/cZone/FSvCZNEAddPage';
+// $route ['zoneEventAdd']                 = 'address/zone/cZone/FSaCZNEAddEvent';
+// $route ['zonePageEdit']                 = 'address/zone/cZone/FSvCZNEEditPage';
+// $route ['zoneEventEdit']                = 'address/zone/cZone/FSaCZNEEditEvent';
+// $route ['zoneEventDelete']              = 'address/zone/cZone/FSaCZNEDeleteEvent';
+
 //Refer
-$route ['zoneEvenAddRefer']             = 'address/zone/cZone/FSvCZNEAddRefer';
-$route ['zoneReferTable']               = 'address/zone/cZone/FSvCZNEObjDataList';
-$route ['zoneReferEventDelete']         = 'address/zone/cZone/FSaCAGNDeleteEvent';
-$route ['zoneReferEventEdit']           = 'address/zone/cZone/FSvCZNEEditRefer';
+// $route ['zoneEvenAddRefer']             = 'address/zone/cZone/FSvCZNEAddRefer';
+// $route ['zoneReferTable']               = 'address/zone/cZone/FSvCZNEObjDataList';
+// $route ['zoneReferEventDelete']         = 'address/zone/cZone/FSaCAGNDeleteEvent';
+// $route ['zoneReferEventEdit']           = 'address/zone/cZone/FSvCZNEEditRefer';
 
-
-
+// Zone (โซน)
+$route ['zone/(:any)/(:any)']           = 'address/zone/Zone_controller/index/$1/$2';
+$route ['zoneCheckUserLevel']           = 'address/zone/Zone_controller/FSvCZNECheckUserLevel';
+$route ['zoneList']                     = 'address/zone/Zone_controller/FSvCZNEListPage';
+$route ['zoneDataTable']                = 'address/zone/Zone_controller/FSvCZNEDataList';
+$route ['zonePageAdd']                  = 'address/zone/Zone_controller/FSvCZNEAddPage';
+$route ['zoneEventAdd']                 = 'address/zone/Zone_controller/FSaCZNEAddEvent';
+$route ['zonePageEdit']                 = 'address/zone/Zone_controller/FSvCZNEEditPage';
+$route ['zoneEventEdit']                = 'address/zone/Zone_controller/FSaCZNEEditEvent';
+$route ['zoneEventDelete']              = 'address/zone/Zone_controller/FSaCZNEDeleteEvent';
+$route ['zoneSetCallPageAdd']           = 'address/zone/Zone_controller/FSaCZNESETCallPageAdd';
+$route ['zoneSetCallPageEdit']          = 'address/zone/Zone_controller/FSaCZNESETCallPageEdit';
+//Refer
+$route ['zoneEvenAddRefer']             = 'address/zone/Zone_controller/FSvCZNEAddRefer';
+$route ['zoneReferTable']               = 'address/zone/Zone_controller/FSvCZNEObjDataList';
+$route ['zoneReferEventDelete']         = 'address/zone/Zone_controller/FSaCAGNDeleteEvent';
+$route ['zoneReferEventEdit']           = 'address/zone/Zone_controller/FSvCZNEEditRefer';
 
 
 // Province

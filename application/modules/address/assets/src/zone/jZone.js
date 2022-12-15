@@ -108,6 +108,108 @@ function JSvZoneDataTable(pnPage) {
 //Creator :
 //Return : View
 //Return Type : View
+function JSxZoneSetBackPageAdd(){
+    var nStaSession = JCNxFuncChkSessionExpired();
+    if(typeof(nStaSession) !== 'undefined' && nStaSession == 1){
+        JCNxOpenLoading();
+        var ptZneCode = $('#oetZneCode').val();
+        $('#odvZneSetSubMenuSta').hide();
+        $('#odvZneSetDataTable').html('');
+        $('#olbZneSetAdd').addClass('xCNHide');
+        $('#obtZneSetAdd').removeClass('xCNHide');
+        $('#obtZneSetBack').addClass('xCNHide');
+        $('#obtZneSetSave').addClass('xCNHide');
+        $('#olbZneSetEdit').removeClass('xCNHide');
+        $('#odvContentZoneObjData').removeClass('xCNHide');
+        JCNxCloseLoading();
+
+    }else{
+        JCNxShowMsgSessionExpired();
+    }
+}
+
+function JSxZoneSetCallPageAdd(){
+    var nStaSession = JCNxFuncChkSessionExpired();
+    if(typeof(nStaSession) !== 'undefined' && nStaSession == 1){
+        JCNxOpenLoading();
+        var ptZneCode = $('#oetZneCode').val();
+        $('#odvZneSetSubMenuSta').hide();
+        $.ajax({
+            type: "POST",
+            url: "zoneSetCallPageAdd",
+            data: {
+                tZneCode: ptZneCode,
+                tTypePage: 'edit'
+            },
+            async: false,
+            cache: false,
+            timeout: 0,
+            success: function(oResult) {
+                var aReturn = JSON.parse(oResult);
+                $('#odvZneSetDataTable').html(aReturn['tHTML']);
+                $('#olbZneSetAdd').removeClass('xCNHide');
+                $('#obtZneSetAdd').addClass('xCNHide');
+                $('#obtZneSetBack').removeClass('xCNHide');
+                $('#obtZneSetSave').removeClass('xCNHide');
+                $('#olbZneSetEdit').addClass('xCNHide');
+                $('#odvContentZoneObjData').addClass('xCNHide');
+                if ($('#ohdRteAutStaEdit').val() == 0) {
+                    $('.xCNIconDel').addClass('xCNDocDisabled');
+                    $('.xCNIconDel').removeAttr('onclick');
+                    $('.xWIMGZoneReferEdit').addClass('xCNDocDisabled');
+                    $('.xWIMGZoneReferEdit').removeAttr('onclick');
+                }else{
+                    $('input').attr('disabled', false);
+                    $('textarea').attr('disabled', false);
+                    $('#obtBarSubmitZne').show();
+                    $('#obtZneSetAdd').show();
+                }
+                               
+                JCNxCloseLoading();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                JCNxResponseError(jqXHR, textStatus, errorThrown);
+            }
+        });
+    }else{
+        JCNxShowMsgSessionExpired();
+    }
+}
+
+function JSxZoneSetCallPageEdit(pnZoneCode){
+    var nStaSession = JCNxFuncChkSessionExpired();
+    if(typeof(nStaSession) !== 'undefined' && nStaSession == 1){
+        JCNxOpenLoading();
+        $('#odvPdtSetSubMenuSta').hide();
+        $.ajax({
+            type: "POST",
+            url: "zoneSetCallPageEdit",
+            data: {
+                ptZneID : pnZoneCode
+            },
+            async: false,
+            cache: false,
+            timeout: 0,
+            success: function(oResult) {
+                var aReturn = JSON.parse(oResult);
+                $('#odvZneSetDataTable').html(aReturn['tHTML']);
+                $('#olbZneSetAdd').addClass('xCNHide');
+                $('#olbZneSetEdit').removeClass('xCNHide');
+                $('#obtZneSetAdd').addClass('xCNHide');
+                $('#obtZneSetBack').removeClass('xCNHide');
+                $('#obtZneSetSave').removeClass('xCNHide');
+                $('#odvContentZoneObjData').addClass('xCNHide');
+                JCNxCloseLoading();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                JCNxResponseError(jqXHR, textStatus, errorThrown);
+            }
+        });
+    }else{
+        JCNxShowMsgSessionExpired();
+    }
+}
+
 function JSvCallPageZoneAdd() {
     var nStaSession = JCNxFuncChkSessionExpired();
     if (typeof(nStaSession) !== 'undefined' && nStaSession == 1) {
@@ -131,6 +233,11 @@ function JSvCallPageZoneAdd() {
                     $('#odvBtnZneInfo').hide();
                     $('#odvBtnZneEditInfo').show();
                 }
+
+                    $('input').attr('disabled', false);
+                    $('textarea').attr('disabled', false);
+                    $('#obtBarSubmitZne').show();
+                    $('#obtZneSetAdd').show();
 
                 $('#odvContentPageZone').html(tResult);
                 JCNxLayoutControll();
@@ -167,6 +274,7 @@ function JSvCallPageZoneEdit(ptZneCode) {
             cache: false,
             timeout: 0,
             success: function(tResult) {
+
                 if (tResult != "") {
                     $('#odvContentPageZone').html(tResult);
                     $('#oliZneAdd').hide();
@@ -195,6 +303,19 @@ function JSvCallPageZoneEdit(ptZneCode) {
                     $('#obtBarBack').show();
 
                     $('.xCNBtnGenCode').attr('disabled', true);
+
+                    if ($('#ohdRteAutStaEdit').val() == 0) {
+                        $('input').attr('disabled', true);
+                        $('textarea').attr('disabled', true);
+                        $('#obtBarSubmitZne').hide();
+                        $('#obtZneSetAdd').hide();
+                    }else{
+                        $('input').attr('disabled', false);
+                        $('textarea').attr('disabled', false);
+                        $('#obtBarSubmitZne').show();
+                        $('#obtZneSetAdd').show();
+                    }
+                    
                 }
                 JCNxLayoutControll();
                 JCNxCloseLoading();
@@ -325,7 +446,9 @@ function JSnAddEditZone(tRouteEvent) {
                                     /*บีนทึกแล้วกลับไปหน้า List*/
                                     JSvCallPageZoneList();
                                     break;
+                                    
                                 default:
+                                    JSvCallPageZoneEdit(tZneCode);
                             }
                         } else {
                             FSvCMNSetMsgErrorDialog(aDataReturn['tStaMessg']);
@@ -722,6 +845,7 @@ function JSnAddReferZone() {
             oetZneSpnName: "required",
             oetZneShopName: "required",
             oetZnePosName: "required",
+            oetZneCtyName: "required",
         },
         messages: {
 
@@ -755,6 +879,11 @@ function JSnAddReferZone() {
                 "required": $('#oetZnePosName').attr('data-validate-required'),
                 "dublicateCode": $('#oetZnePosName').attr('data-validate-dublicateCode')
             },
+            oetZneCtyName: {
+                // "required": "กรุณาเลือก ข้อมูลอ้างอิง!" 
+                "required": $('#oetZneCtyName').attr('data-validate-required'),
+                "dublicateCode": $('#oetZneCtyName').attr('data-validate-dublicateCode')
+            },
         },
         errorElement: "em",
         errorPlacement: function(error, element) {
@@ -785,6 +914,8 @@ function JSnAddReferZone() {
                     var tData = $.parseJSON(tResult);
                     if (tData.nStaEvent == '1') {
 
+                        JSvZoneObjDataTable(1);
+
                         // $('#oetZneBchName').val('');
                         $('#oetZneBchCode').val('');
                         $('#oetZneUSerCode').val('');
@@ -803,7 +934,10 @@ function JSnAddReferZone() {
                         $('#odvZneSaleMan').hide();
                         $('#odvZneShop').hide();
                         $('#odvZnePos').hide();
-                        JSvZoneObjDataTable(1);
+                        $('#odvZneCountry').hide();
+                        $('#odvZneAgency').hide();
+                        $('#odvZneMerchant').hide();
+
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -883,7 +1017,26 @@ function JSvZoneObjDataTable(pnPage) {
 
 
                 }
+                if ($('#ohdRteAutStaEdit').val() == 0) {
+                    $('.xCNIconDel').addClass('xCNDocDisabled');
+                    $('.xCNIconDel').removeAttr('onclick');
+                    $('.xWIMGZoneReferEdit').addClass('xCNDocDisabled');
+                    $('.xWIMGZoneReferEdit').removeAttr('onclick');
+                }else{
+                    $('input').attr('disabled', false);
+                    $('textarea').attr('disabled', false);
+                    $('#obtBarSubmitZne').show();
+                    $('#obtZneSetAdd').show();
+                }
 
+                $('#odvZneSetSubMenuSta').hide();
+                $('#odvZneSetDataTable').html('');
+                $('#olbZneSetAdd').addClass('xCNHide');
+                $('#obtZneSetAdd').removeClass('xCNHide');
+                $('#obtZneSetBack').addClass('xCNHide');
+                $('#obtZneSetSave').addClass('xCNHide');
+                $('#olbZneSetEdit').addClass('xCNHide');
+                $('#odvContentZoneObjData').removeClass('xCNHide');
                 JCNxLayoutControll();
                 JCNxCloseLoading();
             },
@@ -914,7 +1067,7 @@ function JSnZoneObjDel(tCurrentPage, ptName, tIDCode, tTable, tYesOnNo) {
         $('#ospConfirmDelete').html($('#oetTextComfirmDeleteSingle').val() + tIDCode + ' ( ' + ptName + ' ) ' + tYesOnNo);
         $('#osmConfirm').on('click', function(evt) {
 
-            if (localStorage.StaDeleteArray != '1') {
+            // if (localStorage.StaDeleteArray != '1') {
                 JCNxOpenLoading();
                 $.ajax({
                     type: "POST",
@@ -974,13 +1127,13 @@ function JSnZoneObjDel(tCurrentPage, ptName, tIDCode, tTable, tYesOnNo) {
                             alert(aReturn['tStaMessg']);
                         }
 
-                        JSxZNENavDefult();
+                        // JSxZNENavDefult();
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         JCNxResponseError(jqXHR, textStatus, errorThrown);
                     }
                 });
-            }
+            // }
         });
     }
 }
