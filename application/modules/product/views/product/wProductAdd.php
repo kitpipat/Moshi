@@ -782,6 +782,9 @@
                             <li id="oliPdtPdtContentMore" class="xWMenu " data-menutype="MN">
                                 <a role="tab" data-toggle="tab" data-target="#odvPdtContentMore" aria-expanded="true"><?php echo language('product/product/product','tPDTTabOther');?></a>
                             </li>
+                            <li id="oliPdtContentSetZone"class="xWMenu " data-menutype="MN">
+                                <a role="tab" data-toggle="tab" data-target="#odvPdtContentSetZone" aria-expanded="true"><?php echo language('product/product/product','โซน');?></a>
+                            </li>
                             <li id="oliPdtContentCost"class="xWMenu " data-menutype="MN">
                                 <a role="tab" data-toggle="tab" data-target="#odvPdtContentCost" aria-expanded="true"><?php echo language('product/product/product','tPDTCost');?></a>
                             </li>
@@ -812,281 +815,289 @@
                         <!-- เพิ่มเติม -->
                         <div id="odvPdtContentMore" class="tab-pane fade">
                         
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="row">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="row">
 
-                                <div class="col-xs-4 col-sm-4">
-                                    <!-- เงื่อนไขสินค้าใช้เฉพาะ -->
-                                    <div class="panel panel-default" style="margin-bottom: 25px;"> 
-                                        <div class="panel-heading xCNPanelHeadColor" role="tab" style="padding-top:10px;padding-bottom:10px;">
-                                        <label class="xCNTextDetail1"><?php echo language('product/product/product', 'tPdtSpecificProductConditions'); ?></label>
-                                    </div>
-                                        <div id="odvDataPromotion" class="panel-collapse collapse in" role="tabpanel">
-                                            <div class="panel-body xCNPDModlue">
-                                                
-                                            <!-- Product Control Branch -->
-                                            <div class="form-group">
-                                                <label class="xCNLabelFrm"><?php echo language('product/product/product','tPDTBranch')?></label>
-                                                    <div class="input-group">
-                                                        <input type="text" id="oetPdtBchCode" class="form-control xCNHide" name="oetPdtBchCode" value="<?php echo @$tBchCode;?>">
-                                                        <input type="text" id="oetPdtBchName" class="form-control" name="oetPdtBchName" value="<?php echo @$tBchName;?>" readonly>
-                                                        <span class="input-group-btn">
-                                                            <?php
-                                                                // Last Update : 08/10/2019 Wasin(Yoshi)
-                                                                $tDisableBrowseBranch   = '';
-                                                                if($tRoute == 'productEventAdd'){
-                                                                    // เข้ามาในกรณีที่เพิ่มสินค้าใหม่เท่านั้น
-                                                                    if($this->session->userdata("tSesUsrLevel") == "BCH" || $this->session->userdata("tSesUsrLevel") == "SHP"){
-                                                                        // เข้ามาในกรณีก็ต่อเมือ Session User Level เป็นระดับสาขา หรือ ระดับร้านค้า และ Session User Brach Code ต้องไม่เท่ากับค่าว่าง
-                                                                        $tCheckBchCode    = $this->session->userdata('tSesUsrBchCode');
-                                                                        if(isset($tCheckBchCode) && !empty($tCheckBchCode)){
-                                                                            $tDisableBrowseBranch   = ' disabled';
-                                                                        }
-                                                                    }
-                                                                }else{
-                                                                    // เข้ามาในกรณีที่แก้ไขสินค้าใหม่เท่านั้น
-                                                                    if($this->session->userdata("tSesUsrLevel") == "BCH" || $this->session->userdata("tSesUsrLevel") == "SHP"){
-                                                                        // เข้ามาในกรณีก็ต่อเมือ Session User Level เป็นระดับสาขา หรือ ระดับร้านค้า และ Session User Brach Code และ ข้อมูลที่มาจาก DataBase ต้องไม่เท่ากับค่าว่าง
-                                                                        $tCheckSessionBchCode   = $this->session->userdata('tSesUsrBchCode');
-                                                                        $tCheckUserBchCode      = $tBchCode;
-                                                                        if((isset($tCheckSessionBchCode) && !empty($tCheckSessionBchCode)) && (isset($tCheckUserBchCode) && !empty($tCheckUserBchCode))){
-                                                                            $tDisableBrowseBranch   = ' disabled';
-                                                                        }
-                                                                    }
-                                                                }
-                                                            ?>
-                                                            <button id="obtBrowseBranch" type="button" class="btn xCNBtnBrowseAddOn"<?php echo @$tDisableBrowseBranch;?>>
-                                                                <img class="xCNIconFind">
-                                                            </button>
-                                                        </span>
-                                                    </div>
-                                                </div> 
-                                            <!-- End Product Control Branch -->
-
-                                            <!-- Product Merchant -->
-                                            <div class="form-group">
-                                                <label class="xCNLabelFrm"><?php echo language('product/product/product','tPDTMerchant')?></label>
-                                                    <div class="input-group">
-                                                        <input type="text" id="oetPdtMerCode" class="form-control xCNHide" name="oetPdtMerCode" value="<?php echo @$tPdtMerCode;?>">
-                                                        <input type="text" id="oetPdtMerName" class="form-control" name="oetPdtMerName" value="<?php echo @$tPdtMerName;?>" readonly>
-                                                        <span class="input-group-btn">
-                                                            <?php
-                                                                // Last Update : 08/10/2019 Wasin(Yoshi)
-                                                                $tDisableBrowseMechant  = '';
-                                                                if($tRoute == 'productEventAdd'){
-                                                                    // เข้ามาในกรณีก็ต่อเมือ Session User Level เป็นระดับร้านค้า และ Session User Merchant Code ต้องไม่เท่ากับค่าว่าง
-                                                                    if($this->session->userdata("tSesUsrLevel") == "SHP"){
-                                                                        $tCheckMerCode    = $this->session->userdata('tSesUsrMerCode');
-                                                                        if(isset($tCheckMerCode) && !empty($tCheckMerCode)){
-                                                                            $tDisableBrowseMechant  = ' disabled';
-                                                                        }
-                                                                    }
-                                                                }else{
-                                                                    // เข้ามาในกรณีก็ต่อเมือ Session User Level ระดับร้านค้า และ Session User Merchant Code และ ข้อมูลที่มาจาก DataBase ต้องไม่เท่ากับค่าว่าง
-                                                                    if($this->session->userdata("tSesUsrLevel") == "SHP"){
-                                                                        $tCheckSessionMerCode   = $this->session->userdata('tSesUsrMerCode');
-                                                                        $tCheckUserMerCode      = $tPdtMerCode;
-                                                                        if((isset($tCheckSessionMerCode) && !empty($tCheckSessionMerCode)) && (isset($tCheckUserMerCode) && !empty($tCheckUserMerCode))){
-                                                                            $tDisableBrowseMechant  = ' disabled';
-                                                                        }
-                                                                    }
-                                                                }
-                                                            ?>
-                                                        <button id="obtBrowseMerchant" type="button" class="btn xCNBtnBrowseAddOn"<?php echo @$tDisableBrowseMechant;?>>
-                                                            <img class="xCNIconFind">
-                                                        </button>
-                                                    </span>
+                                        <!-- <div class="col-xs-4 col-sm-4"> -->
+                                            <!-- เงื่อนไขสินค้าใช้เฉพาะ -->
+                                            <!-- <div class="panel panel-default" style="margin-bottom: 25px;"> 
+                                                <div class="panel-heading xCNPanelHeadColor" role="tab" style="padding-top:10px;padding-bottom:10px;">
+                                                    <label class="xCNTextDetail1"><?php echo language('product/product/product', 'tPdtSpecificProductConditions'); ?></label>
                                                 </div>
-                                            </div>
-                                            <!-- End Product Merchant -->
+                                                <div id="odvDataPromotion" class="panel-collapse collapse in" role="tabpanel">
+                                                    <div class="panel-body xCNPDModlue"> -->
+                                                        
+                                                    <!-- Product Control Branch -->
+                                                    <!-- <div class="form-group">
+                                                        <label class="xCNLabelFrm"><?php echo language('product/product/product','tPDTBranch')?></label>
+                                                            <div class="input-group">
+                                                                <input type="text" id="oetPdtBchCode" class="form-control xCNHide" name="oetPdtBchCode" value="<?php echo @$tBchCode;?>">
+                                                                <input type="text" id="oetPdtBchName" class="form-control" name="oetPdtBchName" value="<?php echo @$tBchName;?>" readonly>
+                                                                <span class="input-group-btn"> -->
+                                                                    <?php
+                                                                        // Last Update : 08/10/2019 Wasin(Yoshi)
+                                                                        // $tDisableBrowseBranch   = '';
+                                                                        // if($tRoute == 'productEventAdd'){
+                                                                        //     // เข้ามาในกรณีที่เพิ่มสินค้าใหม่เท่านั้น
+                                                                        //     if($this->session->userdata("tSesUsrLevel") == "BCH" || $this->session->userdata("tSesUsrLevel") == "SHP"){
+                                                                        //         // เข้ามาในกรณีก็ต่อเมือ Session User Level เป็นระดับสาขา หรือ ระดับร้านค้า และ Session User Brach Code ต้องไม่เท่ากับค่าว่าง
+                                                                        //         $tCheckBchCode    = $this->session->userdata('tSesUsrBchCode');
+                                                                        //         if(isset($tCheckBchCode) && !empty($tCheckBchCode)){
+                                                                        //             $tDisableBrowseBranch   = ' disabled';
+                                                                        //         }
+                                                                        //     }
+                                                                        // }else{
+                                                                        //     // เข้ามาในกรณีที่แก้ไขสินค้าใหม่เท่านั้น
+                                                                        //     if($this->session->userdata("tSesUsrLevel") == "BCH" || $this->session->userdata("tSesUsrLevel") == "SHP"){
+                                                                        //         // เข้ามาในกรณีก็ต่อเมือ Session User Level เป็นระดับสาขา หรือ ระดับร้านค้า และ Session User Brach Code และ ข้อมูลที่มาจาก DataBase ต้องไม่เท่ากับค่าว่าง
+                                                                        //         $tCheckSessionBchCode   = $this->session->userdata('tSesUsrBchCode');
+                                                                        //         $tCheckUserBchCode      = $tBchCode;
+                                                                        //         if((isset($tCheckSessionBchCode) && !empty($tCheckSessionBchCode)) && (isset($tCheckUserBchCode) && !empty($tCheckUserBchCode))){
+                                                                        //             $tDisableBrowseBranch   = ' disabled';
+                                                                        //         }
+                                                                        //     }
+                                                                        // }
+                                                                    ?>
+                                                                    <!-- <button id="obtBrowseBranch" type="button" class="btn xCNBtnBrowseAddOn"<?php echo @$tDisableBrowseBranch;?>>
+                                                                        <img class="xCNIconFind">
+                                                                    </button>
+                                                                </span>
+                                                            </div>
+                                                        </div>  -->
+                                                    <!-- End Product Control Branch -->
 
-                                            <!-- Product Shop -->
-                                            <div class="form-group">
-                                                <label class="xCNLabelFrm"><?php echo language('product/product/product','tRETPDTSHP')?></label>
-                                                    <div class="input-group">
-                                                        <input type="text" id="oetPdtInfoShpCode" class="form-control xCNHide" name="oetPdtInfoShpCode" value="<?php echo @$tShpCode?>">
-                                                        <input type="text" id="oetPdtInfoShpName" class="form-control" name="oetPdtInfoShpName" value="<?php echo @$tShpName?>" readonly>
-                                                        <span class="input-group-btn">
-                                                            <?php
-                                                                // เช็คปิดปลุ่ม Browse Shop ในกรณีที่เข้ามาแบบ Add Page จะเช็คข้อมูลจาก Session Shop Code ว่ามีค่าเท่านั้นจึงจะปุ่ม แต่ถ้าเข้ามาแบบ Edit จะเช็คข้อมูลจาก Shop Type และ Session
-                                                                // Last Update : 08/10/2019 Wasin(Yoshi)
-                                                                $tDisableBrowseShop = '';
-                                                                if($tRoute == 'productEventAdd'){
-                                                                    // Call In Event Add
-                                                                    if($this->session->userdata("tSesUsrLevel") == "SHP"){
-                                                                        $tCheckShpCode  = $this->session->userdata('tSesUsrShpCode');
-                                                                        if(isset($tCheckShpCode) && !empty($tCheckShpCode)){
-                                                                            $tDisableBrowseShop = ' disabled';
-                                                                        }
-                                                                    }
-                                                                }else{
-                                                                    // Call In Event Edit
-                                                                    if($this->session->userdata("tSesUsrLevel") == "SHP"){
-                                                                        $tCheckSessionShpCode   = $this->session->userdata('tSesUsrShpCode');
-                                                                        $tCheckUserShpCode      = $tShpCode;
-                                                                        if((isset($tCheckSessionShpCode) && !empty($tCheckSessionShpCode)) && (isset($tCheckUserShpCode) && !empty($tCheckUserShpCode))){
-                                                                            $tDisableBrowseShop  = ' disabled';
-                                                                        }
-                                                                    }else{
-                                                                        if($tPdtForSystem == 4 && $tPdtRentType == 2){
-                                                                            $tDisableBrowseShop = ' disabled';
-                                                                        }
-                                                                    }
-                                                                }
-                                                            ?>
-                                                        <button id="obtBrowsePdtInfoShp" type="button" class="btn xCNBtnBrowseAddOn"<?php echo @$tDisableBrowseShop;?>>
-                                                            <img class="xCNIconFind">
-                                                        </button>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <!-- End Product Shop -->
-
-                                            <!-- Product Merchant -->
-                                            <div class="form-group">
-                                                <label class="xCNLabelFrm"><?php echo language('product/product/product','tRETPDTMGP')?></label>
-                                                    <div class="input-group">
-                                                        <input type="text" id="oetPdtInfoMgpCode" class="form-control xCNHide" name="oetPdtInfoMgpCode" value="<?php echo $tMgpCode?>">
-                                                        <input type="text" id="oetPdtInfoMgpName" class="form-control" name="oetPdtInfoMgpName" value="<?php echo $tMgpName?>" readonly>
-                                                        <span class="input-group-btn">
-                                                            <?php
-                                                                $tDisableBrowseMgp  = '';
-                                                                if($tRoute == 'productEventAdd'){
-                                                                    if($this->session->userdata("tSesUsrLevel") == "BCH" || $this->session->userdata("tSesUsrLevel") == "SHP" ){
-                                                                        $tCheckMerCode  = $this->session->userdata('tSesUsrMerCode');
-                                                                        if(isset($tCheckMerCode) && empty($tCheckMerCode)){
-                                                                            $tDisableBrowseMgp  = ' disabled';
-                                                                        }
-                                                                    }
-                                                                }else{
-                                                                    if($tPdtMerCode == ''){
-                                                                        $tDisableBrowseMgp  = ' disabled';
-                                                                    }
-                                                                }
-                                                            ?>
-                                                        <button id="obtBrowsePdtInfoMgp" type="button" class="btn xCNBtnBrowseAddOn"<?php echo @$tDisableBrowseMgp;?>>
-                                                            <img class="xCNIconFind">
-                                                        </button>
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            <!-- End Product Merchant -->
-                                            </div>
-                                        </div>
-                                    </div>    
-                                 <!-- End เงื่อนไขสินค้าใช้เฉพาะ -->
-                                </div>
-
-                                <div class="col-xs-4 col-sm-4">
-                                <!-- ข้อมูลเพิ่มเติมเกี่ยวกับสินค้า -->      
-                                    <div class="panel panel-default" style="margin-bottom: 25px;"> 
-                                        <div class="panel-heading xCNPanelHeadColor" role="tab" style="padding-top:10px;padding-bottom:10px;">
-                                        <label class="xCNTextDetail1"><?php echo language('product/product/product', 'tPdtAboutProduct'); ?></label>
-                                    </div>
-                                        <div id="odvDataPromotion" class="panel-collapse collapse in" role="tabpanel">
-                                            <div class="panel-body xCNPDModlue">
-                                                 
-                                                <!-- Product Group -->
-                                                <div class="form-group">
-                                                    <label class="xCNLabelFrm"><?php echo language('product/product/product','tPDTGroup')?></label>
-                                                        <div class="input-group">
-                                                        <input type="text" id="oetPdtPgpChain" class="form-control xCNHide" name="oetPdtPgpChain" value="<?php echo $tPgpChain;?>">
-                                                        <input type="text" id="oetPdtPgpChainName" class="form-control" name="oetPdtPgpChainName" value="<?php echo $tPgpChainName;?>" readonly>
-                                                            <span class="input-group-btn">
-                                                            <button id="obtBrowsePdtGrp" type="button" class="btn xCNBtnBrowseAddOn">
-                                                                <img class="xCNIconFind">
-                                                            </button>
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <!-- End Product Group -->
-
-                                                <!-- Product Type -->
-                                                <div class="form-group">
-                                                    <label class="xCNLabelFrm"><?php echo language('product/product/product','tPDTType')?></label>
-                                                    <div class="input-group">
-                                                        <input type="text" id="oetPdtPtyCode" class="form-control xCNHide" name="oetPdtPtyCode" value="<?php echo $tPtyCode;?>">
-                                                        <input type="text" id="oetPdtPtyName" class="form-control" name="oetPdtPtyName" value="<?php echo $tPtyName;?>" readonly>
-                                                        <span class="input-group-btn">
-                                                            <button id="obtBrowsePdtType" type="button" class="btn xCNBtnBrowseAddOn">
-                                                                <img class="xCNIconFind">
-                                                            </button>
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                 <!-- End Product Type -->
-
-                                                <!-- Product Brand -->
-                                                <div class="form-group">
-                                                    <label class="xCNLabelFrm"><?php echo language('product/product/product','tPDTBrand')?></label>
-                                                    <div class="input-group">   
-                                                        <input type="text" id="oetPdtPbnCode" class="form-control xCNHide" name="oetPdtPbnCode" value="<?php echo $tPbnCode;?>">
-                                                        <input type="text" id="oetPdtPbnName" class="form-control" name="oetPdtPbnName" value="<?php echo $tPbnName;?>" readonly>
-                                                        <span class="input-group-btn">
-                                                            <button id="obtBrowsePdtBrand" type="button" class="btn xCNBtnBrowseAddOn">
-                                                                <img src="<?php echo base_url().'/application/modules/common/assets/images/icons/find-24.png'?>">
-                                                            </button>
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <!-- End Product Brand -->
-
-                                                <!-- รุ่น -->
-                                                <div class="form-group">
-                                                    <label class="xCNLabelFrm"><?php echo language('product/product/product','tPDTModal');?></label>
-                                                        <div class="input-group">
-                                                            <input type="text" id="oetPdtPmoCode" class="form-control xCNHide" name="oetPdtPmoCode" value="<?php echo $tPmoCode;?>">
-                                                            <input type="text" id="oetPdtPmoName" class="form-control" name="oetPdtPmoName" value="<?php echo $tPmoName;?>" readonly>
-                                                            <span class="input-group-btn">
-                                                                <button id="obtBrowsePdtModel" type="button" class="btn xCNBtnBrowseAddOn">
-                                                                    <img src="<?php echo base_url().'/application/modules/common/assets/images/icons/find-24.png'?>">
+                                                    <!-- Product Merchant -->
+                                                    <!-- <div class="form-group">
+                                                        <label class="xCNLabelFrm"><?php echo language('product/product/product','tPDTMerchant')?></label>
+                                                            <div class="input-group">
+                                                                <input type="text" id="oetPdtMerCode" class="form-control xCNHide" name="oetPdtMerCode" value="<?php echo @$tPdtMerCode;?>">
+                                                                <input type="text" id="oetPdtMerName" class="form-control" name="oetPdtMerName" value="<?php echo @$tPdtMerName;?>" readonly>
+                                                                <span class="input-group-btn"> -->
+                                                                    <?php
+                                                                        // // Last Update : 08/10/2019 Wasin(Yoshi)
+                                                                        // $tDisableBrowseMechant  = '';
+                                                                        // if($tRoute == 'productEventAdd'){
+                                                                        //     // เข้ามาในกรณีก็ต่อเมือ Session User Level เป็นระดับร้านค้า และ Session User Merchant Code ต้องไม่เท่ากับค่าว่าง
+                                                                        //     if($this->session->userdata("tSesUsrLevel") == "SHP"){
+                                                                        //         $tCheckMerCode    = $this->session->userdata('tSesUsrMerCode');
+                                                                        //         if(isset($tCheckMerCode) && !empty($tCheckMerCode)){
+                                                                        //             $tDisableBrowseMechant  = ' disabled';
+                                                                        //         }
+                                                                        //     }
+                                                                        // }else{
+                                                                        //     // เข้ามาในกรณีก็ต่อเมือ Session User Level ระดับร้านค้า และ Session User Merchant Code และ ข้อมูลที่มาจาก DataBase ต้องไม่เท่ากับค่าว่าง
+                                                                        //     if($this->session->userdata("tSesUsrLevel") == "SHP"){
+                                                                        //         $tCheckSessionMerCode   = $this->session->userdata('tSesUsrMerCode');
+                                                                        //         $tCheckUserMerCode      = $tPdtMerCode;
+                                                                        //         if((isset($tCheckSessionMerCode) && !empty($tCheckSessionMerCode)) && (isset($tCheckUserMerCode) && !empty($tCheckUserMerCode))){
+                                                                        //             $tDisableBrowseMechant  = ' disabled';
+                                                                        //         }
+                                                                        //     }
+                                                                        // }
+                                                                    ?>
+                                                                <!-- <button id="obtBrowseMerchant" type="button" class="btn xCNBtnBrowseAddOn"<?php echo @$tDisableBrowseMechant;?>>
+                                                                    <img class="xCNIconFind">
                                                                 </button>
                                                             </span>
                                                         </div>
-                                                    </div>
-                                                <!--End รุ่น -->
+                                                    </div> -->
+                                                    <!-- End Product Merchant -->
 
-                                                                
+                                                    <!-- Product Shop -->
+                                                    <!-- <div class="form-group">
+                                                        <label class="xCNLabelFrm"><?php echo language('product/product/product','tRETPDTSHP')?></label>
+                                                            <div class="input-group">
+                                                                <input type="text" id="oetPdtInfoShpCode" class="form-control xCNHide" name="oetPdtInfoShpCode" value="<?php echo @$tShpCode?>">
+                                                                <input type="text" id="oetPdtInfoShpName" class="form-control" name="oetPdtInfoShpName" value="<?php echo @$tShpName?>" readonly>
+                                                                <span class="input-group-btn"> -->
+                                                                    <?php
+                                                                        // เช็คปิดปลุ่ม Browse Shop ในกรณีที่เข้ามาแบบ Add Page จะเช็คข้อมูลจาก Session Shop Code ว่ามีค่าเท่านั้นจึงจะปุ่ม แต่ถ้าเข้ามาแบบ Edit จะเช็คข้อมูลจาก Shop Type และ Session
+                                                                        // Last Update : 08/10/2019 Wasin(Yoshi)
+                                                                        // $tDisableBrowseShop = '';
+                                                                        // if($tRoute == 'productEventAdd'){
+                                                                        //     // Call In Event Add
+                                                                        //     if($this->session->userdata("tSesUsrLevel") == "SHP"){
+                                                                        //         $tCheckShpCode  = $this->session->userdata('tSesUsrShpCode');
+                                                                        //         if(isset($tCheckShpCode) && !empty($tCheckShpCode)){
+                                                                        //             $tDisableBrowseShop = ' disabled';
+                                                                        //         }
+                                                                        //     }
+                                                                        // }else{
+                                                                        //     // Call In Event Edit
+                                                                        //     if($this->session->userdata("tSesUsrLevel") == "SHP"){
+                                                                        //         $tCheckSessionShpCode   = $this->session->userdata('tSesUsrShpCode');
+                                                                        //         $tCheckUserShpCode      = $tShpCode;
+                                                                        //         if((isset($tCheckSessionShpCode) && !empty($tCheckSessionShpCode)) && (isset($tCheckUserShpCode) && !empty($tCheckUserShpCode))){
+                                                                        //             $tDisableBrowseShop  = ' disabled';
+                                                                        //         }
+                                                                        //     }else{
+                                                                        //         if($tPdtForSystem == 4 && $tPdtRentType == 2){
+                                                                        //             $tDisableBrowseShop = ' disabled';
+                                                                        //         }
+                                                                        //     }
+                                                                        // }
+                                                                    ?>
+                                                                <!-- <button id="obtBrowsePdtInfoShp" type="button" class="btn xCNBtnBrowseAddOn"<?php echo @$tDisableBrowseShop;?>>
+                                                                    <img class="xCNIconFind">
+                                                                </button>
+                                                            </span>
+                                                        </div>
+                                                    </div> -->
+                                                    <!-- End Product Shop -->
+
+                                                    <!-- Product Merchant -->
+                                                    <!-- <div class="form-group">
+                                                        <label class="xCNLabelFrm"><?php echo language('product/product/product','tRETPDTMGP')?></label>
+                                                            <div class="input-group">
+                                                                <input type="text" id="oetPdtInfoMgpCode" class="form-control xCNHide" name="oetPdtInfoMgpCode" value="<?php echo $tMgpCode?>">
+                                                                <input type="text" id="oetPdtInfoMgpName" class="form-control" name="oetPdtInfoMgpName" value="<?php echo $tMgpName?>" readonly>
+                                                                <span class="input-group-btn"> -->
+                                                                    <?php
+                                                                        // $tDisableBrowseMgp  = '';
+                                                                        // if($tRoute == 'productEventAdd'){
+                                                                        //     if($this->session->userdata("tSesUsrLevel") == "BCH" || $this->session->userdata("tSesUsrLevel") == "SHP" ){
+                                                                        //         $tCheckMerCode  = $this->session->userdata('tSesUsrMerCode');
+                                                                        //         if(isset($tCheckMerCode) && empty($tCheckMerCode)){
+                                                                        //             $tDisableBrowseMgp  = ' disabled';
+                                                                        //         }
+                                                                        //     }
+                                                                        // }else{
+                                                                        //     if($tPdtMerCode == ''){
+                                                                        //         $tDisableBrowseMgp  = ' disabled';
+                                                                        //     }
+                                                                        // }
+                                                                    ?>
+                                                                <!-- <button id="obtBrowsePdtInfoMgp" type="button" class="btn xCNBtnBrowseAddOn"<?php echo @$tDisableBrowseMgp;?>>
+                                                                    <img class="xCNIconFind">
+                                                                </button>
+                                                                </span>
+                                                            </div>
+                                                        </div> -->
+                                                    <!-- End Product Merchant -->
+                                                    <!-- </div>
+                                                </div>
+                                            </div>     -->
+                                        <!-- End เงื่อนไขสินค้าใช้เฉพาะ -->
+                                        <!-- </div>  -->
+
+                                        <div class="col-xs-4 col-sm-4">
+                                        <!-- ข้อมูลเพิ่มเติมเกี่ยวกับสินค้า -->      
+                                            <div class="panel panel-default" style="margin-bottom: 25px;"> 
+                                                <div class="panel-heading xCNPanelHeadColor" role="tab" style="padding-top:10px;padding-bottom:10px;">
+                                                <label class="xCNTextDetail1"><?php echo language('product/product/product', 'tPdtAboutProduct'); ?></label>
                                             </div>
-                                        </div>
-                                    </div>
-                                <!-- ข้อมูลเพิ่มเติมเกี่ยวกับสินค้า -->  
-                                </div>
+                                                <div id="odvDataPromotion" class="panel-collapse collapse in" role="tabpanel">
+                                                    <div class="panel-body xCNPDModlue">
+                                                        
+                                                        <!-- Product Group -->
+                                                        <div class="form-group">
+                                                            <label class="xCNLabelFrm"><?php echo language('product/product/product','tPDTGroup')?></label>
+                                                                <div class="input-group">
+                                                                <input type="text" id="oetPdtPgpChain" class="form-control xCNHide" name="oetPdtPgpChain" value="<?php echo $tPgpChain;?>">
+                                                                <input type="text" id="oetPdtPgpChainName" class="form-control" name="oetPdtPgpChainName" value="<?php echo $tPgpChainName;?>" readonly>
+                                                                    <span class="input-group-btn">
+                                                                    <button id="obtBrowsePdtGrp" type="button" class="btn xCNBtnBrowseAddOn">
+                                                                        <img class="xCNIconFind">
+                                                                    </button>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <!-- End Product Group -->
 
-                                <div class="col-xs-4 col-sm-4">
-                                    <!-- กำหนดสินค้าด่วน -->      
-                                    <div class="panel panel-default" style="margin-bottom: 25px;"> 
-                                        <div class="panel-heading xCNPanelHeadColor" role="tab" style="padding-top:10px;padding-bottom:10px;">
-                                        <label class="xCNTextDetail1"><?php echo language('product/product/product', 'tPdtDefineExpressPdt'); ?></label>
-                                    </div>
-                                        <div class="panel-collapse collapse in" role="tabpanel">
-                                            <div class="panel-body xCNPDModlue">
-                                            <!-- กลุ่มสินค้าด่วน -->
-                                                <div class="form-group">
-                                                    <label class="xCNLabelFrm"><?php echo language('product/product/product','tPdtExpressGroup');?></label>
-                                                    <div class="input-group">
-                                                        <input type="text" id="oetPdtTcgCode" name="oetPdtTcgCode" class="form-control xCNHide"  value="<?php echo $tTcgCode;?>">
-                                                        <input type="text" id="oetPdtTcgName" name="oetPdtTcgName" class="form-control" value="<?php echo $tTcgName;?>" readonly>
-                                                        <span class="input-group-btn">
-                                                            <button id="obtBrowsePdtTouchGrp" type="button" class="btn xCNBtnBrowseAddOn">
-                                                                <img class="xCNIconFind">
-                                                            </button>
-                                                        </span>
+                                                        <!-- Product Type -->
+                                                        <div class="form-group">
+                                                            <label class="xCNLabelFrm"><?php echo language('product/product/product','tPDTType')?></label>
+                                                            <div class="input-group">
+                                                                <input type="text" id="oetPdtPtyCode" class="form-control xCNHide" name="oetPdtPtyCode" value="<?php echo $tPtyCode;?>">
+                                                                <input type="text" id="oetPdtPtyName" class="form-control" name="oetPdtPtyName" value="<?php echo $tPtyName;?>" readonly>
+                                                                <span class="input-group-btn">
+                                                                    <button id="obtBrowsePdtType" type="button" class="btn xCNBtnBrowseAddOn">
+                                                                        <img class="xCNIconFind">
+                                                                    </button>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <!-- End Product Type -->
+
+                                                        <!-- Product Brand -->
+                                                        <div class="form-group">
+                                                            <label class="xCNLabelFrm"><?php echo language('product/product/product','tPDTBrand')?></label>
+                                                            <div class="input-group">   
+                                                                <input type="text" id="oetPdtPbnCode" class="form-control xCNHide" name="oetPdtPbnCode" value="<?php echo $tPbnCode;?>">
+                                                                <input type="text" id="oetPdtPbnName" class="form-control" name="oetPdtPbnName" value="<?php echo $tPbnName;?>" readonly>
+                                                                <span class="input-group-btn">
+                                                                    <button id="obtBrowsePdtBrand" type="button" class="btn xCNBtnBrowseAddOn">
+                                                                        <img src="<?php echo base_url().'/application/modules/common/assets/images/icons/find-24.png'?>">
+                                                                    </button>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <!-- End Product Brand -->
+
+                                                        <!-- รุ่น -->
+                                                        <div class="form-group">
+                                                            <label class="xCNLabelFrm"><?php echo language('product/product/product','tPDTModal');?></label>
+                                                                <div class="input-group">
+                                                                    <input type="text" id="oetPdtPmoCode" class="form-control xCNHide" name="oetPdtPmoCode" value="<?php echo $tPmoCode;?>">
+                                                                    <input type="text" id="oetPdtPmoName" class="form-control" name="oetPdtPmoName" value="<?php echo $tPmoName;?>" readonly>
+                                                                    <span class="input-group-btn">
+                                                                        <button id="obtBrowsePdtModel" type="button" class="btn xCNBtnBrowseAddOn">
+                                                                            <img src="<?php echo base_url().'/application/modules/common/assets/images/icons/find-24.png'?>">
+                                                                        </button>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        <!--End รุ่น -->
+
+                                                                        
                                                     </div>
                                                 </div>
-                                            <!-- End กลุ่มสินค้าด่วน -->
                                             </div>
+                                        <!-- ข้อมูลเพิ่มเติมเกี่ยวกับสินค้า -->  
+                                        </div>
+
+                                        <div class="col-xs-4 col-sm-4">
+                                            <!-- กำหนดสินค้าด่วน -->      
+                                            <div class="panel panel-default" style="margin-bottom: 25px;"> 
+                                                <div class="panel-heading xCNPanelHeadColor" role="tab" style="padding-top:10px;padding-bottom:10px;">
+                                                <label class="xCNTextDetail1"><?php echo language('product/product/product', 'tPdtDefineExpressPdt'); ?></label>
+                                            </div>
+                                                <div class="panel-collapse collapse in" role="tabpanel">
+                                                    <div class="panel-body xCNPDModlue">
+                                                    <!-- กลุ่มสินค้าด่วน -->
+                                                        <div class="form-group">
+                                                            <label class="xCNLabelFrm"><?php echo language('product/product/product','tPdtExpressGroup');?></label>
+                                                            <div class="input-group">
+                                                                <input type="text" id="oetPdtTcgCode" name="oetPdtTcgCode" class="form-control xCNHide"  value="<?php echo $tTcgCode;?>">
+                                                                <input type="text" id="oetPdtTcgName" name="oetPdtTcgName" class="form-control" value="<?php echo $tTcgName;?>" readonly>
+                                                                <span class="input-group-btn">
+                                                                    <button id="obtBrowsePdtTouchGrp" type="button" class="btn xCNBtnBrowseAddOn">
+                                                                        <img class="xCNIconFind">
+                                                                    </button>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    <!-- End กลุ่มสินค้าด่วน -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <!-- End กำหนดสินค้าด่วน -->      
+
                                         </div>
                                     </div>
-                                <!-- End กำหนดสินค้าด่วน -->      
-
-                                </div>
                                 </div>
                             </div>
                         </div>
-                        </div>
                         <!-- End เพิ่มเติม -->
+
+                        <div id="odvPdtContentSetZone" class="tab-pane fade">
+                            <!-- ตั้งค่าโซน -->      
+                            <div class="table-responsive xCNTableScrollY">
+                                <div id="odvZoneConditions"></div>   
+                            </div>
+                            <!-- End ตั้งค่าโซน --> 
+                        </div> 
 
                         <!-- ต้นทุน -->
                         <div id="odvPdtContentCost" class="tab-pane fade">

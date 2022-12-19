@@ -2817,6 +2817,405 @@ class mProduct extends CI_Model {
         }
     }
 
+    // Functionality : เคลียร์ข้อมูลในตาราง TsysMasTmp
+    // Parameters : function parameters
+    // Creator : 16/11/2022 [IcePun]
+    // Return : Array
+	// Return Type : array
+    public function FSaMPDTZoneConditionsDelTmp($paData){
 
+        $this->db->where_in('FTMttTableKey', $paData['FTMttTableKey']);
+        $this->db->where_in('FTMttRefKey', $paData['FTMttRefKey']);
+        $this->db->where_in('FTMttSessionID', $paData['FTMttSessionID']);
+        $this->db->delete('TsysMasTmp');
+ 
+        if($this->db->affected_rows() > 0){
+            //Success
+            $aStatus = array(
+                'rtCode' => '1',
+                'rtDesc' => 'success',
+            );
+        }else{
+            //Ploblem
+            $aStatus = array(
+                'rtCode' => '905',
+                'rtDesc' => 'cannot Delete Item.',
+            );
+        }
+        $jStatus = json_encode($aStatus);
+        $aStatus = json_decode($jStatus, true);
+        return $aStatus;
+    }
+
+    //Functionality : List Data  Zone Conditions 
+    //Parameters : function parameters
+    //Creator : 15/12/2022 [IcePun]
+    //Last Modified : -
+    //Return : Array
+    //Return Type : Array
+    public function FSaMPDTZoneConditionsList($paData){
+
+        $aRowLen        = FCNaHCallLenData($paData['nRow'],$paData['nPage']);
+        $tPdtCode       = $paData['FTPdtCode'];
+        $tSessionID     = $paData['FTMttSessionID'];
+        $nLngID         = $paData['FNLngID'];
+        $tTableKey      = $paData['FTMttTableKey'];
+        $tRefKey        = $paData['FTMttRefKey'];
+        $nLngID         = $paData['FNLngID'];
+
+        $tSQL   = "SELECT c.* FROM
+                    ( SELECT  ROW_NUMBER() OVER(ORDER BY FTZneCode ASC) AS FNRowID,* FROM
+                        (SELECT  DISTINCT
+                                TMT.FTPdtCode,
+                                TMT.FTZneCode,
+                                TMT.FTPdtStaInOrEx,
+                                ZNEL.FTZneChainName
+                            FROM TsysMasTmp TMT
+                            -- LEFT JOIN TCNMZone      ZNE         ON ZNESPC.FTZneCode     = ZNE.FTZneCode 
+                            -- LEFT JOIN TCNMZoneObj   ZNEOBJ      ON ZNESPC.FTZneCode     = ZNEOBJ.FTZneCode 
+                            LEFT JOIN TCNMZone_L    ZNEL        ON TMT.FTZneCode        = ZNEL.FTZneChain        AND ZNEL.FNLngID   =  $nLngID 
+                            WHERE 1=1 
+                            AND TMT.FTPdtCode       = '$tPdtCode'
+                            AND TMT.FTMttSessionID  = '$tSessionID'
+                            AND TMT.FTMttTableKey   = '$tTableKey' 
+                            AND TMT.FTMttRefKey     = '$tRefKey' ";
+
+
+        $tSQL .= ") Base) AS c WHERE c.FNRowID > $aRowLen[0] AND c.FNRowID <= $aRowLen[1]";
+
+        $oQuery = $this->db->query($tSQL);
+        // echo $tSQL;
+        if($oQuery->num_rows() > 0){
+            $oList = $oQuery->result();
+            $aFoundRow = $this->FSnMPDTZoneConditionsGetPageAll($nLngID);
+            $nFoundRow = $aFoundRow[0]->counts;
+            $nPageAll = ceil($nFoundRow/$paData['nRow']); //หา Page All จำนวน Rec หาร จำนวนต่อหน้า
+            $aResult = array(
+                'raItems'       => $oList,
+                'rnAllRow'      => $nFoundRow,
+                'rnCurrentPage' => $paData['nPage'],
+                'rnAllPage'     => $nPageAll,
+                'rtCode'        => '1',
+                'rtDesc'        => 'success',
+            );
+        }else{
+            //No Data
+            $aResult = array(
+                'rnAllRow'      => 0,
+                'rnCurrentPage' => $paData['nPage'],
+                "rnAllPage"     => 0,
+                'rtCode'        => '800',
+                'rtDesc'        => 'data not found',
+            );
+        }
+        $jResult = json_encode($aResult);
+        $aResult = json_decode($jResult, true);
+        return $aResult;
+    }
+
+    //Functionality : All Page Of StockConditions
+    //Parameters : function parameters
+    //Creator :  23/01/2020 saharat(Golf)
+    //Last Modified : -
+    //Return : data
+    //Return Type : Array
+    public function FSnMPDTZoneConditionsGetPageAll($paData){
+        $nLngID   = $paData;
+        $tSQL = "SELECT COUNT (TMT.FTMttRefKey) AS counts
+                 FROM TsysMasTmp TMT
+                    LEFT JOIN TCNMZone_L    ZNEL        ON TMT.FTZneCode        = ZNEL.FTZneCode        AND ZNEL.FNLngID   =  $nLngID 
+                 WHERE 1=1 AND FTMttRefKey = 'TCNMPdtSpcZone'";
+        $oQuery = $this->db->query($tSQL);
+        if ($oQuery->num_rows() > 0) {
+            return $oQuery->result();
+        }else{
+            //No Data
+            return false;
+        }
+    }
+
+    public function FSaMPDTCheckMasZoneTempDuplicate($paData){
+        $FTMttTableKey  = $paData['FTMttTableKey'];
+        $FTMttRefKey    = $paData['FTMttRefKey'];
+        $FTPdtCode      = $paData['FTPdtCode'];
+        $FTZneCode      = $paData['FTZneCode'];
+        $FTMttSessionID = $paData['FTMttSessionID'];
+
+        $tSQL           = "SELECT * FROM TsysMasTmp WHERE FTMttTableKey='$FTMttTableKey' AND FTMttRefKey='$FTMttRefKey' AND FTPdtCode='$FTPdtCode' AND FTZneCode='$FTZneCode' AND FTMttSessionID='$FTMttSessionID'";
+        $oQuery         = $this->db->query($tSQL);
+        if($oQuery->num_rows() > 0){
+            $aResult = array(
+                'rtCode'	=> '1',
+                'rtDesc'	=> 'success'
+            );
+        }else{
+            $aResult = array(
+                'rtCode'	=> '800',
+                'rtDesc'	=> 'data not found'
+            );
+        }
+        return $aResult;
+    }
+
+    //Functionality : Update&insert TCNMPdtSpcZone
+    //Parameters : function parameters
+    //Creator : 15/12/2022 [IcePun]
+    //Last Modified : -
+    //Return : Array
+    //Return Type : Array
+    public function FSaMPDTZoneConditionsAddEditTemp($paData){
+        try{    
+            //Update Master
+            $this->db->set('FTMttSessionID' , $paData['FTMttSessionID']);
+            $this->db->set('FTPdtCode' , $paData['FTPdtCode']);
+            $this->db->set('FTZneCode' , $paData['FTZneCode']);
+            $this->db->set('FTPdtStaInOrEx' , $paData['FTPdtStaInOrEx']);
+            $this->db->set('FDLastUpdOn' , $paData['FDLastUpdOn']);
+            $this->db->set('FTLastUpdBy' , $paData['FTLastUpdBy']);
+
+            $this->db->where('FTPdtCode', $paData['FTPdtCode']);
+            $this->db->where('FTZneCode', $paData['FTZneCode']);
+            $this->db->where('FTMttRefKey', $paData['FTMttRefKey']);
+            $this->db->update('TsysMasTmp');
+
+            if($this->db->affected_rows() > 0){
+                $aStatus = array(
+                    'rtCode' => '1',
+                    'rtDesc' => 'Update Product Special Zone Success',
+                );
+            }else{
+            //Add Master
+              $this->db->insert('TsysMasTmp',array(
+                    'FTMttTableKey'         => $paData['FTMttTableKey'],
+                    'FTMttRefKey'           => $paData['FTMttRefKey'],
+                    'FTMttSessionID'        => $paData['FTMttSessionID'],
+                    'FTPdtCode'             => $paData['FTPdtCode'],
+                    'FTZneCode'             => $paData['FTZneCode'],
+                    'FTPdtStaInOrEx'        => $paData['FTPdtStaInOrEx'],
+
+                    'FDLastUpdOn'           => $paData['FDLastUpdOn'],
+                    'FDCreateOn'            => $paData['FDCreateOn'],
+                    'FTLastUpdBy'           => $paData['FTLastUpdBy'],
+                    'FTCreateBy'            => $paData['FTCreateBy'],
+                ));
+                if($this->db->affected_rows() > 0){
+                    $aStatus = array(
+                        'rtCode' => '1',
+                        'rtDesc' => 'Add Product Special Zone Success',
+                    );
+                }else{
+                    $aStatus = array(
+                        'rtCode' => '905',
+                        'rtDesc' => 'Error Cannot Add/Edit Product Special Zone.',
+                    );
+                }
+            }
+            // print_r($aStatus);
+        return $aStatus;
+        }catch(Exception $Error){
+            return $Error;
+        }
+    }
+
+    //Functionality : บันทึกข้อมูลงตาราง  TsysMasTmp
+    //Parameters : function parameters
+    //Creator : 16/11/2022 [IcePun]
+    //Last Modified : -
+    //Return : Array
+    //Return Type : Array
+    public function FSaMPDTZoneConditionsGetDataList($ptData){
+        try{
+
+            $this->db->where_in('FTPdtCode', $ptData['FTPdtCode']);
+            $this->db->where_in('FTMttTableKey', $ptData['FTMttTableKey']);
+            $this->db->where_in('FTMttRefKey', $ptData['FTMttRefKey']);
+            $this->db->delete('TsysMasTmp');
+            $tPdtCode = $ptData['FTPdtCode'];
+            //Add Master
+            $tSQL  ="INSERT INTO TsysMasTmp (
+                    FTPdtCode, 
+                    FTZneCode, 
+                    FTPdtStaInOrEx, 
+                    FTMttTableKey,
+                    FTMttRefKey,
+                    FTMttSessionID
+                    )
+                    SELECT 
+                    FTPdtCode,
+                    FTZneCode, 
+                    FTPdtStaInOrEx,
+                    'TCNMPdt' AS FTMttTableKey,
+                    'TCNMPdtSpcZone' AS FTMttRefKey,
+                    '".$ptData['FTMttSessionID']."' AS FTMttSessionID
+                    FROM TCNMPdtSpcZone
+                    WHERE FTPdtCode     = '$tPdtCode'
+                ";
+            $oQuery = $this->db->query($tSQL);
+            if ($oQuery){
+                $aStatus = array(
+                    'rtCode' => '1',
+                    'rtDesc' => 'Add Master Success',
+                );
+            }else{
+                $aStatus = array(
+                    'rtCode' => '905',
+                    'rtDesc' => 'Error Cannot Add/Edit Master.',
+                );
+            }
+            return $aStatus;
+        }catch(Exception $Error){
+            return $Error;
+        }
+    }
+
+     //Functionality : บันทึกข้อมูลงตาราง  TCNMPdtSpcZone
+    //Parameters : function parameters
+    //Creator : 16/11/2022 [IcePun]
+    //Last Modified : -
+    //Return : Array
+    //Return Type : Array
+    public function FSxMPDTAddUpdateZone($paPdtWhere,$paPackSizeWhere){
+        $FTPdtCode        = $paPdtWhere['FTPdtCode'];
+        $FTMttTableKey    = $paPackSizeWhere['FTMttTableKey'];
+        $FTMttRefKey      = $paPackSizeWhere['FTMttRefKey'];
+        $FTMttSessionID   = $paPackSizeWhere['FTMttSessionID'];
+        try{
+            // $tPdtCode = $ptPdtCode;
+            // delete TCNMPdtSpcWah
+            $this->db->where('FTPdtCode', $FTPdtCode);
+            $this->db->delete('TCNMPdtSpcZone');
+
+            //Add Master
+
+            // $tSQL  ="INSERT INTO TCNMPdtSpcZone (FTPdtCode, FTZneCode, FTPdtStaInOrEx, FDLastUpdOn, FDCreateOn, FTLastUpdBy, FTCreateBy)
+            $tSQL  ="INSERT INTO TCNMPdtSpcZone (FTPdtCode, 
+                        FTZneCode, 
+                        FTPdtStaInOrEx,
+                        FDLastUpdOn,
+                        FDCreateOn,
+                        FTLastUpdBy,
+                        FTCreateBy)
+                    SELECT FTPdtCode, 
+                        FTZneCode, 
+                        FTPdtStaInOrEx,
+                        FDLastUpdOn,
+                        FDCreateOn,
+                        FTLastUpdBy,
+                        FTCreateBy
+                    FROM TsysMasTmp
+                    WHERE FTPdtCode='$FTPdtCode' AND FTMttTableKey='$FTMttTableKey' AND FTMttRefKey='$FTMttRefKey' AND FTMttSessionID='$FTMttSessionID'";
+
+            $oQuery = $this->db->query($tSQL);
+            if ($oQuery){
+                // ลบข้อมูลในตาราง Tmp
+                $this->db->where('FTPdtCode', $FTPdtCode);
+                $this->db->where('FTMttRefKey', 'TCNMPdtSpcZone');
+                $this->db->delete('TsysMasTmp');
+
+                $aStatus = array(
+                    'rtCode' => '1',
+                    'rtDesc' => 'Add Master Success',
+                );
+            }else{
+                $aStatus = array(
+                    'rtCode' => '905',
+                    'rtDesc' => 'Error Cannot Add/Edit Master.',
+                );
+            }
+            return $aStatus;
+        }catch(Exception $Error){
+            return $Error;
+        }
+    }
+
+    // Functionality : ลบข้อมูลในตาราง TsysMasTmp
+    // Parameters : function parameters
+    // Creator : 16/11/2022 [IcePun]
+    // Return : Array
+	// Return Type : array
+    public function FSaMPDTZoneConditionsDel($paData){
+
+        $this->db->where_in('FTPdtCode', $paData['FTPdtCode']);
+        $this->db->where_in('FTZneCode', $paData['FTZneCode']);
+        $this->db->delete('TsysMasTmp');
+ 
+        if($this->db->affected_rows() > 0){
+            //Success
+            $aStatus = array(
+                'rtCode' => '1',
+                'rtDesc' => 'success',
+            );
+        }else{
+            //Ploblem
+            $aStatus = array(
+                'rtCode' => '905',
+                'rtDesc' => 'cannot Delete Item.',
+            );
+        }
+        $jStatus = json_encode($aStatus);
+        $aStatus = json_decode($jStatus, true);
+        return $aStatus;
+    }
     
+    //Functionality : List Data  Zone Conditions 
+    //Parameters : function parameters
+    //Creator : 15/12/2022 [IcePun]
+    //Last Modified : -
+    //Return : Array
+    //Return Type : Array
+    public function FSaMPDTGetDataTableZoneDatail($paData){
+
+        $aRowLen        = FCNaHCallLenData($paData['nRow'],$paData['nPage']);
+        $tPdtCode       = $paData['FTPdtCode'];
+        $nLngID         = $paData['FNLngID'];
+        $tZoneCode      = $paData['FTZneCode'];
+
+        $tSQL   = "SELECT c.* FROM
+                    ( SELECT  ROW_NUMBER() OVER(ORDER BY FTZneRefCode ASC) AS FNRowID,* FROM
+                        (SELECT ZNEOBJ.FNZneID, 
+                                ZNEOBJ.FTZneRefCode, 
+                                ZNEOBJ.FTZneChain, 
+                                ZNEOBJ.FTAgnCode,
+                                ZNEL.FTZneChainName, 
+                                BCHL.FTBchName
+                        FROM TCNMZoneObj ZNEOBJ
+                        LEFT JOIN TCNMZone_L    ZNEL        ON ZNEOBJ.FTZneChain        = ZNEL.FTZneChain            AND ZNEL.FNLngID   =  $nLngID 
+                        LEFT JOIN TCNMBranch_L  BCHL        ON BCHL.FTBchCode           = ZNEOBJ.FTZneRefCode        AND ZNEL.FNLngID   =  $nLngID 
+                        WHERE 1=1 
+                        AND ZNEOBJ.FTZneTable  = 'TCNMBranch'
+                        AND ZNEOBJ.FTZneChain  = '$tZoneCode'
+                            ";
+
+
+        $tSQL .= ") Base) AS c WHERE c.FNRowID > $aRowLen[0] AND c.FNRowID <= $aRowLen[1]";
+
+        $oQuery = $this->db->query($tSQL);
+        // echo $tSQL;
+        if($oQuery->num_rows() > 0){
+            $oList = $oQuery->result();
+            // $aFoundRow = $this->FSnMPDTZoneConditionsGetPageAll($nLngID);
+            // $nFoundRow = $aFoundRow[0]->counts;
+            // $nPageAll = ceil($nFoundRow/$paData['nRow']); //หา Page All จำนวน Rec หาร จำนวนต่อหน้า
+            $aResult = array(
+                'raItems'       => $oList,
+                // 'rnAllRow'      => $nFoundRow,
+                // 'rnCurrentPage' => $paData['nPage'],
+                // 'rnAllPage'     => $nPageAll,
+                'rtCode'        => '1',
+                'rtDesc'        => 'success',
+            );
+        }else{
+            //No Data
+            $aResult = array(
+                // 'rnAllRow'      => 0,
+                // 'rnCurrentPage' => $paData['nPage'],
+                // "rnAllPage"     => 0,
+                'rtCode'        => '800',
+                'rtDesc'        => 'data not found',
+            );
+        }
+        $jResult = json_encode($aResult);
+        $aResult = json_decode($jResult, true);
+        return $aResult;
+    }
 }

@@ -227,7 +227,16 @@ class cProduct extends MX_Controller {
                     $tPdtCode        = $this->input->post('tPdtCode'),
                     $nUsrBchCode    = $this->session->userdata("tSesUsrBchCode")
                     );
+
             $aDataPdtSpcWah = $this->mProduct->FSaMPDTGetDataPdtSpcWah($aDataSpcWah);
+
+            $aDataZone     = array(
+                'FTMttTableKey'     => 'TCNMPdt',
+                'FTMttRefKey'       => 'TCNMPdtSpcZone',
+                // 'DeleteType'        => 2, //1 Delete Singal , 2 Delete All
+                'FTMttSessionID'    => $this->session->userdata("tSesSessionID")
+            );
+            $aDataPdtZone = $this->mProduct->FSaMPDTZoneConditionsDelTmp($aDataZone);
             $aReturnVat = $this->mProduct->FSaMPDTGetVatRateCpn();
             //เช็ค vat ว่ามีค่า หรือไม่
             if($aReturnVat['rtCode'] == 1){
@@ -294,6 +303,17 @@ class cProduct extends MX_Controller {
                 'dDate'             => date('Y-m-d H:i:s'),
                 'tUser'             => $this->session->userdata('tSesUsername')
             );
+
+            $aDataZone     = array(
+                'FTMttTableKey'     => 'TCNMPdt',
+                'FTMttRefKey'       => 'TCNMPdtSpcZone',
+                'FTPdtCode'         => $tPdtCode,
+                'FNLngID'           => $nLangEdit,
+                'DeleteType'        => 2, //1 Delete Singal , 2 Delete All
+                'FTMttSessionID'    => $this->session->userdata("tSesSessionID"),
+                'dDate'             => date('Y-m-d H:i:s'),
+                'tUser'             => $this->session->userdata('tSesUsername')
+            );
             // Insert into PackSize Temp
             $aDataWhereBarCode     = array(
                 'FTMttTableKey'     => 'TCNMPdt',
@@ -305,10 +325,14 @@ class cProduct extends MX_Controller {
                 'tUser'             => $this->session->userdata('tSesUsername')
             );
 
+            
             // บันทึกข้อมูลงตาราง  TsysMasTmp
             $this->mProduct->FSaMPDTStockConditionsGetDataList($aDataWhere);
+            
             // Delete All Temp
             $this->mProduct->FSaMPDTDelDataMasTemp($aDataWhere);
+            
+            $this->mProduct->FSaMPDTZoneConditionsGetDataList($aDataZone);
             // Insert into PackSize Temp
             $this->mProduct->FSaMPDTInsertPackSizeMasTemp($aDataWhere);
             //Get Data BarCode MasTmp
@@ -638,6 +662,8 @@ class cProduct extends MX_Controller {
             $aPdtDataInfo2      = $this->input->post('aPdtDataInfo2');
             $tIsAutoGenCode     = $aPdtDataInfo1['tIsAutoGenCode'];
 
+            // print_r($aPdtDataInfo2);exit;
+
             // Setup Product Code
             $tPdtCode   = "";
             if(isset($tIsAutoGenCode) && $tIsAutoGenCode == '1'){
@@ -666,6 +692,12 @@ class cProduct extends MX_Controller {
             $aDataWhereBarCode = array(
                 'FTMttTableKey'     => 'TCNMPdt',
                 'FTMttRefKey'       => 'TCNMPdtBar',
+                'FTMttSessionID'    => $this->session->userdata("tSesSessionID")
+            );
+
+            $aDataWhereZone = array(
+                'FTMttTableKey'     => 'TCNMPdt',
+                'FTMttRefKey'       => 'TCNMPdtSpcZone',
                 'FTMttSessionID'    => $this->session->userdata("tSesSessionID")
             );
 
@@ -705,15 +737,15 @@ class cProduct extends MX_Controller {
                 // 'FTBchCode'             => $aPdtDataInfo2['tPdtBchCode'],
                 // 'FTBchCode'             => $aPdtDataInfo2['tPdtBchCode'],
             );
-       
-            $aDataSpcBch = array(
-                'FTPdtCode'             => $tPdtCode,
-                'FTBchCode'             => $aPdtDataInfo2['tPdtBchCode'],
-                'FTMerCode'             => $aPdtDataInfo2['tPdtMerCode'],
-                'FTShpCode'             => $aPdtDataInfo2['tPdtShpCode'],
-                'FTMgpCode'             => $aPdtDataInfo2['tPdtMgpCode'],
-                'FCPdtMin'              => floatval(preg_replace("/[^-0-9\.]/","",$aPdtDataInfo2['tPdtMin']))
-            );
+    
+            // $aDataSpcBch = array(
+                // 'FTPdtCode'             => $tPdtCode,
+                // 'FTBchCode'             => $aPdtDataInfo2['tPdtBchCode'],
+                // 'FTMerCode'             => $aPdtDataInfo2['tPdtMerCode'],
+                // 'FTShpCode'             => $aPdtDataInfo2['tPdtShpCode'],
+                // 'FTMgpCode'             => $aPdtDataInfo2['tPdtMgpCode'],
+                // 'FCPdtMin'              => floatval(preg_replace("/[^-0-9\.]/","",$aPdtDataInfo2['tPdtMin']))
+            // );
 
             $aDataWhereLangPdt      = array(
                 'FNLngID'           => $nLangEdit,
@@ -733,15 +765,16 @@ class cProduct extends MX_Controller {
                 $this->db->trans_begin();
                     $this->mProduct->FSaMPDTAddUpdateMaster($aDataWherePdt,$aDataAddUpdatePdt);
                     $this->mProduct->FSaMPDTAddUpdateLang($aDataWhereLangPdt,$aDataLangPdt);
-                    if($aDataSpcBch['FTBchCode']!="" || $aDataSpcBch['FTMerCode']!="" || $aDataSpcBch['FTShpCode']!="" || $aDataSpcBch['FTMgpCode']!="" || $aDataSpcBch['FCPdtMin']!=""){
-                        $this->mProduct->FSxMPDTAddUpdateSpcBch($aDataSpcBch);
-                    }
+                    // if($aDataSpcBch['FTBchCode']!="" || $aDataSpcBch['FTMerCode']!="" || $aDataSpcBch['FTShpCode']!="" || $aDataSpcBch['FTMgpCode']!="" || $aDataSpcBch['FCPdtMin']!=""){
+                    //     $this->mProduct->FSxMPDTAddUpdateSpcBch($aDataSpcBch);
+                    // }
                     
                     if($nTypeAdd == 1){
                         $this->mProduct->FSxMPDTUpdatePdtCodeMasTmp($aDataWhereMasTmp,$aDataWherePdt);
                         $this->mProduct->FSxMPDTAddUpdatePackSize($aDataWherePdt,$aDataWherePackSize);
                         $this->mProduct->FSxMPDTAddUpdateBarCode($aDataWherePdt,$aDataWhereBarCode);
                         $this->mProduct->FSxMPDTAddUpdateSupplier($aDataWherePdt,$aDataWhereBarCode);
+                        $this->mProduct->FSxMPDTAddUpdateZone($aDataWherePdt,$aDataWhereZone);
                         
                     }else{
                         $this->mProduct->FSxMPDTAutoAddBarCodeAndUnit($aDataWherePdt);
@@ -851,6 +884,11 @@ class cProduct extends MX_Controller {
                 'FTMttRefKey'       => 'TCNMPdtBar',
                 'FTMttSessionID'    => $this->session->userdata("tSesSessionID")
             );
+            $aDataWhereZone = array(
+                'FTMttTableKey'     => 'TCNMPdt',
+                'FTMttRefKey'       => 'TCNMPdtSpcZone',
+                'FTMttSessionID'    => $this->session->userdata("tSesSessionID")
+            );
             $aDataAddUpdateRental = array(
                 'FTPdtCode'         => $aPdtDataInfo1['tPdtCode'],
                 'FTPdtRentType'     => $aPdtDataRental['tRetPdtType'],
@@ -897,14 +935,14 @@ class cProduct extends MX_Controller {
                 // 'FTBchCode'             => $aPdtDataInfo2['tPdtBchCode'],
                 // 'FTBchCode'             => $aPdtDataInfo2['tPdtBchCode'],
             );
-            $aDataSpcBch = array(
-                'FTPdtCode'             => $aPdtDataInfo1['tPdtCode'],
-                'FTBchCode'             => $aPdtDataInfo2['tPdtBchCode'],
-                'FTMerCode'             => $aPdtDataInfo2['tPdtMerCode'],
-                'FTShpCode'             => $aPdtDataInfo2['tPdtShpCode'],
-                'FTMgpCode'             => $aPdtDataInfo2['tPdtMgpCode'],
-                'FCPdtMin'              => floatval(preg_replace("/[^-0-9\.]/","",$aPdtDataInfo2['tPdtMin']))
-            );
+            // $aDataSpcBch = array(
+            //     'FTPdtCode'             => $aPdtDataInfo1['tPdtCode'],
+            //     'FTBchCode'             => $aPdtDataInfo2['tPdtBchCode'],
+            //     'FTMerCode'             => $aPdtDataInfo2['tPdtMerCode'],
+            //     'FTShpCode'             => $aPdtDataInfo2['tPdtShpCode'],
+            //     'FTMgpCode'             => $aPdtDataInfo2['tPdtMgpCode'],
+            //     'FCPdtMin'              => floatval(preg_replace("/[^-0-9\.]/","",$aPdtDataInfo2['tPdtMin']))
+            // );
 
             $aDataWhereLangPdt      = array(
                 'FNLngID'           => $nLangEdit,
@@ -924,12 +962,13 @@ class cProduct extends MX_Controller {
             $this->mProduct->FSxMPDTAddUpdatePackSize($aDataWherePdt,$aDataWherePackSize);
             $this->mProduct->FSxMPDTAddUpdateBarCode($aDataWherePdt,$aDataWhereBarCode);
             $this->mProduct->FSxMPDTAddUpdateSupplier($aDataWherePdt,$aDataWhereBarCode);
+            $this->mProduct->FSxMPDTAddUpdateZone($aDataWherePdt,$aDataWhereZone);
             //บันทึกกำหนดเงื่อนไขการควบคุมสต๊อก
             $this->mProduct->FSaMPDTStockConditionsAddEdit($aPdtDataInfo1['tPdtCode']);
 
-            if($aDataSpcBch['FTBchCode']!="" || $aDataSpcBch['FTMerCode']!="" || $aDataSpcBch['FTShpCode']!="" || $aDataSpcBch['FTMgpCode']!="" || $aDataSpcBch['FCPdtMin']!=""){
-                $this->mProduct->FSxMPDTAddUpdateSpcBch($aDataSpcBch);
-            }
+            // if($aDataSpcBch['FTBchCode']!="" || $aDataSpcBch['FTMerCode']!="" || $aDataSpcBch['FTShpCode']!="" || $aDataSpcBch['FTMgpCode']!="" || $aDataSpcBch['FCPdtMin']!=""){
+            //     $this->mProduct->FSxMPDTAddUpdateSpcBch($aDataSpcBch);
+            // }
 
             if($aDataAddUpdatePdt['FTPdtForSystem'] == '4'){
                 $this->mProduct->FSxMPDTAddUpdateRental($aDataAddUpdateRental);
@@ -1564,6 +1603,118 @@ class cProduct extends MX_Controller {
         }else{
             echo "database error!";
         }
+    }
+
+    /*
+    // Functionality :Call Viwe กำหนดเงื่อนไขการควบคุมโซน
+    // Parameters : 
+    // Creator : 15/12/2022 [IcePun]
+    // Last Modified : -
+    // Return : String View
+    // Return Type : View
+    */
+    public function FSvCPDTCallPageZoneConditions(){
+        $aDataList = array(
+            'FTPdtCode'         => $this->input->post('ptPdtCode'),
+            'FTMttSessionID'    => $this->session->userdata("tSesSessionID"),
+            'FNLngID'           => $this->session->userdata("tLangID"),
+            'FTMttTableKey'     => 'TCNMPdt',
+            'FTMttRefKey'       => 'TCNMPdtSpcZone',
+            'nPage'             => 1,
+            'nRow'              => 10,
+        );
+        $aResultData  = $this->mProduct->FSaMPDTZoneConditionsList($aDataList);
+        // print_r($aResultData);
+        $this->load->view('product/product/wProductZoneConditions',$aResultData);
+
+    }
+
+    //Functionality: เพิ่มข้อมูล ZoneConditions
+    //Parameters:  พารามิเตอร์ จาก jProductAdd
+    //Creator: 15/12/2022 [IcePun]
+    //LastModified: -
+    //Return: Return JSON
+    //ReturnType: JSON
+    public function FSaCPDTZoneConditionsEventAdd(){
+        try{
+            $aDataZoneConditions  = array(
+                'FTMttTableKey'         => 'TCNMPdt',
+                'FTMttRefKey'           => 'TCNMPdtSpcZone',
+                'FTPdtCode'             => $this->input->post('oetZoneConditionPdtCode'),
+                'FTZneCode'             => $this->input->post('oetZoneConditionZneCode'),
+                'FTPdtStaInOrEx'        => $this->input->post('ocmTypeInorEx'),
+                'FTMttSessionID'        => $this->session->userdata("tSesSessionID"),
+                'FDLastUpdOn'           => date('Y-m-d H:i:s'),
+                'FDCreateOn'            => date('Y-m-d H:i:s'),
+                'FTLastUpdBy'           => $this->session->userdata('tSesUsername'),
+                'FTCreateBy'            => $this->session->userdata('tSesUsername')
+            );
+            // print_r($aDataZoneConditions);
+            $tChkDup = $this->mProduct->FSaMPDTCheckMasZoneTempDuplicate($aDataZoneConditions);
+            if($tChkDup['rtCode'] == '800'){
+                // Insert into Zone Temp
+                $aResult = $this->mProduct->FSaMPDTZoneConditionsAddEditTemp($aDataZoneConditions);
+            }else{
+                $aResult = array(
+                    'rtCode' => '2',
+                    'rtDesc' => 'Zone is alrady exits',
+                );
+            }
+            
+        }catch(Exception $Error){
+            $aResult = array(
+                'nStaEvent' => '500',
+                'tStaMessg' => $Error->getMessage()
+            );
+        }
+        echo json_encode($aResult);
+    }
+
+    //Functionality : Event Delete Agency
+    //Parameters : Ajax jReason()
+    //Creator : 11/06/2019 saharat(Golf)
+    //Last Modified : -
+    //Return : Status Delete Event
+    //Return Type : String
+    public function FSaCPDTZoneConditionsDeleteEvent(){
+        $aDataDel = array(
+            'FTPdtCode' => $this->input->post('ptPdtCode'),
+            'FTZneCode' => $this->input->post('ptZneCode'),
+        );
+        $aResDel        = $this->mProduct->FSaMPDTZoneConditionsDel($aDataDel);
+        if($aResDel){
+            $aReturn    = array(
+                'nStaEvent'  => $aResDel['rtCode'],
+                'tStaMessg'  => $aResDel['rtDesc'],
+            );
+            echo json_encode($aReturn);
+        }else{
+            echo "database error!";
+        }
+    }
+
+    //ดูรายละเอียดโซน
+    public function FSoCPDTZoneDetailDataTable(){
+        try{
+            $aData = array(
+                'FTPdtCode'         => $this->input->post('ptPdtCode'),
+                'FTZneCode'         => $this->input->post('ptZneCode'),
+                'FNLngID'           => $this->session->userdata("tLangID"),
+                'nPage'             => 1,
+                'nRow'              => 10,
+            );
+
+            $aDataPdtZone            = $this->mProduct->FSaMPDTGetDataTableZoneDatail($aData);
+            $tPdtBarCodeViewDataTable   = $this->load->view('product/product/wProductZoneDetailDataTable',$aDataPdtZone);
+
+        }catch(Exception $Error){
+            $aReturnData = array(
+                'nStaEvent' => '500',
+                'tStaMessg' => $Error->getMessage()
+            );
+        }
+        // echo json_encode($aReturnData);
+
     }
 
 

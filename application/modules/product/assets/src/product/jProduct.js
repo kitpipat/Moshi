@@ -456,10 +456,10 @@ function JSoAddEditProduct(ptRoute) {
 
                 // Product Information 2
                 var aPdtDataInfo2 = {
-                    'tPdtBchCode': $('#oetPdtBchCode').val(),
-                    'tPdtMerCode': $('#oetPdtMerCode').val(),
-                    'tPdtMgpCode': $('#oetPdtInfoMgpCode').val(), //Napat(Jame) 30/08/2019
-                    'tPdtShpCode': $('#oetPdtInfoShpCode').val(),
+                    // 'tPdtBchCode': $('#oetPdtBchCode').val(),
+                    // 'tPdtMerCode': $('#oetPdtMerCode').val(),
+                    // 'tPdtMgpCode': $('#oetPdtInfoMgpCode').val(), //Napat(Jame) 30/08/2019
+                    // 'tPdtShpCode': $('#oetPdtInfoShpCode').val(),
                     'tPdtPgpChain': $('#oetPdtPgpChain').val(),
                     'tPdtPtyCode': $('#oetPdtPtyCode').val(),
                     'tPdtPbnCode': $('#oetPdtPbnCode').val(),
@@ -467,7 +467,7 @@ function JSoAddEditProduct(ptRoute) {
                     'tPdtTcgCode': $('#oetPdtTcgCode').val(),
                     'tPdtSaleStart': $('#oetPdtSaleStart').val(),
                     'tPdtSaleStop': $('#oetPdtSaleStop').val(),
-                    'tPdtPointTime': $('#oetPdtPointTime').val(),
+                    // 'tPdtPointTime': $('#oetPdtPointTime').val(),
                     // 'tPdtStkFac'    : $('#oetPdtStkFac').val(),
                     'tPdtQtyOrdBuy': $('#oetPdtQtyOrdBuy').val(),
                     'tPdtMax': $('#oetPdtMax').val(),
@@ -546,6 +546,7 @@ function JSoAddEditProduct(ptRoute) {
 }
 
 function JSxAjaxPostDataProduct(paPackData, pnTypeAdd) { //paTypeAdd 1 = เพิ่มสินค้าธรรมดา , 2 = เพิ่มสินค้า เพิ่มหน่วย เพิ่มบาร์โค๊ด
+    console.log(paPackData);
     JCNxOpenLoading();
     $.ajax({
         type: "POST",

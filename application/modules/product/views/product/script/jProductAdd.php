@@ -11,6 +11,8 @@
     $(document).ready(function(){
         //เรียกหน้า กำหนดเงื่อนไขการควบคุมสต๊อก 23/01/2020 Saharat(Golf) 
         JSvPdtCallpageStockConditions();
+        JSvPdtCallpageZoneConditions();
+
         if(nStaAddOrEdit != "" && nStaAddOrEdit == 1){
             var nCountDataImgItem   =   $('#odvImageTumblr #otbImageListProduct tbody tr td.xWTDImgDataItem').length;
             if(nCountDataImgItem > 0){
@@ -2531,6 +2533,27 @@
         });
     }
 
+    // Function: ฟังก์ชั่น Call View กำหนดเงื่อนไขการโซน
+    // Parameters: -
+    // Creator: 23/01/2020 Saharat(GolF)
+    // Return: View
+    // ReturnType: View
+    function JSvPdtCallpageZoneConditions(){
+        let tPdtCode  = $('#oetPdtCode').val();
+        $.ajax({
+            type   : "POST",
+            url    : "pdtEventPageZoneConditionsList", 
+            data   : {ptPdtCode:tPdtCode},
+            cache  : false,
+            success: function(oResult){
+                // JCNxOpenLoading();
+                $('#odvZoneConditions').html(oResult); 
+                JCNxCloseLoading();
+            }
+        });
+    }
+
+
     // Function: ฟังก์ชั่น Call Modal Add กำหนดเงื่อนไขการควบคุมสต๊อก
     // Parameters: -
     // Creator: 23/01/2020 Saharat(GolF)
@@ -2646,7 +2669,9 @@
                                 let aReturn = JSON.parse(tResult);
                                 if(aReturn['rtCode'] == 1){
                                     $('#odvModalStockConditions').modal('hide');
-                                    JSvPdtCallpageStockConditions();
+                                    setTimeout(function() { 
+                                        JSvPdtCallpageStockConditions();
+                                    }, 500);
                                 }else{
                                     $('#odvModalStockConditionsAlert').modal('show');
                                 }
@@ -2686,6 +2711,7 @@
                     success: function(oResult) {
                         var aReturn = JSON.parse(oResult);
                         if (aReturn['nStaEvent'] == 1) {
+
                             $('#odvModalDeleteStockConditions').modal('hide');
                             $('#odvModalDeleteStockConditions #ospTextConfirmDelSingle').html($('#oetTextComfirmDeleteSingle').val());
                             $('.modal-backdrop').remove();
@@ -2704,8 +2730,159 @@
         }
     }
 
+    // Function: ฟังก์ชั่น Call Modal Add การผูกโซน
+    // Parameters: -
+    // Creator: 15/12/2022 [IcePun]
+    // Return: View
+    // ReturnType: View
+    function JSvPdtZoneConditionsPageAdd(){
+            document.forms["ofmAddZoneConditions"].reset();
+            let tPdtCode  = $('#oetPdtCode').val();
+            $('#odvModalZoneConditions').modal('show');
+            $('#oetZoneConditionPdtCode').val(tPdtCode); 
+            $('#oetZoneConditionRoute').val('pdtEventAddZoneConditions'); 
+              
+    }
 
+    // Function: ฟังก์ชั่น บันทึกข้อมูล การผูกโซน
+    // Parameters: -
+    // Creator: 15/12/2022 [IcePun]
+    // Return: View
+    // ReturnType: View
+    function JSvPdtZoneConditionsEventAddEdit(){
+        let tRoute = $('#oetZoneConditionRoute').val();
+            var nStaSession = JCNxFuncChkSessionExpired();
+                if (typeof(nStaSession) !== 'undefined' && nStaSession == 1) {
+                    $('#ofmAddZoneConditions').validate().destroy();
+                    $('#ofmAddZoneConditions').validate({
+                        rules: {
+                            oetZoneConditionZneName: { "required": {} },
+                        },
+                        messages: {
+                            oetZoneConditionZneName: {
+                                "required": $('#oetZoneConditionZneName').attr('data-validate-required'),
+                            },
+                        },
+                        errorElement: "em",
+                        errorPlacement: function(error, element) {
+                            error.addClass("help-block");
+                            if (element.prop("type") === "checkbox") {
+                                error.appendTo(element.parent("label"));
+                            } else {
+                                var tCheck = $(element.closest('.form-group')).find('.help-block').length;
+                                if (tCheck == 0) {
+                                    error.appendTo(element.closest('.form-group')).trigger('change');
+                                }
+                            }
+                        },
+                        highlight: function(element, errorClass, validClass) {
+                            $(element).closest('.form-group').addClass("has-error").removeClass("has-success");
+                        },
+                        unhighlight: function(element, errorClass, validClass) {
+                            $(element).closest('.form-group').addClass("has-success").removeClass("has-error");
+                        },
+                        submitHandler: function(form) {
+                        JCNxOpenLoading();
+                        $.ajax({
+                            type: "POST",
+                            url: tRoute,
+                            data: $('#ofmAddZoneConditions').serialize(),
+                            cache: false,
+                            timeout: 0,
+                            success: function(tResult) {
+                                let aReturn = JSON.parse(tResult);
+                                if(aReturn['rtCode'] == 1){
+                                    $('#odvModalZoneConditions').modal('hide');
+                                    setTimeout(function() { 
+                                        JSvPdtCallpageZoneConditions();
+                                    }, 500);
+                                }else{
+                                    $('#odvModalZoneConditionsAlert').modal('show');
+                                }
+                                JCNxCloseLoading();
+                            },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            JCNxResponseError(jqXHR, textStatus, errorThrown);
+                        }
+                    });
+                },
+            });
+        }
+    }
 
+     // Functionality: ลบข้อมูล
+    // Parameters: Event Icon Delete
+    // Creator: 19/12/2022 [IcePun]
+    // Return: object Status Delete
+    // ReturnType: object
+    function JSoPdtZoneConditionsDelete(ptPdtCode, ptZneCode, ptZneName) {
+        var nStaSession = JCNxFuncChkSessionExpired();
+        if (typeof(nStaSession) !== 'undefined' && nStaSession == 1) {
+            let tDeleteYesOrNot = $('#oetTextComfirmDeleteYesOrNot').val();
+            $('#odvModalDeleteZoneConditions #ospTextConfirmDelSingle').html($('#oetTextComfirmDeleteSingle').val() + ptZneCode + ' (' + ptZneName + ') ' +tDeleteYesOrNot);
+            $('#odvModalDeleteZoneConditions').modal('show');
+            $('#odvModalDeleteZoneConditions #osmConfirmDelSingle').unbind().click(function() {
+                JCNxOpenLoading();
+                $.ajax({
+                    type: "POST",
+                    url: "pdtEventDeleteZoneConditions",
+                    data: { ptPdtCode : ptPdtCode,
+                            ptZneCode : ptZneCode
+                        },
+                    cache: false,
+                    timeout: 0,
+                    success: function(oResult) {
+                        var aReturn = JSON.parse(oResult);
+                        if (aReturn['nStaEvent'] == 1) {
 
+                            $('#odvModalDeleteZoneConditions').modal('hide');
+                            $('#odvModalDeleteZoneConditions #ospTextConfirmDelSingle').html($('#oetTextComfirmDeleteSingle').val());
+                            $('.modal-backdrop').remove();
+                            JSvPdtCallpageZoneConditions();
+                        } else {
+                            alert(aReturn['tStaMessg']); 
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        JCNxResponseError(jqXHR, textStatus, errorThrown);
+                    }
+                });
+            });
+        } else {
+            JCNxShowMsgSessionExpired();
+        }
+    }
+
+    // Function: ฟังก์ชั่น Call Modal Add การผูกโซน
+    // Parameters: -
+    // Creator: 15/12/2022 [IcePun]
+    // Return: View
+    // ReturnType: View
+    function JSvPdtZoneConditionsPageView(ptPdtCode, ptZneCode, ptZneName){
+            // document.forms["ofmAddZoneConditions"].reset();
+            // let tPdtCode  = $('#oetPdtCode').val();
+            // $('#odvModalZoneConditions').modal('show');
+            // $('#oetZoneConditionPdtCode').val(tPdtCode); 
+            // $('#oetZoneConditionRoute').val('pdtEventAddZoneConditions'); 
+            // $('#odvModalZoneDetail #ospHeaderZoneDetail').html($('#oetTextHeaderZoneDetail').val() + <?php echo language('product/product/product', 'tPdtZone') ?> + ': ' + ptZneName);
+
+            $.ajax({
+                type: "POST",
+                url: "pdtViewZoneDetailConditions",
+                data: { ptPdtCode : ptPdtCode,
+                        ptZneCode : ptZneCode
+                    },
+                cache: false,
+                timeout: 0,
+                success: function(oResult) {
+                    $('#odvZoneDetail').html(oResult); 
+                    $('#odvModalZoneDetail').modal('show');
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    JCNxResponseError(jqXHR, textStatus, errorThrown);
+                }
+            });
+              
+    }
 
 </script>

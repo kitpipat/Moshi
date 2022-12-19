@@ -194,3 +194,9 @@ $route ['pdtEventPageStockConditionsEdit']  = 'product/product/cProduct/FSvCPDTC
 $route ['pdtEventAddStockConditions']       = 'product/product/cProduct/FSaCPDTStockConditionsEventAdd';
 $route ['pdtEventEditStockConditions']      = 'product/product/cProduct/FSaCPDTStockConditionsEventEdit';
 $route ['pdtEventDeleteStockConditions']    = 'product/product/cProduct/FSaCPDTStockConditionsDeleteEvent';
+
+//กำหนดเงื่อนไขโซน
+$route ['pdtEventPageZoneConditionsList']   = 'product/product/cProduct/FSvCPDTCallPageZoneConditions';
+$route ['pdtEventAddZoneConditions']        = 'product/product/cProduct/FSaCPDTZoneConditionsEventAdd';
+$route ['pdtEventDeleteZoneConditions']     = 'product/product/cProduct/FSaCPDTZoneConditionsDeleteEvent';
+$route ['pdtViewZoneDetailConditions']      = 'product/product/cProduct/FSoCPDTZoneDetailDataTable';

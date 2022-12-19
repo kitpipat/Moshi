@@ -52,3 +52,8 @@ $lang['tZneKeyRefer']                           = "Key Referent";
 $lang['tZneEdit']                               = "Edit";
 $lang['tZneDelete']                             = "Delete";
 $lang ['tZneSearch']                            = 'Search';
+
+//Browse Zone
+$lang ['tBrowseZoneTitle']                      = 'Show Data : Zone';
+$lang ['tBrowseZoneCode']                       = 'Zone Code';
+$lang ['tBrowseZoneName']                       = 'Zone Name';

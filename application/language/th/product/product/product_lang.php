@@ -458,6 +458,21 @@ $lang['tPdtSpecificProductConditions']      = 'เงื่อนไขสิน
 $lang['tPdtAboutProduct']                   = 'ข้อมูลเพิ่มเติมเกี่ยวกับสินค้า';
 $lang['tPdtCostConditions']                 = 'เงื่อนไขต้นทุน';
 
-
-
-
+//ผูกโซน 15/12/2022 [IcePun]
+$lang['tPdtZone']                                = 'โซน';
+$lang['tPdtZoneSeq']                             = 'ลำดับ';
+$lang['tPdtZoneCode']                            = 'รหัสโซน';
+$lang['tPdtZoneName']                            = 'ชื่อโซน';
+$lang['tPdtZoneInorEx']                          = 'กลุ่ม';
+$lang['tPdtZoneManage']                          = 'จัดการ';
+$lang['tPdtZoneDel']                             = 'ลบ';
+$lang['tPdtZoneDetail']                          = 'ดูรายละเอียด';
+$lang['tPdtZoneConditionsValid']                 = 'กรุณาเลือกโซน'; 
+$lang['tPdtZoneConditionsValidGrp']              = 'กรุณาเลือกกลุ่ม'; 
+$lang['tPdtZoneInclude']                         = 'เข้าร่วม'; 
+$lang['tPdtZoneExclude']                         = 'ยกเว้น'; 
+$lang['tPdtZoneConditionswarning']               = 'แจ้งเตือน'; 
+$lang['tPdtZoneConditionswarningZone']           = 'โซนนี้ถูกกำหนดไว้ในเงื่อนไขโซนเรียบร้อยแล้ว';
+$lang['tPdtZoneBchCode']                         = 'รหัสสาขา';
+$lang['tPdtZoneBchName']                         = 'ชื่อสาขา';
+$lang['tPdtZoneBchName']                         = 'ชื่อสาขา';

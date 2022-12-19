@@ -54,6 +54,11 @@ $lang['tZneEdit']                               = "แก้ไข";
 $lang['tZneDelete']                             = "ลบ";
 $lang ['tZneSearch']                            = 'ค้นหา';
 
+//Browse Zone
+$lang ['tBrowseZoneTitle']                      = 'แสดงข้อมูล : โซน';
+$lang ['tBrowseZoneCode']                       = 'รหัสโซน';
+$lang ['tBrowseZoneName']                       = 'ชื่อโซน';
+
 
 
 

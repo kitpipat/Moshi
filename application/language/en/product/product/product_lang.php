@@ -205,3 +205,21 @@ $lang['tPDTHisPIDis']                       = "discount";
 $lang['tPDTHisPIChg']                       = "Chart";
 $lang['tPDTHisPINet']                       = "Amount of money";
 
+//ผูกโซน 15/12/2022 [IcePun]
+$lang['tPdtZone']                                = 'Zone';
+$lang['tPdtZoneSeq']                             = 'No.';
+$lang['tPdtZoneCode']                            = 'Zone Code';
+$lang['tPdtZoneName']                            = 'Zone Name';
+$lang['tPdtZoneInorEx']                          = 'Group';
+$lang['tPdtZoneManage']                          = 'Manage';
+$lang['tPdtZoneDel']                             = 'Delete';
+$lang['tPdtZoneDetail']                          = 'Detail';
+$lang['tPdtZoneConditionsValid']                 = 'Please fill out a zone'; 
+$lang['tPdtZoneConditionsValidGrp']              = 'Please fill out a group'; 
+$lang['tPdtZoneInclude']                         = 'Include'; 
+$lang['tPdtZoneExclude']                         = 'Exclude';
+$lang['tPdtZoneConditionswarning']               = 'แจ้งเตือน'; 
+$lang['tPdtZoneConditionswarningZone']           = 'โซนนี้ถูกกำหนดไว้ในเงื่อนไขโซนเรียบร้อยแล้ว';
+$lang['tPdtZoneBchCode']                         = 'Branch Code';
+$lang['tPdtZoneBchName']                         = 'Branch Name';
+
