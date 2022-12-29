@@ -26,10 +26,10 @@
         <tr>
            <td class="text-center"><?php echo $aValue['FNRowID'];?></td>
            <td class="text-left"><?php echo $aValue['FTZneCode'];?></td>
-           <td class="text-left"><?php echo $aValue['FTZneChainName'];?></td>
+           <td class="text-left"><?php echo $aValue['FTZneName'];?></td>
            <td class="text-left"><?php echo $tPdtZoneInorEx;?></td>
-           <td class="text-center"><img class="xCNIconTable" src="<?= base_url().'/application/modules/common/assets/images/icons/delete.png'?>" onClick="JSoPdtZoneConditionsDelete('<?php echo $aValue['FTPdtCode'];?>','<?php echo $aValue['FTZneCode'];?>','<?php echo $aValue['FTZneChainName'];?>');"></td>
-           <td class="text-center"><img class="xCNIconTable" src="<?= base_url().'/application/modules/common/assets/images/icons/view2.png'?>" onClick="JSvPdtZoneConditionsPageView('<?php echo $aValue['FTPdtCode'];?>','<?php echo $aValue['FTZneCode'];?>','<?php echo $aValue['FTZneChainName'];?>');"></td>
+           <td class="text-center"><img class="xCNIconTable" src="<?= base_url().'/application/modules/common/assets/images/icons/delete.png'?>" onClick="JSoPdtZoneConditionsDelete('<?php echo $aValue['FTPdtCode'];?>','<?php echo $aValue['FTZneCode'];?>','<?php echo $aValue['FTZneName'];?>');"></td>
+           <td class="text-center"><img class="xCNIconTable" src="<?= base_url().'/application/modules/common/assets/images/icons/view2.png'?>" onClick="JSvPdtZoneConditionsPageView('<?php echo $aValue['FTPdtCode'];?>','<?php echo $aValue['FTZneCode'];?>','<?php echo $aValue['FTZneName'];?>');"></td>
         </tr>   
     <?php } ?>
     <?php else:?>
@@ -159,20 +159,30 @@
     var oBrowseZne = {
 
         Title: ['address/zone/zone', 'tBrowseZoneTitle'],
-            Table: { Master: 'TCNMZone',PK: 'FTZneChain' },
+            Table: { Master: 'TCNMZoneObj',PK: 'FTZneChain' },
             Join: {
-                Table: ['TCNMZone_L'],
-                On: ["TCNMZone.FTZneCode = TCNMZone_L.FTZneCode AND TCNMZone_L.FNLngID = 1 AND ISNULL(TCNMZone.FTZneCode,'') = ISNULL(TCNMZone_L.FTZneCode,'') AND ISNULL(TCNMZone.FTZneChain,'') = ISNULL(TCNMZone_L.FTZneChain,'') "]
+                Table: ['TCNMZone', 'TCNMZone_L'],
+                On: ["TCNMZone.FTZneChain = TCNMZoneObj.FTZneChain" , 
+                        "TCNMZone.FTZneCode = TCNMZone_L.FTZneCode AND TCNMZone_L.FNLngID = 1 AND ISNULL(TCNMZone.FTZneCode,'') = ISNULL(TCNMZone_L.FTZneCode,'') AND ISNULL(TCNMZone.FTZneChain,'') = ISNULL(TCNMZone_L.FTZneChain,'') "]
             },
             Where: {
                 Condition: [
                     function() {
-                        var tAgncode = '<?=$this->session->userdata('tSesUsrAgnCode') ?>';
+                        var tAgncode        = '<?=$this->session->userdata('tSesUsrAgnCode') ?>';
+                        // var tBchcode        = '<?=$this->session->userdata('tSesUsrBchCode') ?>';
+                        // var tMercode        = '<?=$this->session->userdata('tSesUsrMerCode') ?>';
+                        // var tShpcode        = '<?=$this->session->userdata('tSesUsrShpCode') ?>';
+                        var tSesUsrLevel    = '<?=$this->session->userdata('tSesUsrLevel') ?>';
                         // var tSQL = " AND TCNMZone.FTZneChain NOT IN(SELECT FTZneChain FROM TCNTPdtPmtHDZne_Tmp WHERE FTSessionID = '<?php echo $this->session->userdata("tSesSessionID"); ?>') ";
                         var tSQL = "";
                         if(tAgncode != ''){
                             tSQL += " AND ISNULL(TCNMZone.FTAgnCode,'') = ''  OR ISNULL(TCNMZone.FTAgnCode,'') = '<?=$this->session->userdata('tSesUsrAgnCode') ?>'"
                         }
+                        // else if($tSesUsrLevel == 'BCH'){
+                        //     tSQL += " AND TCNMZoneObj.FTZneTable = 'TCNMBranch' AND ISNULL(TCNMZoneObj.FTZneRefCode,'') IN ('','<?=$this->session->userdata('tSesUsrBchCode') ?>') "
+                        // }else if($tSesUsrLevel == 'SHP'){
+                        //     tSQL += " AND (TCNMZoneObj.FTZneTable = 'TCNMMerchant' OR TCNMZoneObj.FTZneTable = 'TCNMShop') AND ( TCNMZoneObj.FTZneRefCode = '<?=$this->session->userdata('tSesUsrBchCode') ?>' ) AND ( TCNMZoneObj.FTZneRefCode = '<?=$this->session->userdata('tSesUsrMerCode') ?>' AND ISNULL(TCNMZoneObj.FTZneRefCode,'') = '' ) OR ( TCNMZoneObj.FTZneRefCode = '<?=$this->session->userdata('tSesUsrMerCode') ?>' AND TCNMZoneObj.FTZneRefCode = '<?=$this->session->userdata('tSesUsrShpCode') ?>' )"
+                        // }
                         return tSQL;
                     }
                 ]
@@ -181,22 +191,23 @@
                 ColumnPathLang: 'address/zone/zone',
                 ColumnKeyLang: ['tBrowseZoneCode', 'tBrowseZoneName'],
                 ColumnsSize: ['10%', '35%', '55%'],
-                DataColumns: ['TCNMZone.FTZneChain', 'TCNMZone_L.FTZneChainName','TCNMZone.FTZneCode'],
+                DataColumns: ['TCNMZoneObj.FTZneChain', 'TCNMZone_L.FTZneName','TCNMZone.FTZneCode'],
+                DistinctField   : [0],
                 DataColumnsFormat: ['', '',''],
                 WidthModal: 50,
                 Perpage: 10,
-                OrderBy: ['TCNMZone.FTZneChain'],
+                OrderBy: ['TCNMZoneObj.FTZneChain'],
                 SourceOrder: "ASC",
                 DisabledColumns: [2],
             },
             CallBack: {
                 ReturnType: 'S',
-                Value: ["oetZoneConditionZneCode", "TCNMZone.FTZneChain"],
-                Text: ["oetZoneConditionZneName", "TCNMZone_L.FTZneChainName"]
+                Value: ["oetZoneConditionZneCode", "TCNMZoneObj.FTZneChain"],
+                Text: ["oetZoneConditionZneName", "TCNMZone_L.FTZneName"]
             },
             // NextFunc: {
             //     FuncName: 'JSxPromotionStep4CallbackZone',
-            //     ArgReturn: ['FTZneChain', 'FTZneChainName','FTZneCode']
+            //     ArgReturn: ['FTZneChain', 'FTZneName','FTZneCode']
             // },
             RouteAddNew: 'zone',
             BrowseLev: 1,

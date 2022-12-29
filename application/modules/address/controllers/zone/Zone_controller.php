@@ -450,7 +450,7 @@ class Zone_controller extends MX_Controller {
 				'FTZneKey'    	=> $this->input->post('oetKeyReferName'),
 				'FTCreateBy'    => $this->session->userdata("tSesUsername"),
 				'FDCreateOn'	=> date('Y-m-d H:i:s'),
-				'FTLastUpdBy'	=> date('Y-m-d H:i:s'),
+				'FTLastUpdBy'	=> $this->session->userdata("tSesUsername"),
 				'FDLastUpdOn'   => date('Y-m-d H:i:s')
 			);
 
@@ -530,7 +530,9 @@ class Zone_controller extends MX_Controller {
         $aDataMaster = array(
 			'FTZneRefCode' => $tIDCode,
 			'FTZneTable'   => $tTable,
-			'tZneChain'    => $tZneChain
+			'tZneChain'    => $tZneChain,
+			'FTLastUpdBy'	=> $this->session->userdata("tSesUsername"),
+			'FDLastUpdOn'   => date('Y-m-d H:i:s')
         );
         $aResDel    = $this->Zone_model->FSnMZENOJBDel($aDataMaster);
 		$nNumRowZen = $this->Zone_model->FSnMZENOGetAllNumRow($aDataMaster);
@@ -563,7 +565,7 @@ class Zone_controller extends MX_Controller {
 				'FNZneID'       => $tZneID,
 				'FTCreateBy'    => $this->session->userdata("tSesUsername"),
 				'FDCreateOn'	=> date('Y-m-d H:i:s'),
-				'FTLastUpdBy'	=> date('Y-m-d H:i:s'),
+				'FTLastUpdBy'	=> $this->session->userdata("tSesUsername"),
 				'FDLastUpdOn'   => date('Y-m-d H:i:s')
 			);
 			$this->db->trans_begin();
@@ -651,9 +653,14 @@ class Zone_controller extends MX_Controller {
 				'nZenCode'      => $FNZneID			
 			);
 
+			$aAlwEventZone 	= FCNaHCheckAlwFunc('zone/0/0'); 
+			$aAlwEventAgn   = FCNaHCheckAlwFunc('agency/0/0');
+
 			$aItems = $this->Zone_model->FSaMZENGetDataZenSetByID($aData);
 			$aDataEdit  = array(
-				'aItems'       => $aItems
+				'aItems'       => $aItems,
+				'aAlwEventZone'		=> $aAlwEventZone,
+				'aAlwEventAgn'		=> $aAlwEventAgn,
 			);
 			$aDataReturn = array(
 				'tHTML'     => $this->load->view('address/zone/wZoneSetAdd', $aDataEdit, true),

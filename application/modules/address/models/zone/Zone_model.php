@@ -629,7 +629,6 @@ class Zone_model extends CI_Model {
         return $aResult;
     }   
 
-
     //Functionality: Get data  TCNMZoneObj
     //Parameters:  Function Parameter
     //Creator: 23/01/2019 (Bell)
@@ -673,7 +672,7 @@ class Zone_model extends CI_Model {
 			$this->db->update('TCNMZoneObj');
 		
 			if($this->db->affected_rows() > 0) {
-				$aStatus = array(
+				$aStatusObj = array(
 					'rtCode' => '1',
 					'rtDesc' => 'Edit ZoneObj Success',
 				);
@@ -691,14 +690,35 @@ class Zone_model extends CI_Model {
 				));
 	
 				if ($this->db->affected_rows() > 0) {
-					$aStatus    = array(
+					$aStatusObj    = array(
 						'rtCode' => '1',
 						'rtDesc' => 'Add ZoneObj Success',
 					);
 				} else {
-					$aStatus    = array(
+					$aStatusObj    = array(
 						'rtCode' => '801',
 						'rtDesc' => 'Error Cannot Add/Update ZoneObj.',
+					);
+				}
+			}
+
+			if($aStatusObj['rtCode'] == '1') {
+				$this->db->set('FDLastUpdOn',$paData['FDLastUpdOn']);
+				$this->db->set('FTLastUpdBy',$paData['FTLastUpdBy']);
+				$this->db->where('FTZneChain', $paData['FTZneChain']);
+				$this->db->update('TCNMZone');
+					
+				if($this->db->affected_rows() > 0) {
+					//Success
+					$aStatus = array(
+							'rtCode' => '1',
+							'rtDesc' => 'success',
+					);
+				} else {
+					//Ploblem
+					$aStatus = array(
+							'rtCode' => '905',
+							'rtDesc' => 'cannot update database.',
 					);
 				}
 			}
@@ -861,10 +881,32 @@ class Zone_model extends CI_Model {
 			$this->db->where('FNZneID', $tZneRefCode);
 			$this->db->where('FTZneTable', $tZneTable);
 			$this->db->delete('TCNMZoneObj');
-			$aStatus = array(
+			$aStatusObj = array(
 				'rtCode' => '1',
-				'rtDesc' => 'Add Master Success',
+				'rtDesc' => 'Delete Master Success',
 			);
+
+			if($aStatusObj['rtCode'] == '1') {
+				$this->db->set('FDLastUpdOn',$ptZneRefCode['FDLastUpdOn']);
+				$this->db->set('FTLastUpdBy',$ptZneRefCode['FTLastUpdBy']);
+				$this->db->where('FTZneChain', $tZneChain);
+				$this->db->update('TCNMZone');
+					
+				if($this->db->affected_rows() > 0) {
+					//Success
+					$aStatus = array(
+							'rtCode' => '1',
+							'rtDesc' => 'success',
+					);
+				} else {
+					//Ploblem
+					$aStatus = array(
+							'rtCode' => '905',
+							'rtDesc' => 'cannot update database.',
+					);
+				}
+			}
+			
             return $aStatus;
         } else {
 			$aStatus = array(
@@ -904,6 +946,7 @@ class Zone_model extends CI_Model {
 		$tZneTable   = $paData['FTZneTable'];
 		$tZneRefCode = $paData['FTZneRefCode'];
 		$tZneKey = $paData['FTZneKey'];
+		// print_r($paData);exit;
 	try{
 		if($tZneTable != '' && $tZneRefCode == ''){
 			$this->db->set('FTZneKey', $paData['FTZneKey']);
@@ -932,16 +975,18 @@ class Zone_model extends CI_Model {
 
         //Update Master
         if($this->db->affected_rows() > 0){
-                $aStatus = array(
-                    'rtCode' => '1',
-                    'rtDesc' => 'Update Master Success',
-                );
+			$aStatus = array(
+				'rtCode' => '1',
+				'rtDesc' => 'Update Master Success',
+			);
 		}else{
-				$aStatus = array(
-					'rtCode' => '905',
-					'rtDesc' => 'Error Cannot Update Master.',
-				);
-			}
+			$aStatus = array(
+				'rtCode' => '905',
+				'rtDesc' => 'Error Cannot Update Master.',
+			);
+		}
+
+
 		return $aStatus;
         }catch(Exception $Error){
 		return $Error;

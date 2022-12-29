@@ -29,33 +29,47 @@ class mProduct extends CI_Model {
         }   
 
 
-        /* |-------------------------------------------------------------------------------------------| */
-        /* |                            สิทธิในการมองเห็นสินค้า CR.wat                                      | */
-        /* |-------------------------------------------------------------------------------------------| */
-        /* | */     $tSesUsrLevel           = $this->session->userdata('tSesUsrLevel');             // | */ 
-        /* | */     $tSessionMerCode        = $this->session->userdata('tSesUsrMerCode');           // | */ 
-        /* | */     $tSessionShopCode       = $this->session->userdata('tSesUsrShpCode');           // | */ 
-        /* | */     $tSessionBchCode        = $this->session->userdata('tSesUsrBchCode');           // | */ 
-        /* | */     $tWHEREPermission_BCH   = '';                                                   // | */ 
-        /* | */     $tWHEREPermission_SHP   = '';                                                   // | */     
-        /* | */                                                                                     // | */ 
-        /* | */     //PERMISSION BCH    : ต้องเห็นสินค้าที่ผูกสาขา และสินค้าที่ไม่ผูกอะไรเลย(HQ)                // | */ 
-        /* | */     if($tSesUsrLevel == 'BCH'){                                                     // | */ 
-        /* | */         $tWHEREPermission_BCH    = " AND ISNULL(PDLSPC.FTBchCode,'') ";             // | */ 
-        /* | */         $tWHEREPermission_BCH   .= "  IN ('','$tSessionBchCode') ";                 // | */ 
-        /* | */     }                                                                               // | */ 
-        /* | */                                                                                     // | */ 
-        /* | */     //PERMISSION SHP    : ต้องเห็นสินค้าระดับร้านค้า และ สินค้าของกลุ่มธุรกิจที่ไม่ได้ผูกร้านค้า       // | */ 
-        /* | */     if($tSesUsrLevel == 'SHP'){                                                     // | */ 
-        /* | */         $tWHEREPermission_SHP  = " AND ( PDLSPC.FTBchCode = '$tSessionBchCode' )";  // | */ 
-        /* | */         $tWHEREPermission_SHP  .= " AND ";                                          // | */ 
-        /* | */         $tWHEREPermission_SHP  .= " ( PDLSPC.FTMerCode = '$tSessionMerCode' AND ";  // | */ 
-        /* | */         $tWHEREPermission_SHP  .= " ISNULL(PDLSPC.FTShpCode,'') = '' ) ";           // | */ 
-        /* | */         $tWHEREPermission_SHP  .= " OR ";                                           // | */ 
-        /* | */         $tWHEREPermission_SHP  .= " ( PDLSPC.FTMerCode = '$tSessionMerCode' AND ";  // | */ 
-        /* | */         $tWHEREPermission_SHP  .= " PDLSPC.FTShpCode = '$tSessionShopCode' )";      // | */ 
-        /* | */     }                                                                               // | */             
-        /* |-------------------------------------------------------------------------------------------| */
+        /* |-----------------------------------------------------------------------------------------------| */
+        /* |                            สิทธิในการมองเห็นสินค้า CR.wat  Edit By.IcePun                          | */
+        /* |-----------------------------------------------------------------------------------------------| */
+        /* | */     $tSesUsrLevel               = $this->session->userdata('tSesUsrLevel');             // | */ 
+        /* | */     $tSessionMerCode            = $this->session->userdata('tSesUsrMerCode');           // | */ 
+        /* | */     $tSessionShopCode           = $this->session->userdata('tSesUsrShpCode');           // | */ 
+        /* | */     $tSessionBchCode            = $this->session->userdata('tSesUsrBchCode');           // | */ 
+        /* | */     $tWHEREPermission_BCH       = '';                                                   // | */ 
+        /* | */     $tWHEREPermission_SHP       = '';                                                   // | */     
+        /* | */     $tWHEREPermission_InOrEx    = '';                                                   // | */     
+        /* | */                                                                                         // | */ 
+        /* | */     //PERMISSION BCH    : ต้องเห็นสินค้าที่ผูกสาขา และสินค้าที่ไม่ผูกอะไรเลย(HQ)                    // | */ 
+        /* | */     if($tSesUsrLevel == 'BCH'){                                                         // | */ 
+     // /* | */         $tWHEREPermission_BCH    = " AND ISNULL(PDLSPC.FTBchCode,'') ";                 // | */ 
+     // /* | */         $tWHEREPermission_BCH   .= "  IN ('','$tSessionBchCode') ";                     // | */ 
+        /* | */         $tWHEREPermission_BCH    = " AND ISNULL(PSC.FTBchCode,'') ";                    // | */ 
+        /* | */         $tWHEREPermission_BCH   .= "  IN ('','$tSessionBchCode') ";                     // | */ 
+        /* | */     }                                                                                   // | */ 
+        /* | */                                                                                         // | */
+        /* | */     //PERMISSION SHP    : ต้องเห็นสินค้าระดับร้านค้า และ สินค้าของกลุ่มธุรกิจที่ไม่ได้ผูกร้านค้า           // | */ 
+        /* | */     if($tSesUsrLevel == 'SHP'){                                                         // | */ 
+     // /* | */         $tWHEREPermission_SHP  = " AND ( PDLSPC.FTBchCode = '$tSessionBchCode' )";      // | */ 
+     // /* | */         $tWHEREPermission_SHP  .= " AND ";                                              // | */ 
+     // /* | */         $tWHEREPermission_SHP  .= " ( PDLSPC.FTMerCode = '$tSessionMerCode' AND ";      // | */ 
+     // /* | */         $tWHEREPermission_SHP  .= " ISNULL(PDLSPC.FTShpCode,'') = '' ) ";               // | */ 
+     // /* | */         $tWHEREPermission_SHP  .= " OR ";                                               // | */ 
+     // /* | */         $tWHEREPermission_SHP  .= " ( PDLSPC.FTMerCode = '$tSessionMerCode' AND ";      // | */ 
+     // /* | */         $tWHEREPermission_SHP  .= " PDLSPC.FTShpCode = '$tSessionShopCode' )";          // | */ 
+        /* | */         $tWHEREPermission_SHP  = " AND ( PSC.FTBchCode = '$tSessionBchCode' )";         // | */ 
+        /* | */         $tWHEREPermission_SHP  .= " AND ";                                              // | */ 
+        /* | */         $tWHEREPermission_SHP  .= " ( PSC.FTMerCode = '$tSessionMerCode' AND ";         // | */ 
+        /* | */         $tWHEREPermission_SHP  .= " ISNULL(PSC.FTShpCode,'') = '' ) ";                  // | */ 
+        /* | */         $tWHEREPermission_SHP  .= " OR ";                                               // | */ 
+        /* | */         $tWHEREPermission_SHP  .= " ( PSC.FTMerCode = '$tSessionMerCode' AND ";         // | */ 
+        /* | */         $tWHEREPermission_SHP  .= " PSC.FTShpCode = '$tSessionShopCode' )";             // | */
+        /* | */     }                                                                                   // | */
+        /* | */                                                                                         // | */     
+        /* | */     if($tSesUsrLevel != 'HQ'){                                                          // | */  
+        /* | */         $tWHEREPermission_InOrEx  = " AND ISNULL(PSC.FTPdtStaInOrEx,'') <> '2'";        // | */ 
+        /* | */     }                                                                                   // | */             
+        /* |-----------------------------------------------------------------------------------------------| */
 
         // Stagement Query Product
         $tSQL       =   "   SELECT
@@ -74,7 +88,7 @@ class mProduct extends CI_Model {
                                             ROW_NUMBER() OVER (PARTITION BY FTPdtCode ORDER BY FTPdtCode ASC) AS MergeColumTD,
                                             * 
                                             FROM (
-                                            SELECT 
+                                            SELECT DISTINCT
                                                 PDT.FTPdtForSystem,
                                                 PIMG.FTImgObj,
                                                 PDT.FTPdtCode,
@@ -87,22 +101,41 @@ class mProduct extends CI_Model {
                                                 PTL.FTPtyName
                                             FROM   TCNMPdt PDT WITH(NOLOCK)
                                             LEFT JOIN TCNMPdt_L         PDTL    WITH(NOLOCK)    ON PDT.FTPdtCode    = PDTL.FTPdtCode    AND PDTL.FNLngID    = $nLngID
-                                            LEFT JOIN TCNMPdtSpcBch     PDLSPC  WITH(NOLOCK)    ON PDT.FTPdtCode    = PDLSPC.FTPdtCode
+                                            --LEFT JOIN TCNMPdtSpcBch     PDLSPC  WITH(NOLOCK)    ON PDT.FTPdtCode    = PDLSPC.FTPdtCode
+                                            LEFT JOIN TCNMPdtSpcZone    PDLZNE  WITH(NOLOCK)    ON PDT.FTPdtCode    = PDLZNE.FTPdtCode
+                                            --LEFT JOIN TCNMZoneObj       ZNEOBJ  WITH(NOLOCK)    ON PDLZNE.FTZneCode = ZNEOBJ.FTZneChain
                                             LEFT JOIN TCNMPdtPackSize   PPCZ    WITH(NOLOCK)    ON PDT.FTPdtCode    = PPCZ.FTPdtCode 
                                             LEFT JOIN TCNMPdtBar        PBAR    WITH(NOLOCK)    ON PDT.FTPdtCode    = PBAR.FTPdtCode    AND PPCZ.FTPunCode  = PBAR.FTPunCode 
                                             LEFT JOIN TCNMImgPdt        PIMG    WITH(NOLOCK)    ON PDT.FTPdtCode    = PIMG.FTImgRefID   AND PIMG.FTImgTable = 'TCNMPdt' AND PIMG.FNImgSeq = $nLngID
                                             LEFT JOIN TCNMPdtType_L     PTL     WITH(NOLOCK)    ON PDT.FTPtyCode    = PTL.FTPtyCode     AND PTL.FNLngID     = $nLngID
                                             LEFT JOIN TCNMPdtUnit_L     PUNL    WITH(NOLOCK)    ON PPCZ.FTPunCode   = PUNL.FTPunCode    AND PUNL.FNLngID    = $nLngID
+                                            LEFT JOIN TCNMZone_L        ZNEL    WITH(NOLOCK)    ON PDLZNE.FTZneCode = ZNEL.FTZneChain   AND ZNEL.FNLngID    = $nLngID
                                             LEFT JOIN TCNMPdtGrp_L      PGL     WITH(NOLOCK)    ON PGL.FTPgpChain   = PDT.FTPgpChain
+                                            LEFT JOIN 
+												(
+													SELECT DISTINCT 
+														PZN.FTPdtCode,
+														ZOB.FTZneChain,
+                                                        PZN.FTPdtStaInOrEx,
+														CASE WHEN ZOB.FTZneTable = 'TCNMCountry'    THEN ZOB.FTZneRefCode ELSE '' END AS FTCtyCode,
+														CASE WHEN ZOB.FTZneTable = 'TCNMAgency'     THEN ZOB.FTZneRefCode ELSE '' END AS FTAgnCode,
+														CASE WHEN ZOB.FTZneTable = 'TCNMBranch'     THEN ZOB.FTZneRefCode ELSE '' END AS FTBchCode,
+														CASE WHEN ZOB.FTZneTable = 'TCNMShop'       THEN ZOB.FTZneRefCode ELSE '' END AS FTShpCode,
+														CASE WHEN ZOB.FTZneTable = 'TCNMMerchant'   THEN ZOB.FTZneRefCode ELSE '' END AS FTMerCode
+													FROM TCNMPdtSpcZone PZN
+													INNER JOIN TCNMZoneObj ZOB ON PZN.FTZneCode = ZOB.FTZneChain 
+												) PSC ON PDT.FTPdtCode = PSC.FTPdtCode
                                             WHERE 1=1
                                             ".$tPdtForSysLine1."
                                             ".$tWHEREPermission_BCH."
                                             ".$tWHEREPermission_SHP."
+                                            ".$tWHEREPermission_InOrEx."
                         ";
                     if(isset($tSearch) && !empty($tSearch)){
                         $tSQL   .= " AND (PDT.FTPdtCode   COLLATE THAI_BIN LIKE '%$tSearch%' OR PDTL.FTPdtName COLLATE THAI_BIN LIKE '%$tSearch%' OR PUNL.FTPunName COLLATE THAI_BIN LIKE '%$tSearch%' 
                                                     OR PGL.FTPgpName  COLLATE THAI_BIN LIKE '%$tSearch%' OR PGL.FTPgpChainName COLLATE THAI_BIN LIKE '%$tSearch%' OR PTL.FTPtyName COLLATE THAI_BIN LIKE '%$tSearch%'
-                                                    OR PBAR.FTBarCode  COLLATE THAI_BIN LIKE '%$tSearch%')";
+                                                    OR PBAR.FTBarCode  COLLATE THAI_BIN LIKE '%$tSearch%'
+                                                    OR ZNEL.FTZneName  COLLATE THAI_BIN LIKE '%$tSearch%')";
                     }
                                             
                     $tSQL .= "      ) Base) AS c WHERE c.FNRowID > $aRowLen[0] AND c.FNRowID <= $aRowLen[1] 
@@ -132,6 +165,8 @@ class mProduct extends CI_Model {
                 // }else{
                 //     $tSearchGetall = $tSearchPrice;
                 // }
+
+                // print_r($tSQL);
         $oQuery = $this->db->query($tSQL);           
         if ($oQuery->num_rows() > 0) {
             $aList          = $oQuery->result_array();
@@ -184,7 +219,7 @@ class mProduct extends CI_Model {
                         ROW_NUMBER() OVER(ORDER BY PDT.FTPdtCode ASC) AS counts,
                         PDT.FTPdtCode
                     FROM TCNMPdt PDT WITH(NOLOCK)
-                    LEFT JOIN TCNMPdtSpcBch     PDLSPC  WITH(NOLOCK)    ON PDT.FTPdtCode    = PDLSPC.FTPdtCode
+                   -- LEFT JOIN TCNMPdtSpcBch     PDLSPC  WITH(NOLOCK)    ON PDT.FTPdtCode    = PDLSPC.FTPdtCode
                     LEFT JOIN TCNMPdt_L         PDTL    WITH(NOLOCK)    ON PDT.FTPdtCode    = PDTL.FTPdtCode    AND PDTL.FNLngID    = $ptLngID
                     LEFT JOIN TCNMPdtPackSize   PPCZ    WITH(NOLOCK)    ON PDT.FTPdtCode    = PPCZ.FTPdtCode 
                     LEFT JOIN TCNMPdtBar        PBAR    WITH(NOLOCK)    ON PDT.FTPdtCode    = PBAR.FTPdtCode    AND PPCZ.FTPunCode  = PBAR.FTPunCode 
@@ -192,6 +227,20 @@ class mProduct extends CI_Model {
                     LEFT JOIN TCNMPdtType_L     PTL     WITH(NOLOCK)    ON PDT.FTPdtType    = PTL.FTPtyCode     AND PTL.FNLngID     = $ptLngID
                     LEFT JOIN TCNMPdtUnit_L     PUNL    WITH(NOLOCK)    ON PPCZ.FTPunCode   = PUNL.FTPunCode    AND PUNL.FNLngID    = $ptLngID
                     LEFT JOIN TCNMPdtGrp_L      PGL     WITH(NOLOCK)    ON PGL.FTPgpChain   = PDT.FTPgpChain
+                    LEFT JOIN 
+                        (
+                            SELECT DISTINCT 
+                                PZN.FTPdtCode,
+                                ZOB.FTZneChain,
+                                PZN.FTPdtStaInOrEx,
+                                CASE WHEN ZOB.FTZneTable = 'TCNMCountry'    THEN ZOB.FTZneRefCode ELSE '' END AS FTCtyCode,
+                                CASE WHEN ZOB.FTZneTable = 'TCNMAgency'     THEN ZOB.FTZneRefCode ELSE '' END AS FTAgnCode,
+                                CASE WHEN ZOB.FTZneTable = 'TCNMBranch'     THEN ZOB.FTZneRefCode ELSE '' END AS FTBchCode,
+                                CASE WHEN ZOB.FTZneTable = 'TCNMShop'       THEN ZOB.FTZneRefCode ELSE '' END AS FTShpCode,
+                                CASE WHEN ZOB.FTZneTable = 'TCNMMerchant'   THEN ZOB.FTZneRefCode ELSE '' END AS FTMerCode
+                            FROM TCNMPdtSpcZone PZN
+                            INNER JOIN TCNMZoneObj ZOB ON PZN.FTZneCode = ZOB.FTZneChain 
+                        ) PSC ON PDT.FTPdtCode = PSC.FTPdtCode
                     LEFT JOIN (
                                     SELECT PRI4PDT.* FROM (
                                         SELECT 
@@ -228,33 +277,65 @@ class mProduct extends CI_Model {
         }
 
         // echo $tSQL;
-        /* |-------------------------------------------------------------------------------------------| */
-        /* |                            สิทธิในการมองเห็นสินค้า CR.wat                                      | */
-        /* |-------------------------------------------------------------------------------------------| */
-        /* | */     $tSesUsrLevel           = $this->session->userdata('tSesUsrLevel');             // | */ 
-        /* | */     $tSessionMerCode        = $this->session->userdata('tSesUsrMerCode');           // | */ 
-        /* | */     $tSessionShopCode       = $this->session->userdata('tSesUsrShpCode');           // | */ 
-        /* | */     $tSessionBchCode        = $this->session->userdata('tSesUsrBchCode');           // | */ 
-        /* | */                                                                                     // | */ 
-        /* | */     //PERMISSION BCH    : ต้องเห็นสินค้าที่ผูกสาขา และสินค้าที่ไม่ผูกอะไรเลย(HQ)                // | */ 
-        /* | */     if($tSesUsrLevel == 'BCH'){                                                     // | */ 
-        /* | */         $tSQL   .= " AND ISNULL(PDLSPC.FTBchCode,'') ";                             // | */ 
-        /* | */         $tSQL   .= "  IN ('','$tSessionBchCode') ";                                 // | */ 
-        /* | */     }                                                                               // | */ 
-        /* | */                                                                                     // | */ 
-        /* | */     //PERMISSION SHP    : ต้องเห็นสินค้าระดับร้านค้า และ สินค้าของกลุ่มธุรกิจที่ไม่ได้ผูกร้านค้า       // | */ 
-        /* | */     if($tSesUsrLevel == 'SHP'){                                                     // | */ 
-        /* | */         $tSQL  .= " AND ( PDLSPC.FTBchCode = '$tSessionBchCode' ) ";                // | */ 
-        /* | */         $tSQL  .= " AND ";                                                          // | */ 
-        /* | */         $tSQL  .= " ( PDLSPC.FTMerCode = '$tSessionMerCode' AND ";                  // | */ 
-        /* | */         $tSQL  .= " ISNULL(PDLSPC.FTShpCode,'') = '' ) ";                           // | */ 
-        /* | */         $tSQL  .= " OR ";                                                           // | */ 
-        /* | */         $tSQL  .= " ( PDLSPC.FTMerCode = '$tSessionMerCode' AND ";                  // | */ 
-        /* | */         $tSQL  .= " PDLSPC.FTShpCode = '$tSessionShopCode' )";                      // | */ 
-        /* | */     }                                                                               // | */             
-        /* |-------------------------------------------------------------------------------------------| */
+        // /* |-------------------------------------------------------------------------------------------| */
+        // /* |                            สิทธิในการมองเห็นสินค้า CR.wat                                      | */
+        // /* |-------------------------------------------------------------------------------------------| */
+        // /* | */     $tSesUsrLevel           = $this->session->userdata('tSesUsrLevel');             // | */ 
+        // /* | */     $tSessionMerCode        = $this->session->userdata('tSesUsrMerCode');           // | */ 
+        // /* | */     $tSessionShopCode       = $this->session->userdata('tSesUsrShpCode');           // | */ 
+        // /* | */     $tSessionBchCode        = $this->session->userdata('tSesUsrBchCode');           // | */ 
+        // /* | */                                                                                     // | */ 
+        // /* | */     //PERMISSION BCH    : ต้องเห็นสินค้าที่ผูกสาขา และสินค้าที่ไม่ผูกอะไรเลย(HQ)                // | */ 
+        // /* | */     if($tSesUsrLevel == 'BCH'){                                                     // | */ 
+        // /* | */         $tSQL   .= " AND ISNULL(PDLSPC.FTBchCode,'') ";                             // | */ 
+        // /* | */         $tSQL   .= "  IN ('','$tSessionBchCode') ";                                 // | */ 
+        // /* | */     }                                                                               // | */ 
+        // /* | */                                                                                     // | */ 
+        // /* | */     //PERMISSION SHP    : ต้องเห็นสินค้าระดับร้านค้า และ สินค้าของกลุ่มธุรกิจที่ไม่ได้ผูกร้านค้า       // | */ 
+        // /* | */     if($tSesUsrLevel == 'SHP'){                                                     // | */ 
+        // /* | */         $tSQL  .= " AND ( PDLSPC.FTBchCode = '$tSessionBchCode' ) ";                // | */ 
+        // /* | */         $tSQL  .= " AND ";                                                          // | */ 
+        // /* | */         $tSQL  .= " ( PDLSPC.FTMerCode = '$tSessionMerCode' AND ";                  // | */ 
+        // /* | */         $tSQL  .= " ISNULL(PDLSPC.FTShpCode,'') = '' ) ";                           // | */ 
+        // /* | */         $tSQL  .= " OR ";                                                           // | */ 
+        // /* | */         $tSQL  .= " ( PDLSPC.FTMerCode = '$tSessionMerCode' AND ";                  // | */ 
+        // /* | */         $tSQL  .= " PDLSPC.FTShpCode = '$tSessionShopCode' )";                      // | */ 
+        // /* | */     }                                                                               // | */             
+        // /* |-------------------------------------------------------------------------------------------| */
+
+          /* |-----------------------------------------------------------------------------------------------| */
+        /* |                            สิทธิในการมองเห็นสินค้า CR.wat  Edit By.IcePun                          | */
+        /* |-----------------------------------------------------------------------------------------------| */
+        /* | */     $tSesUsrLevel               = $this->session->userdata('tSesUsrLevel');             // | */ 
+        /* | */     $tSessionMerCode            = $this->session->userdata('tSesUsrMerCode');           // | */ 
+        /* | */     $tSessionShopCode           = $this->session->userdata('tSesUsrShpCode');           // | */ 
+        /* | */     $tSessionBchCode            = $this->session->userdata('tSesUsrBchCode');           // | */ 
+        /* | */                                                                                         // | */ 
+        /* | */     //PERMISSION BCH    : ต้องเห็นสินค้าที่ผูกสาขา และสินค้าที่ไม่ผูกอะไรเลย(HQ)                    // | */ 
+        /* | */     if($tSesUsrLevel == 'BCH'){                                                         // | */ 
+        /* | */         $tSQL   .= " AND ISNULL(PSC.FTBchCode,'') ";                                    // | */ 
+        /* | */         $tSQL   .= "  IN ('','$tSessionBchCode') ";                                     // | */ 
+        /* | */     }                                                                                   // | */ 
+        /* | */                                                                                         // | */
+        /* | */     //PERMISSION SHP    : ต้องเห็นสินค้าระดับร้านค้า และ สินค้าของกลุ่มธุรกิจที่ไม่ได้ผูกร้านค้า           // | */ 
+        /* | */     if($tSesUsrLevel == 'SHP'){                                                         // | */ 
+        /* | */         $tSQL  .= " AND ( PSC.FTBchCode = '$tSessionBchCode' )";                        // | */ 
+        /* | */         $tSQL  .= " AND ";                                                              // | */ 
+        /* | */         $tSQL  .= " ( PSC.FTMerCode = '$tSessionMerCode' AND ";                         // | */ 
+        /* | */         $tSQL  .= " ISNULL(PSC.FTShpCode,'') = '' ) ";                                  // | */ 
+        /* | */         $tSQL  .= " OR ";                                                               // | */ 
+        /* | */         $tSQL  .= " ( PSC.FTMerCode = '$tSessionMerCode' AND ";                         // | */ 
+        /* | */         $tSQL  .= " PSC.FTShpCode = '$tSessionShopCode' )";                             // | */
+        /* | */     }                                                                                   // | */
+        /* | */                                                                                         // | */     
+        /* | */     if($tSesUsrLevel != 'HQ'){                                                          // | */  
+        /* | */         $tSQL  .= " AND ISNULL(PSC.FTPdtStaInOrEx,'') <> '2'";                          // | */ 
+        /* | */     }                                                                                   // | */             
+        /* |-----------------------------------------------------------------------------------------------| */
+
 
         $tSQL   .= " GROUP BY PDT.FTPdtCode";
+        // print_r($tSQL);
         $oQuery = $this->db->query($tSQL);
         if ($oQuery->num_rows() > 0) {
             $aDetail = $oQuery->row_array();
@@ -2869,7 +2950,7 @@ class mProduct extends CI_Model {
                                 TMT.FTPdtCode,
                                 TMT.FTZneCode,
                                 TMT.FTPdtStaInOrEx,
-                                ZNEL.FTZneChainName
+                                ZNEL.FTZneName
                             FROM TsysMasTmp TMT
                             -- LEFT JOIN TCNMZone      ZNE         ON ZNESPC.FTZneCode     = ZNE.FTZneCode 
                             -- LEFT JOIN TCNMZoneObj   ZNEOBJ      ON ZNESPC.FTZneCode     = ZNEOBJ.FTZneCode 
@@ -3172,17 +3253,24 @@ class mProduct extends CI_Model {
 
         $tSQL   = "SELECT c.* FROM
                     ( SELECT  ROW_NUMBER() OVER(ORDER BY FTZneRefCode ASC) AS FNRowID,* FROM
-                        (SELECT ZNEOBJ.FNZneID, 
+                        (SELECT DISTINCT ZNEOBJ.FNZneID, 
                                 ZNEOBJ.FTZneRefCode, 
                                 ZNEOBJ.FTZneChain, 
                                 ZNEOBJ.FTAgnCode,
-                                ZNEL.FTZneChainName, 
-                                BCHL.FTBchName
+                                ZNEL.FTZneName, 
+                                --BCHL.FTBchName
+                                CASE WHEN ZNEOBJ.FTZneTable = 'TCNMAgency'     THEN AGNL.FTAgnName ELSE '' END AS FTAgnName,
+                                CASE WHEN ZNEOBJ.FTZneTable = 'TCNMBranch'     THEN BCHL.FTBchName ELSE '' END AS FTBchName,
+                                CASE WHEN ZNEOBJ.FTZneTable = 'TCNMMerchant'   THEN MERL.FTMerName ELSE '' END AS FTMerName,
+                                CASE WHEN ZNEOBJ.FTZneTable = 'TCNMShop'       THEN SHPL.FTShpName ELSE '' END AS FTShpName
                         FROM TCNMZoneObj ZNEOBJ
-                        LEFT JOIN TCNMZone_L    ZNEL        ON ZNEOBJ.FTZneChain        = ZNEL.FTZneChain            AND ZNEL.FNLngID   =  $nLngID 
-                        LEFT JOIN TCNMBranch_L  BCHL        ON BCHL.FTBchCode           = ZNEOBJ.FTZneRefCode        AND ZNEL.FNLngID   =  $nLngID 
+                        LEFT JOIN TCNMZone_L     ZNEL        ON ZNEOBJ.FTZneChain        = ZNEL.FTZneChain            AND ZNEL.FNLngID   =  $nLngID 
+                        LEFT JOIN TCNMAgency_L   AGNL        ON AGNL.FTAgnCode           = ZNEOBJ.FTZneRefCode        AND ZNEL.FNLngID   =  $nLngID 
+                        LEFT JOIN TCNMBranch_L   BCHL        ON BCHL.FTBchCode           = ZNEOBJ.FTZneRefCode        AND ZNEL.FNLngID   =  $nLngID 
+                        LEFT JOIN TCNMMerchant_L MERL        ON MERL.FTMerCode           = ZNEOBJ.FTZneRefCode        AND ZNEL.FNLngID   =  $nLngID 
+                        LEFT JOIN TCNMShop_L     SHPL        ON SHPL.FTShpCode           = ZNEOBJ.FTZneRefCode        AND ZNEL.FNLngID   =  $nLngID 
                         WHERE 1=1 
-                        AND ZNEOBJ.FTZneTable  = 'TCNMBranch'
+                        --AND ZNEOBJ.FTZneTable  = 'TCNMBranch'
                         AND ZNEOBJ.FTZneChain  = '$tZoneCode'
                             ";
 
@@ -3193,23 +3281,14 @@ class mProduct extends CI_Model {
         // echo $tSQL;
         if($oQuery->num_rows() > 0){
             $oList = $oQuery->result();
-            // $aFoundRow = $this->FSnMPDTZoneConditionsGetPageAll($nLngID);
-            // $nFoundRow = $aFoundRow[0]->counts;
-            // $nPageAll = ceil($nFoundRow/$paData['nRow']); //หา Page All จำนวน Rec หาร จำนวนต่อหน้า
             $aResult = array(
                 'raItems'       => $oList,
-                // 'rnAllRow'      => $nFoundRow,
-                // 'rnCurrentPage' => $paData['nPage'],
-                // 'rnAllPage'     => $nPageAll,
                 'rtCode'        => '1',
                 'rtDesc'        => 'success',
             );
         }else{
             //No Data
             $aResult = array(
-                // 'rnAllRow'      => 0,
-                // 'rnCurrentPage' => $paData['nPage'],
-                // "rnAllPage"     => 0,
                 'rtCode'        => '800',
                 'rtDesc'        => 'data not found',
             );

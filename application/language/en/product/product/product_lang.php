@@ -220,6 +220,12 @@ $lang['tPdtZoneInclude']                         = 'Include';
 $lang['tPdtZoneExclude']                         = 'Exclude';
 $lang['tPdtZoneConditionswarning']               = 'แจ้งเตือน'; 
 $lang['tPdtZoneConditionswarningZone']           = 'โซนนี้ถูกกำหนดไว้ในเงื่อนไขโซนเรียบร้อยแล้ว';
+$lang['tPdtZoneAgnCode']                         = 'Agency Code';
+$lang['tPdtZoneAgnName']                         = 'Agency Name';
 $lang['tPdtZoneBchCode']                         = 'Branch Code';
 $lang['tPdtZoneBchName']                         = 'Branch Name';
+$lang['tPdtZoneMerCode']                         = 'Merchant Code';
+$lang['tPdtZoneMerName']                         = 'Merchant Name';
+$lang['tPdtZoneShpCode']                         = 'Shop Code';
+$lang['tPdtZoneShpName']                         = 'Shop Name';
 
