@@ -30,6 +30,7 @@ $lang['tCancel']                    = 'ยกเลิก';
 $lang['tBack']                      = 'ย้อนกลับ';
 $lang['tSave']                      = 'บันทึก';
 $lang['tEdit']                      = "แก้ไข";
+$lang['tDelete']                    = "ลบ";
 $lang['tAdd']                       = "เพิ่ม";
 $lang['tDelAll']                    = "ลบทั้งหมด";
 $lang['tSelectPic']                 = "เลือกรูป";
@@ -282,3 +283,5 @@ $lang['tBrowse']  = "เลือก";
 $lang['tFavTitle']  = "รายการโปรด";
 
 $lang['tImportExportProgress'] = 'ระบบกำลังดำเนินการ กรุณาตรวจสอบผลที่ประวัติการนำเข้า-ส่งออก';
+
+$lang['tStaUse']                    = "สถานะใช้งาน";

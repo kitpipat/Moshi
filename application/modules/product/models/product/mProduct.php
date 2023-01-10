@@ -46,6 +46,10 @@ class mProduct extends CI_Model {
      // /* | */         $tWHEREPermission_BCH   .= "  IN ('','$tSessionBchCode') ";                     // | */ 
         /* | */         $tWHEREPermission_BCH    = " AND ISNULL(PSC.FTBchCode,'') ";                    // | */ 
         /* | */         $tWHEREPermission_BCH   .= "  IN ('','$tSessionBchCode') ";                     // | */ 
+        /* | */         $tWHEREPermission_BCH   .= "  AND ISNULL(PSC.FTCtyCode,'') = ''";               // | */ 
+        /* | */         $tWHEREPermission_BCH   .= "  AND ISNULL(PSC.FTAgnCode,'') = ''";               // | */ 
+        /* | */         $tWHEREPermission_BCH   .= "  AND ISNULL(PSC.FTMerCode,'') = ''";               // | */ 
+        /* | */         $tWHEREPermission_BCH   .= "  AND ISNULL(PSC.FTShpCode,'') = ''";               // | */ 
         /* | */     }                                                                                   // | */ 
         /* | */                                                                                         // | */
         /* | */     //PERMISSION SHP    : ต้องเห็นสินค้าระดับร้านค้า และ สินค้าของกลุ่มธุรกิจที่ไม่ได้ผูกร้านค้า           // | */ 
@@ -117,6 +121,8 @@ class mProduct extends CI_Model {
 														PZN.FTPdtCode,
 														ZOB.FTZneChain,
                                                         PZN.FTPdtStaInOrEx,
+                                                        -- ZOB.FTZneTable,
+														-- ZOB.FTZneRefCode
 														CASE WHEN ZOB.FTZneTable = 'TCNMCountry'    THEN ZOB.FTZneRefCode ELSE '' END AS FTCtyCode,
 														CASE WHEN ZOB.FTZneTable = 'TCNMAgency'     THEN ZOB.FTZneRefCode ELSE '' END AS FTAgnCode,
 														CASE WHEN ZOB.FTZneTable = 'TCNMBranch'     THEN ZOB.FTZneRefCode ELSE '' END AS FTBchCode,

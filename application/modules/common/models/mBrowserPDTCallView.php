@@ -204,7 +204,8 @@ class mBrowserPDTCallView extends CI_Model {
             $tSQL       .= "FROM (";
             $tSQL       .= "SELECT * ";
             $tSQL       .= "FROM VCN_ProductsBranch";
-            $tSQL       .= " WHERE FTPdtSpcBch = '$tBCH' OR ISNULL(FTPdtSpcBch, '') = '' AND FNLngIDPdt = '$nLngID' AND FNLngIDUnit = '$nLngID' ";
+            // $tSQL       .= " WHERE FTPdtSpcBch = '$tBCH' OR ISNULL(FTPdtSpcBch, '') = '' AND FNLngIDPdt = '$nLngID' AND FNLngIDUnit = '$nLngID' ";
+            $tSQL       .= " WHERE FTZneRefCode = '$tBCH'  AND FTZneTable = 'TCNMBranch' OR ISNULL(FTZneRefCode, '') = '' AND FNLngIDPdt = '$nLngID' AND FNLngIDUnit = '$nLngID' ";
             $tSQL       .= ") Products ";
             $tSQL       .= "WHERE 1 = 1 ";
             $tSQL       .= "$ptFilter";
@@ -212,6 +213,7 @@ class mBrowserPDTCallView extends CI_Model {
             $tSQL       .= ") AS ProductM ";
             $tSQL       .= "$ptLeftJoinPrice";
 
+            print_r($tSQL);
             $oQuery = $this->db->query($tSQL);
             if($oQuery->num_rows() > 0){
                 $aList      = $oQuery->result_array();
@@ -267,9 +269,10 @@ class mBrowserPDTCallView extends CI_Model {
         }
         $tSQL       = "SELECT FTPDTCode FROM ";
         $tSQL       .= " ( ";
-        $tSQL       .= "SELECT Products.* FROM VCN_ProductsBranch as Products WHERE FTPdtSpcBch = '$ptBCH' 
+        // $tSQL       .= "SELECT Products.* FROM VCN_ProductsBranch as Products WHERE FTPdtSpcBch = '$ptBCH' 
+        $tSQL       .= "SELECT Products.* FROM VCN_ProductsBranch as Products WHERE FTZneRefCode = '$ptBCH' AND FTZneTable = 'TCNMBranch'
                         AND FNLngIDPdt = '$nLngID' AND FNLngIDUnit = '$nLngID'
-                        OR ISNULL(FTPdtSpcBch, '') = '' ";
+                        OR ISNULL(FTZneRefCode, '') = '' ";
         $tSQL       .= " ) AS Products WHERE 1=1 ";
         $tSQL       .= $ptFilter;
 

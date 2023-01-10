@@ -27,6 +27,7 @@ $lang['tCancel']                    = 'Cancel';
 $lang['tBack']                      = 'Back';
 $lang['tSave']                      = 'Save';
 $lang['tEdit']                      = "Edit";
+$lang['tDelete']                    = "Delete";
 $lang['tAdd']                       = "Add";
 $lang['tDelAll']                    = "Delete All";
 $lang['tSelectPic']                 = "Select Image";
@@ -273,3 +274,5 @@ $lang['tStaDocCancel']             = "Cancel";
 
 
 $lang['tImportExportProgress'] = 'Systems is process plase look in menu History Import-export';
+
+$lang['tStaUse']                    = "Using";

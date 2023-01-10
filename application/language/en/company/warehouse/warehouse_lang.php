@@ -32,3 +32,5 @@ $lang['tWAHBwsMchNme']        = "Name";
 
 $lang['tWAHBchName'] = 'Branch';
 $lang['tWAHShpName'] = 'Shop';
+
+$lang['tPosStaAlwSNPL']                 = "Allow S/N in arrangement";

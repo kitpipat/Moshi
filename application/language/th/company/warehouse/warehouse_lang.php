@@ -40,6 +40,8 @@ $lang['tWAHBwsMchNme']        = "ชื่อ";
 $lang['tWAHBchName'] = 'ชื่อสาขา';
 $lang['tWAHShpName'] = 'ชื่อร้านค้า';
 
+$lang['tPosStaAlwSNPL']                 = "รับ S/N ในใบจัด";
+
 
 
 
