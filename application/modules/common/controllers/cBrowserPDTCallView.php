@@ -317,7 +317,7 @@ class cBrowserPDTCallView extends MX_Controller
 
         if(!empty($paData['nDISTYPE'])){
             $nDISTYPE = $paData['nDISTYPE'];
-            $tFilter .= " AND (Products.FTPdtStaAlwDis = $nDISTYPE )";
+            $tFilter .= " AND (Products.FTPdtStaAlwDis = '1' )";
             // FTPdtStaAlwDis
         }
         //-------------------เงื่อนไขพิเศษ ตามหน้า-------------------
@@ -498,11 +498,11 @@ class cBrowserPDTCallView extends MX_Controller
         switch ($tPermission) {
             case "HQ":
                 $aResultPDT = $this->mBrowserPDTCallView->FSaMGetProductHQ($tFilter,$tLeftJoinPrice,$paData,$nTotalResult);
-                //print_r(  $aResultPDT );
+                // print_r(  $aResultPDT );
                 break;
             case "BCH":
                 $aResultPDT = $this->mBrowserPDTCallView->FSaMGetProductBCH($tFilter,$tLeftJoinPrice,$paData,$nTotalResult);
-                //print_r(  $aResultPDT );
+                // print_r(  $aResultPDT );
                 break;
             case "SHP":
                 $aResultPDT = $this->mBrowserPDTCallView->FSaMGetProductSHP($tFilter,$tLeftJoinPrice,$paData,$nTotalResult);

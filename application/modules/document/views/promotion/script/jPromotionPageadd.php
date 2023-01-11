@@ -10,6 +10,8 @@
             immediateUpdates: false,
         });
 
+
+
         $('.xCNTimePicker').datetimepicker({
             format: 'HH:mm:ss'
         });
@@ -73,6 +75,11 @@
             $('form .xCNApvOrCanCelDisabled').attr('disabled', true);
         } else {
             $('#odvBtnAddEdit .btn-group').show();
+        }
+
+        if (bIsAlwDis != 1) {
+            
+            $('.XCNPromotionAlwDis').addClass("hide");
         }
 
         if(bIsCancel){

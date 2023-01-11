@@ -5,6 +5,7 @@ if ($aResult['rtCode'] == "1") { // Edit
 	$tDocTime = $aResult['raItems']['FTPmhDocTime'];
 	$tCreateByCode = $aResult['raItems']['FTCreateBy'];
 	$tCreateByName = $aResult['raItems']['FTCreateByName'];
+	$tAlwDis = $aRoleAlwDis['rtCode'];
 	// $tStaDelMQ = $aResult['raItems']['FTXthStaDelMQ'];
 	$tBchCode = $aResult['raItems']['FTBchCode'];
 	$tBchName = $aResult['raItems']['FTBchName'];
@@ -14,6 +15,7 @@ if ($aResult['rtCode'] == "1") { // Edit
 	$tPmhTStop = $aResult['raItems']['FTPmhTStopTime'];
 	$tPmhStaLimitCst = $aResult['raItems']['FTPmhStaLimitCst'];
 	$tPmhStaClosed = $aResult['raItems']['FTPmhStaClosed'];
+	$tPmhAlwDis = $aResult['raItems']['FTPmhStaAlwDis'];
 	$tStaDoc = $aResult['raItems']['FTPmhStaDoc'];
 	$tStaApv = $aResult['raItems']['FTPmhStaApv'];
 	$tPmhStaPrcDoc = $aResult['raItems']['FTPmhStaPrcDoc'];
@@ -60,6 +62,7 @@ if ($aResult['rtCode'] == "1") { // Edit
 
 	$tRefExt = "";
 } else { // New
+	$tAlwDis = $aRoleAlwDis['rtCode'];
 	$tDocNo = "";
 	$tDocDate = date('Y-m-d');
 	$tDocTime = date('H:i');
@@ -72,6 +75,7 @@ if ($aResult['rtCode'] == "1") { // Edit
 	$tPmhTStop = '23:59:59';
 	$tPmhStaLimitCst = "1";
 	$tPmhStaClosed = "";
+	$tPmhAlwDis = "";
 	$tStaDoc = "";
 	$tStaApv = "";
 	$tPmhStaPrcDoc = "";
@@ -218,6 +222,7 @@ $bIsApvOrCancel = ($bIsApv || $bIsCancel);
     var bIsApv = <?php echo ($bIsApv) ? 'true' : 'false'; ?>;
     var bIsCancel = <?php echo ($bIsCancel) ? 'true' : 'false'; ?>;
     var bIsApvOrCancel = <?php echo ($bIsApvOrCancel) ? 'true' : 'false'; ?>;
+	var bIsAlwDis = <?php echo $tAlwDis ?>;
 </script>
 
 <form class="contact100-form validate-form" action="javascript:void(0)" method="post" enctype="multipart/form-data" autocorrect="off" autocapitalize="off" autocomplete="off" id="ofmPromotionForm">
@@ -414,6 +419,26 @@ $bIsApvOrCancel = ($bIsApv || $bIsCancel);
 							</div>
 						</div>
 
+						<!-- อนุญาตนำสินค้าห้ามลดมาทำโปรโมชั่น -->
+						<div class='XCNPromotionAlwDis'>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<label class="fancy-checkbox">
+											<input 
+											type="checkbox" 
+											class="xCNCanCelDisabled" 
+											value="1" 
+											id="ocbPromotionDiscount" 
+											name="ocbPromotionDiscount" 
+											maxlength="1" <?php echo $tPmhAlwDis == "1" ? 'checked' : ''; ?>>
+											<span>&nbsp;</span>
+											<span class="xCNLabelFrm"><?php echo language('document/promotion/promotion', 'tAccpetDiscount'); ?></span>
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>	
 						<hr>
 
 						<div class="row">
@@ -518,7 +543,7 @@ $bIsApvOrCancel = ($bIsApv || $bIsCancel);
 								</div>
 							</div>
 						</div>
-
+		
 					</div>
 				</div>
 			</div>
@@ -602,29 +627,29 @@ $bIsApvOrCancel = ($bIsApv || $bIsCancel);
 								</div>
 							</div>
 							<!-- สิทธิ์อนุญาต -->
-							<div class="col-md-12">
-								<div class="form-group">
-									<label class="xCNLabelFrm"><?= language('document/promotion/promotion', 'tPermission'); ?></label>
-									<div class="input-group">
-										<?php $bIsPmhStaGetPdtType3 = ($tPmhStaGetPdt == "3"); ?>
-										<input 
-										<?php echo ($bIsPmhStaGetPdtType3)?'':'disabled'; ?>
-										name="oetPromotionRoleName" 
-										id="oetPromotionRoleName" 
-										class="form-control" 
-										value="<?php echo $tRoleName; ?>" 
-										type="text" 
-										readonly 
-										placeholder="<?= language('document/promotion/promotion', 'tPermission') ?>">
-										<input <?php echo ($bIsPmhStaGetPdtType3)?'':'disabled'; ?> name="oetPromotionRoleCode" id="oetPromotionRoleCode" value="<?php echo $tRoleCode; ?>" class="form-control xCNHide" type="text">
-										<span class="input-group-btn">
-											<button class="btn xCNBtnBrowseAddOn xCNApvOrCanCelDisabled" id="obtPromotionBrowseRole" type="button" <?php echo ($bIsPmhStaGetPdtType3)?'':'disabled'; ?>>
-												<img src="<?= base_url() . '/application/modules/common/assets/images/icons/find-24.png' ?>">
-											</button>
-										</span>
+								<div class="col-md-12">
+									<div class="form-group">
+										<label class="xCNLabelFrm"><?= language('document/promotion/promotion', 'tPermission'); ?></label>
+										<div class="input-group">
+											<?php $bIsPmhStaGetPdtType3 = ($tPmhStaGetPdt == "3"); ?>
+											<input 
+											<?php echo ($bIsPmhStaGetPdtType3)?'':'disabled'; ?>
+											name="oetPromotionRoleName" 
+											id="oetPromotionRoleName" 
+											class="form-control" 
+											value="<?php echo $tRoleName; ?>" 
+											type="text" 
+											readonly 
+											placeholder="<?= language('document/promotion/promotion', 'tPermission') ?>">
+											<input <?php echo ($bIsPmhStaGetPdtType3)?'':'disabled'; ?> name="oetPromotionRoleCode" id="oetPromotionRoleCode" value="<?php echo $tRoleCode; ?>" class="form-control xCNHide" type="text">
+											<span class="input-group-btn">
+												<button class="btn xCNBtnBrowseAddOn xCNApvOrCanCelDisabled" id="obtPromotionBrowseRole" type="button" <?php echo ($bIsPmhStaGetPdtType3)?'':'disabled'; ?>>
+													<img src="<?= base_url() . '/application/modules/common/assets/images/icons/find-24.png' ?>">
+												</button>
+											</span>
+										</div>
 									</div>
 								</div>
-							</div>
 							<!-- End Group -->
 						</div><!-- row -->
 
@@ -964,6 +989,30 @@ $bIsApvOrCancel = ($bIsApv || $bIsCancel);
 						<?php echo language('common/main/main', 'tModalConfirm'); ?>
 					</button>
 					<button type="button" class="btn xCNBTNDefult" data-dismiss="modal">
+						<?php echo language('common/main/main', 'tModalCancel'); ?>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End Cancel Doc -->
+
+	<!-- Begin Cancel Doc -->
+	<div class="modal fade" id="odvPromotionAlwDis">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header xCNModalHead">
+					<label class="xCNTextModalHeard"><?php echo language('document/document/document', 'พบรายการสินค้าไม่อนุญาตลด') ?></label>
+				</div>
+				<div class="modal-body">
+					<p id="obpMsgApv"><?php echo language('document/document/document', 'พบรายการสินค้าที่ไม่อนุญาตลดอยู่ในเอกสารเมื่อยืนยันจะทำการลบสินค้าออก') ?></p>
+					<p><strong><?php echo language('document/document/document', 'คุณต้องการที่จะดำเนินการต่อหรือไม่?') ?></strong></p>
+				</div>
+				<div class="modal-footer">
+					<button onclick="JSxEventAlwDisPmtPdtDtInTmp()" type="button" class="btn xCNBTNPrimery">
+						<?php echo language('common/main/main', 'tModalConfirm'); ?>
+					</button>
+					<button type="button" id="obtAlwDisCheck" class="btn xCNBTNDefult" data-dismiss="modal">
 						<?php echo language('common/main/main', 'tModalCancel'); ?>
 					</button>
 				</div>

@@ -34,6 +34,10 @@
             if(aPdtCond.includes(tListType)){
                 JSxPromotionStep1PmtBrandDtDataTableDeleteMore();
             }
+        });   
+
+        $('#obtAlwDisCheck').on('click', function(){
+            $('#ocbPromotionDiscount').prop("checked", true);
         });
 
         $('#obtPromotionStep1AddGroupNameBtn').on('click', function(){
@@ -68,6 +72,14 @@
             }    
         });
 
+        $('#ocbPromotionDiscount').on('change', function(){
+            var bAlwDisIsChecked = $('#ocbPromotionDiscount').is(':checked');
+            if(bAlwDisIsChecked){            
+            }else{
+                JSxCheckAlwDisPmtPdtDtInTmp()
+            }    
+        });
+
         /*===== Begin Group Type Control ===============================================*/
         $('#ocmPromotionGroupTypeTmp').on('change', function(){ // ประเภทกลุ่ม
             var tGroupType = $(this).val();
@@ -80,6 +92,62 @@
             $('.xCNPromotionStep1BtnBrowse').prop('disabled', true).addClass('xCNBrowsePdtdisabled');
         }
     });
+
+    function JSxCheckAlwDisPmtPdtDtInTmp() {
+        var nStaSession = JCNxFuncChkSessionExpired();
+        if (typeof nStaSession !== "undefined" && nStaSession == 1){
+            var tBchCode = $('#oetPromotionBchCode').val();
+            $.ajax({
+                type: "POST",
+                url: "promotionCheckAlwDis",
+                data: {
+                    tBchCode: tBchCode,
+                },
+                cache: false,
+                timeout: 0,
+                success: function(oResult) {
+                    if(oResult.rtCode == '1'){
+                        $("#odvPromotionAlwDis").modal("show");
+                    }   
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    JCNxCloseLoading();
+                    JCNxResponseError(jqXHR, textStatus, errorThrown);
+                }
+            });
+
+        } else {
+            JCNxShowMsgSessionExpired();
+        }
+    }
+
+    function JSxEventAlwDisPmtPdtDtInTmp() {
+        var nStaSession = JCNxFuncChkSessionExpired();
+        if (typeof nStaSession !== "undefined" && nStaSession == 1){
+            var tBchCode = $('#oetPromotionBchCode').val();
+            $.ajax({
+                type: "POST",
+                url: "promotionDelAlwDis",
+                data: {
+                    tBchCode: tBchCode,
+                },
+                cache: false,
+                timeout: 0,
+                success: function(oResult) {
+                    JSxPromotionStep1GetPmtDtGroupNameInTmp(1, true);
+                    JSxPromotionStep1GetPmtPdtDtInTmp(1, false);
+                    $("#odvPromotionAlwDis").modal("hide");
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    JCNxCloseLoading();
+                    JCNxResponseError(jqXHR, textStatus, errorThrown);
+                }
+            });
+
+        } else {
+            JCNxShowMsgSessionExpired();
+        }
+    }
 
     /*===== Begin PMT PDT DT Table Process =============================================*/
     /**
@@ -566,11 +634,13 @@
     Return Type : -
     */
     function JCNxPromotionStep1BrowsePdt() {
+        var AlwDis = '';
+        var checkDiscount = $('#ocbPromotionDiscount').is(':checked');  
         var nStaSession = JCNxFuncChkSessionExpired();
         if (typeof nStaSession !== "undefined" && nStaSession == 1) {
             JSxCheckPinMenuClose(); // Hidden Pin Menu
-
-            $.ajax({
+            if(checkDiscount) {
+                $.ajax({
                 type: "POST",
                 url: "BrowseDataPDT",
                 data: {
@@ -624,6 +694,64 @@
                     // console.log(data);
                 }
             });
+            }else{
+                $.ajax({
+                type: "POST",
+                url: "BrowseDataPDT",
+                data: {
+                    Qualitysearch: [
+                        /*"CODEPDT",
+                        "NAMEPDT",
+                        "BARCODE",
+                        "SUP",
+                        "PurchasingManager",
+                        "NAMEPDT",
+                        "CODEPDT",
+                        "BARCODE",
+                        'LOC',
+                        "FromToBCH",
+                        "Merchant",
+                        "FromToSHP",
+                        "FromToPGP",
+                        "FromToPTY",
+                        "PDTLOGSEQ"
+                        "PDTLOGSEQ"*/
+                    ],
+                    PriceType: ["Cost", "tCN_Cost", "Company", "1"],
+                    // 'PriceType'       : ['Pricesell'],
+                    // 'SelectTier'      : ['PDT'],
+                    SelectTier: ["Barcode"],
+                    // 'Elementreturn'   : ['oetInputTestValue','oetInputTestName'],
+                    ShowCountRecord: 10,
+                    NextFunc: "JSvPromotionStep1InsertPmtPdtDtToTemp",
+                    ReturnType: "M",
+                    BCH: ["", ""],
+                    SHP: ["", ""],
+                    MER: ["", ""],
+                    SPL: ["", ""],
+                    DISTYPE: '1',
+                    /* SPL: [$('#oetCreditNoteSplCode').val(), $('#oetCreditNoteSplName').val()],
+                    BCH: [$("#oetBchCode").val(), $("#oetBchCode").val()],
+                    SHP: [$("#oetShpCodeStart").val(), $("#oetShpCodeStart").val()], */
+                    // NOTINITEM: [["00002", "1155109050238"]],
+                    NOTINITEM: window.aPromotionStep1PmtPdtDtNotIn
+                },
+                cache: false,
+                timeout: 0,
+                success: function (tResult) {
+                    $("#odvModalDOCPDT").modal({backdrop: "static", keyboard: false});
+                    $("#odvModalDOCPDT").modal({show: true});
+
+                    // remove localstorage
+                    localStorage.removeItem("LocalItemDataPDT");
+                    $("#odvModalsectionBodyPDT").html(tResult);
+                },
+                error: function (data) {
+                    // console.log(data);
+                }
+            });
+            }
+            
         } else {
             JCNxShowMsgSessionExpired();
         }

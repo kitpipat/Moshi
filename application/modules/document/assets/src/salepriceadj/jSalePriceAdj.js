@@ -519,6 +519,8 @@ function JSoAddEditSpa(ptRoute){
                         url: ptRoute,
                         data: $oForm,
                         success: function(oResult){
+                            $('#oetSPAInsertScan').removeAttr('disabled', true);
+                            $('#oetSPAInsertScan').hide();
 
                             var aReturn = JSON.parse(oResult);
                             // console.log(aReturn);
@@ -1661,6 +1663,8 @@ function JSxDisableInput(){
         $('.xCNEditInLineClick').addClass('xWImgDisable');
         $('.xWLabelInLine').addClass('xWImgDisable');
         $('.xWInLine').addClass('xWTdDisable');
+        $('#oetSPAInsertScan').attr('disabled', true);
+        $('#oetSPAInsertScan').hide();
     }
 }
 
@@ -1870,4 +1874,38 @@ function JSoSPASubscribeMQ(){
     /*===========================================================================*/
     //RabbitMQ
 	
+}
+
+// Create By : 25/11/2020 Napat(Jame)
+function JSxSPASearchFromBarcode(poElem) {
+    // console.log( $(poElem).val() );
+    $('#oetSPAInsertScan').attr('readonly', true);
+    $.ajax({
+        type: "POST",
+        url: "BrowseDataPDTTableCallView",
+        data: {
+            aPriceType: ['Pricesell'],
+            NextFunc: "",
+            SPL: "",
+            BCH: $('#oetBchCodeMulti').val(),
+            tPdtSpcCtl: 'TCNTPdtAdjPriHD',
+            tTYPEPDT: '1,2,3,4,5',
+            tTextScan: $(poElem).val()
+        },
+        cache: false,
+        timeout: 0,
+        success: function(tResult) {
+            var oText = JSON.parse(tResult);
+            if (oText != "800") {
+                JSxSpaPdtPriAddTemp(tResult, '2');
+            } else {
+                FSvCMNSetMsgWarningDialog('ไม่พบข้อมูลสินค้า กรุณาลองใหม่อีกครั้ง');
+            }
+            $('#oetSPAInsertScan').attr('readonly', false).val('');
+            // console.log(oText);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            JCNxResponseError(jqXHR, textStatus, errorThrown);
+        }
+    });
 }

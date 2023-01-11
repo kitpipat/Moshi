@@ -112,7 +112,7 @@ class cPromotion extends MX_Controller
      * Return Type : View
      */
     public function FSxCPromotionAddPage()
-    {
+    {   
         $tUserSessionID = $this->session->userdata('tSesSessionID');
         $tUserSessionDate = $this->session->userdata('tSesSessionDate');
         $tUserLevel = $this->session->userdata("tSesUsrLevel");
@@ -173,8 +173,11 @@ class cPromotion extends MX_Controller
         ];
         $aPdtCond = $this->mPromotionStep1PmtBrandDt->FSaMGetPmtPdtCondition($aGetPmtPdtConditionParams);
 
+        $aRoleAlwDis = $this->mPromotion->FSaMCheckAlwDisRole();
+
         $aDataAdd = array(
             'aResult' =>  array('rtCode' => '99'),
+            'aRoleAlwDis' => $aRoleAlwDis,
             'aPdtCond' => $aPdtCond
         );
         $this->load->view('document/promotion/wPromotionPageadd', $aDataAdd);
@@ -234,6 +237,7 @@ class cPromotion extends MX_Controller
                 'FTLastUpdBy' => $tUserLoginCode,
                 'FDCreateOn' => $tDocDate,
                 'FTCreateBy' => $tUserLoginCode,
+                'FTPmhStaAlwDis' => ($this->input->post('ocbPromotionDiscount') == "1")?"1":"2",
                 // HD_L
                 'FNLngID' => $nLangEdit,
                 'FTPmhName' => $this->input->post('oetPromotionPmhName'),
@@ -443,11 +447,13 @@ class cPromotion extends MX_Controller
         ];
         $aPdtCond = $this->mPromotionStep1PmtBrandDt->FSaMGetPmtPdtCondition($aGetPmtPdtConditionParams);
         /*===== End Get Data ===========================================================*/
-        
+        $aRoleAlwDis = $this->mPromotion->FSaMCheckAlwDisRole();
+
         $aDataEdit = array(
             'aResult' => $aResult,
             'aPdtPmtHDCstResult' => $aPdtPmtHDCstResult,
             'aAlwEvent' => $aAlwEvent,
+            'aRoleAlwDis' => $aRoleAlwDis,
             'aPdtCond' => $aPdtCond
         );
         $this->load->view('document/promotion/wPromotionPageadd', $aDataEdit);
@@ -512,6 +518,7 @@ class cPromotion extends MX_Controller
                 'FTPmhStaChkLimit' => ($bIsPmhStaLimitGetActive)?$this->input->post('ocmPromotionPmhStaChkLimit'):'', // เงื่อนไขจำกัดจำนวน 1:ต่อสาขา 2: ต่อบริษัท
                 'FTPmhStaChkCst' => ($this->input->post('ocbPromotionPmhStaChkCst') == "1")?$this->input->post('ocbPromotionPmhStaChkCst'):'2', // สถานะใช้งาน กำหนด เงื่อนไขเฉพาะสมาชิก (1:ใช้งาน,2:ไม่ใช้งาน)
                 'FDLastUpdOn' => date('Y-m-d H:i:s'),
+                'FTPmhStaAlwDis' => ($this->input->post('ocbPromotionDiscount') == "1")?"1":"2",
                 'FTLastUpdBy' => $tUserLoginCode,
                 'FDCreateOn' => $tDocDate,
                 'FTCreateBy' => $tUserLoginCode,
@@ -802,5 +809,43 @@ class cPromotion extends MX_Controller
             );
         }
         $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($aStatus));
+    }
+
+    public function FStPromotionDeleteAlwDis()
+    {
+        $tUserLevel = $this->session->userdata('tSesUsrLevel');
+        $tBchCodeLogin = $tUserLevel == 'HQ' ? FCNtGetBchInComp() : $this->session->userdata("tSesUsrBchCode");
+        $tUserSessionID = $this->session->userdata('tSesSessionID');
+
+        $aData = array(
+            'tBchCode' => $tBchCodeLogin,
+            'tUserSessionID' => $tUserSessionID,
+        );
+
+        $aReturn = $this->mPromotion->FSaMDelAlwDisTmp($aData);
+
+
+        $this->output->set_content_type('application/json')->set_output(json_encode($aReturn));
+
+
+    }
+
+    public function FStPromotionCheckAlwDis()
+    {
+        $tUserLevel = $this->session->userdata('tSesUsrLevel');
+        $tBchCodeLogin = $tUserLevel == 'HQ' ? FCNtGetBchInComp() : $this->session->userdata("tSesUsrBchCode");
+        $tUserSessionID = $this->session->userdata('tSesSessionID');
+
+        $aData = array(
+            'tBchCode' => $tBchCodeLogin,
+            'tUserSessionID' => $tUserSessionID,
+        );
+
+        $aReturn = $this->mPromotion->FSaMCheckAlwDisTmp($aData);
+
+
+        $this->output->set_content_type('application/json')->set_output(json_encode($aReturn));
+
+
     }
 }

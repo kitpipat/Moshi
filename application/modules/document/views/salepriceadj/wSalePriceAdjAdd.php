@@ -572,6 +572,8 @@
                                         </li>
                                     </ul>
                                 </div>
+
+                                <input type="text" class="form-control" style="display: inline;width: 250px;margin-left: 10px;" id="oetSPAInsertScan" autocomplete="off" name="oetSPAInsertScan" maxlength="50" value="" onkeypress="Javascript:if(event.keyCode==13) JSxSPASearchFromBarcode(this);" placeholder="<?php echo language('document/document/document', 'เพิ่มสินค้าด้วยบาร์โค้ด หรือ รหัสสินค้า') ?>">
                                 <button id="obtAddPdt" name="obtAddPdt" class="xCNBTNPrimeryPlus" type="button" style="margin-left:10px;margin-top: 0px;">+</button>
                             </div>
                         </div>

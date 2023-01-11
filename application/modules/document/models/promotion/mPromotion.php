@@ -1348,6 +1348,7 @@ class mPromotion extends CI_Model
         $this->db->set('FTPmhStaChkCst', $paParams['FTPmhStaChkCst']);
         $this->db->set('FDLastUpdOn', $paParams['FDLastUpdOn']);
         $this->db->set('FTLastUpdBy', $paParams['FTLastUpdBy']);
+        $this->db->set('FTPmhStaAlwDis', $paParams['FTPmhStaAlwDis']);
         $this->db->where('FTPmhDocNo', $paParams['FTPmhDocNo']);
         $this->db->update('TCNTPdtPmtHD');
         if ($this->db->affected_rows() > 0) {
@@ -1710,6 +1711,129 @@ class mPromotion extends CI_Model
 
             $this->db->where('FTPmhDocNo', $tDocNo);
             $this->db->delete('TCNTPdtPmtHDCstPri');
+        } catch (Exception $Error) {
+            return $Error;
+        }
+    }
+
+    public function FSaMDelAlwDisTmp($paParams = [])
+    {
+        try {
+            $tBchCode = $paParams['tBchCode'];
+            $tSesSessionID = $paParams['tUserSessionID'];
+
+            $tSQL = "
+                        DELETE 
+                        FROM
+                            TCNTPdtPmtDT_Tmp 
+                        WHERE
+                            FTPmdRefCode IN (
+                            SELECT
+                                PDTT.FTPmdRefCode 
+                            FROM
+                                TCNTPdtPmtDT_Tmp PDTT
+                                LEFT JOIN TCNMPdt PDT ON PDTT.FTPmdRefCode = PDT.FTPdtCode 
+                            WHERE
+                                1 = 1 
+                                AND PDTT.FTSessionID = '$tSesSessionID' 
+                                AND FTBchCode = '$tBchCode'
+                                AND PDT.FTPdtStaAlwDis NOT IN ( '1' ) 
+                            )
+                    ";
+
+            $this->db->query($tSQL); 
+
+            if ($this->db->affected_rows() > 0) {
+                $aStatus = array(
+                    'rtCode' => '1',
+                    'rtDesc' => 'Del AlwDisPdt Success',
+                );
+            } else {
+                $aStatus = array(
+                    'rtCode' => '905',
+                    'rtDesc' => 'Error Cannot Add/Edit AlwDisPdt.',
+                );
+            }
+            return $aStatus;
+        } catch (Exception $Error) {
+            return $Error;
+        }
+    }
+
+    public function FSaMCheckAlwDisTmp($paParams = [])
+    {
+        try {
+
+            $tBchCode = $paParams['tBchCode'];
+            $tSesSessionID = $paParams['tUserSessionID'];
+
+            $tSQL = "
+                        SELECT PDTT.FTPmdRefCode FROM TCNTPdtPmtDT_Tmp PDTT
+                        LEFT JOIN TCNMPdt PDT ON PDTT.FTPmdRefCode = PDT.FTPdtCode
+                        WHERE 1=1 AND PDTT.FTSessionID = '$tSesSessionID' AND PDT.FTPdtStaAlwDis NOT IN ('1') 
+                        AND FTBchCode = '$tBchCode'
+                    ";
+
+            $oQuery = $this->db->query($tSQL);
+
+            if ($oQuery->num_rows() > 0) {
+                $oDetail = $oQuery->row_array();
+                $aResult = array(
+                    'rtCode' => '1',
+                    'rtDesc' => 'success',
+                );
+            } else {
+                // Not Found
+                $aResult = array(
+                    'rtCode' => '800',
+                    'rtDesc' => 'data not found.',
+                );
+            }
+
+            $jResult = json_encode($aResult);
+            $aResult = json_decode($jResult, true);
+            return $aResult;
+
+        } catch (Exception $Error) {
+            return $Error;
+        }
+    }
+
+    public function FSaMCheckAlwDisRole()
+    {
+        try {
+            $tRol = $this->session->userdata('tSesUsrRoleCode');
+
+            $tSQL = "
+                    SELECT FTUfrStaAlw 
+                    FROM TCNTUsrFuncRpt WITH(NOLOCK)
+                    WHERE FTRolCode = '$tRol'
+                    AND FTUfrType = '1'
+                    AND FTUfrGrpRef = '051'
+                    AND FTUfrRef = 'KB109'
+                    AND FTGhdApp = 'SB'
+                    ";
+
+            $oQuery = $this->db->query($tSQL);
+
+            if ($oQuery->num_rows() > 0) {
+                $oDetail = $oQuery->row_array();
+                $aResult = array(
+                    'rtCode' => '1',
+                    'rtDesc' => 'success',
+                );
+            } else {
+                // Not Found
+                $aResult = array(
+                    'rtCode' => '800',
+                    'rtDesc' => 'data not found.',
+                );
+            }
+
+            $jResult = json_encode($aResult);
+            $aResult = json_decode($jResult, true);
+            return $aResult;
+
         } catch (Exception $Error) {
             return $Error;
         }

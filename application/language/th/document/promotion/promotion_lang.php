@@ -83,6 +83,7 @@ $lang['tToDate'] = "ถึงวันที่";
 $lang['tFromTime'] = "จากเวลา";
 $lang['tToTime'] = "ถึงเวลา";
 $lang['tPausedTemporarily'] = "หยุดรายการชั่วคราว";
+$lang['tAccpetDiscount'] = "อนุญาต ใช้สินค้าห้ามลด";
 $lang['tConditionsCustomers'] = "เงื่อนไข-ลูกค้า";
 $lang['tAllowedToCalculatePromotionsThatHaveAlreadyBeenReceived'] = "อนุญาต คำนวนรายการที่ได้รับโปรโมชั่นแล้ว";
 $lang['tAllowToCalculateTheAmount'] = "อนุญาต เอายอดไปคำนวนแต้ม";

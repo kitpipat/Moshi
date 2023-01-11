@@ -800,6 +800,8 @@ $route ['promotionDocApprove'] = 'document/promotion/cPromotion/FStCPromotionDoc
 $route ['promotionDocCancel'] = 'document/promotion/cPromotion/FStCPromotionDocCancel';
 $route ['promotionDelDoc'] = 'document/promotion/cPromotion/FStPromotionDeleteDoc';
 $route ['promotionDelDocMulti'] = 'document/promotion/cPromotion/FStPromotionDeleteMultiDoc';
+$route ['promotionDelAlwDis'] = 'document/promotion/cPromotion/FStPromotionDeleteAlwDis';
+$route ['promotionCheckAlwDis'] = 'document/promotion/cPromotion/FStPromotionCheckAlwDis';
 
 // Step1 PMTDT Tmp
 $route ['promotionStep1ConfirmPmtDtInTmp'] = 'document/promotion/cPromotionStep1PmtDt/FSxCPromotionConfirmPmtDtInTmp';

@@ -1,7 +1,7 @@
 <?php
 /*===== SYSTEM ===============================================================*/
 define('BASE_TITLE', 'Moshi Moshi');
-define('BASE_URL', 'http://localhost/AdaMoshi-OKStation/Moshi/');
+define('BASE_URL', 'http://localhost:8000/Moshi/');
 // define('BASE_URL', 'https://dev.ada-soft.com/AdaMoshi/');
 define('BASE_DATABASE', 'AdaMoshi');
 define('DATABASE_IP', '147.50.143.126,33433');
